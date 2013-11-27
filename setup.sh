@@ -10,15 +10,7 @@ hucorepath=`which hucore`
 
 source inst-pkgs.sh
 
-if [ "$dbtype" == "m" ];
-then
-	source conf-mysql.sh
-	dbtype="mysql"
-elif [ "$dbtype" == "p" ]
-then
-	source conf-pgsql.sh
-	dbtype="postgres"
-fi
+source conf-db-generic.sh
 
 source inst-hrm.sh
 source conf-hrm.sh
