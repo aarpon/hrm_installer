@@ -28,10 +28,10 @@ function readkey()
 	echo $ans
 }
 
-function readstring()
-{
-	read -e -i "$1"
-	echo $REPLY
+function readstring() {
+    # Show a preset string that can be changed or accepted.
+    read -e -i "$1"
+    echo $REPLY
 }
 
 function mysqlcmd()
