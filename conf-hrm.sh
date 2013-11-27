@@ -17,6 +17,7 @@ cp $hrmdir/config/samples/hrm_server_config.inc.sample $CONF_SRV
 sedconf $CONF_SRV '$db_type = "mysql";' '$db_type = "'$dbtype'";'
 sedconf $CONF_SRV '$db_user = "dbuser";' '$db_user = "'$db_user'";'
 sedconf $CONF_SRV '$db_password = "dbpasswd";' '$db_password = "'$db_pass'";'
+sedconf $CONF_SRV '$db_name = "hrm";' '$db_name = "'$db_name'";'
 sedconf $CONF_SRV '$hrm_path = "/var/www/html/hrm";' '$hrm_path = "'$hrmdir'";'
 sedconf $CONF_SRV '$local_huygens_core = "/usr/local/bin/hucore";' '$local_huygens_core = "'$hucorepath'";'
 
