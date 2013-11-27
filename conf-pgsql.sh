@@ -11,7 +11,7 @@ then
 
 	# get user name
 	echo "Enter new user name to create for HRM database"
-	db_user=`readstring "hrm-user"`
+	db_user=`readstring "hrm_user"`
 
 	# create postgresql user
 	pgret=`su postgres -c "createuser -e -P -d -A -S -R -N $db_user"`
@@ -19,7 +19,7 @@ then
 else
 	# get user credentials
 	echo "Enter existing user name for HRM database"
-	db_user=`readstring "hrm-user"`
+	db_user=`readstring "hrm_user"`
 
 	echo "Enter password for HRM database user"
 	db_pass=`readstring`
