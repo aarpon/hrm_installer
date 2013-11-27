@@ -30,7 +30,10 @@ function readkey()
 
 function readstring() {
     # Show a preset string that can be changed or accepted.
-    read -e -i "$1"
+    # Do not accept empty return values.
+    while [ -z "$REPLY" ] ; do
+        read -e -i "$1"
+    done
     echo $REPLY
 }
 
