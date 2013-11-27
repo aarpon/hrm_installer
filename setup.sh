@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Ensure we don't get localized output from various tools, otherwise many of
+# the tests will behave pretty much unpredictable.
+export LC_ALL=C
+
 echo "Welcome to the HRM installation script."
 
 source funs.sh
