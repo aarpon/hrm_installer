@@ -10,11 +10,11 @@ if [ $(readkey) == "y" ] ; then
 
     if [ "$dbtype" == "m" ];
     then
-        source conf-mysql.sh
+        source conf-db-mysql.sh
         dbtype="mysql"
     elif [ "$dbtype" == "p" ]
     then
-        source conf-pgsql.sh
+        source conf-db-pgsql.sh
         dbtype="postgres"
     fi
 else
