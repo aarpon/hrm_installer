@@ -8,9 +8,10 @@ echo "Welcome to the HRM installation script."
 
 source funs.sh
 
-echo "Looking for hucore installation."
+echo -n "Looking for hucore installation: "
 hucorepath=`which hucore`
 [ -z  "$hucorepath" ] && abort "Hucore could not be found."
+echo $hucorepath
 
 source inst-pkgs.sh
 
