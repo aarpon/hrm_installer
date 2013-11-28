@@ -21,9 +21,11 @@ chown $hrm_user:$hrm_group $hrmdir
 chmod u+s,g+ws $hrmdir
 
 echo "Downloading and extracting HRM."
-wget -nv -O /tmp/hrm-latest.tar.bz2 http://sourceforge.net/projects/hrm/files/latest/download
-tar xjf /tmp/hrm-latest.tar.bz2 -C $hrmdir --strip-components=1
+HRMPKG="$(mktemp)"
+wget -nv -O $HRMPKG http://sourceforge.net/projects/hrm/files/latest/download
+tar xjf $HRMPKG -C $hrmdir --strip-components=1
 #errcheck "Could not download and extract HRM."
+rm $HRMPKG
 echo "Done."
 
 mkdir -vp /var/log/hrm
