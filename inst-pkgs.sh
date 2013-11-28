@@ -8,7 +8,7 @@ if [ -z "$dbmsmissing" ]; # empty, so both dbms are installed
 then
 	echo "Two DBMS have been found, choose to use MySQL or PostgreSQL."
 	ans=`readkey_choice 'm' 'p'`
-else # one or two dbms found
+else # one or both dbms are missing
 	num_dbms=`echo $dbmsmissing | wc -w`
 
 	if [ $num_dbms == 2 ]; # both dbms are missing
