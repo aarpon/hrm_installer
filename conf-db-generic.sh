@@ -2,8 +2,8 @@
 
 source funs.sh
 
-echo "Create new database account for HRM? [y/n]"
-if [ $(readkey) == "y" ] ; then
+echo "Create new database account for HRM?"
+if [ $(readkey_choice) == "y" ] ; then
     echo -e "\nEnter new user name to create for the HRM database"
     db_user=`readstring "hrm_user"`
 

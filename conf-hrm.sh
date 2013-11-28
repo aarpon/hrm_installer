@@ -28,8 +28,8 @@ imgdir=`readstring "/data/images"`
 # check if $imgdir exists
 if [ ! -d $imgdir ];
 then
-	echo "Image storage directory $imgdir does not exist, create it? [y/n]"
-	if [ $(readkey) == "y" ];
+	echo "Image storage directory $imgdir does not exist, create it?"
+	if [ $(readkey_choice) == "y" ];
 	then
 		mkdir -vp $imgdir
 		chown $hrm_user $imgdir
