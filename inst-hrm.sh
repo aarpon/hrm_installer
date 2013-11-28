@@ -7,10 +7,10 @@ hrm_user=`readstring "hrm-user"`
 echo "Enter the name for a system group for the HRM:"
 hrm_group=`readstring "hrm"`
 echo "Creating HRM system user and group."
-groupadd -r $hrm_group
-useradd $hrm_user -r -g $hrm_group # --system --shell /bin/bash --no-create-home --ingroup $hrm_group
-#usermod $hrm_user -aG $hrm_group
-usermod www-data -aG $hrm_group
+groupadd --system $hrm_group
+useradd $hrm_user --system --gid $hrm_group # --system --shell /bin/bash --no-create-home --ingroup $hrm_group
+#usermod $hrm_user --append --groups $hrm_group
+usermod www-data --append --groups $hrm_group
 
 echo "Enter HRM installation directory (must be a sub-directory of Apache document root):"
 hrmdir=`readstring "/var/www/hrm"`
