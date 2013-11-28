@@ -2,7 +2,7 @@
 
 source funs.sh
 
-dbmsmissing=`packages_missing "mysql-server postgresql"`
+dbmsmissing=`packages_missing mysql-server postgresql`
 
 if [ -z "$dbmsmissing" ]; # empty, so both dbms are installed
 then
