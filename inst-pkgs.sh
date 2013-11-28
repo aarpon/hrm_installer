@@ -36,9 +36,11 @@ mtainstalled=`which sendmail`
 [ -z  "$mtainstalled" ] && mtapkg="postfix"
 
 pkgs="$dbmspkgs $mtapkg apache2 libapache2-mod-php5 php5 php5-cli php5-common zip"
-echo -e "\nThe following packages are required to be installed:\n$pkgs\n"
-waitconfirm
-aptitude install $pkgs
 MISSING=$(packages_missing $pkgs)
-[ -n "$MISSING" ] && errcheck "Could not install required packages."
-
+if [ -n "$MISSING" ] ; then
+    echo -e "\nThe following packages will be installed:\n$MISSING\n"
+    waitconfirm
+    aptitude install $MISSING
+    MISSING=$(packages_missing $pkgs)
+    [ -n "$MISSING" ] && errcheck "Could not install packages: $MISSING"
+fi
