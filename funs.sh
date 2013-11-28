@@ -44,6 +44,14 @@ function readstring() {
     echo $REPLY
 }
 
+function waitconfirm() {
+    # Display a message and wait for the user to confirm by pressing 'y'.
+    echo "Press [y] to continue, [Ctrl]-[C] to abort."
+    while ! [ "$(readkey)" == "y" ] ; do
+        echo
+    done
+}
+
 function mysqlcmd()
 {
 	mysql -h localhost -u $1 -p$2 -e "$3"
