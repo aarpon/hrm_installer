@@ -42,6 +42,19 @@ function readkey() {
     unset _PROMPT
 }
 
+function readkey_choice() {
+    # Ask the user for pressing one of two keys (case insensitive). If not
+    # specified otherwise, 'y' and 'n' are the default keys.
+    [ -n "$1" ] && CH1="$1" || CH1="y"
+    [ -n "$2" ] && CH2="$2" || CH2="n"
+    unset REPLY
+    while [ "$REPLY" != "$CH1" ] && [ "$REPLY" != "$CH2" ] ; do
+        REPLY=$(readkey " [$CH1/$CH2] ")
+    done
+    echo $REPLY
+    unset REPLY CH1 CH2
+}
+
 function readstring() {
     # Show a preset string that can be changed or accepted.
     # Do not accept empty return values.
