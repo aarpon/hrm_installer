@@ -30,9 +30,16 @@ function install_packages()
 }
 
 function readkey() {
-    # Read a single keypress and return it as lower-case.
-    read -p '> ' -n 1
+    # Read a single keypress and return it as lower-case. Optionally, the
+    # prompt can be set by providing a string as 1st positional parameter.
+    if [ -n "$1" ] ; then
+        _PROMPT="$1"
+    else
+        _PROMPT="> "
+    fi
+    read -p "$_PROMPT" -n 1
     echo $REPLY | tr '[A-Z]' '[a-z]'
+    unset _PROMPT
 }
 
 function readstring() {
