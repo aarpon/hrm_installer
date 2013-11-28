@@ -29,11 +29,10 @@ function install_packages()
         aptitude install "$1"
 }
 
-function readkey()
-{
-	read
-	ans=`echo "$REPLY" | cut -c 1 | tr '[A-Z]' '[a-z]'`
-	echo $ans
+function readkey() {
+    # Read a single keypress and return it as lower-case.
+    read -n 1
+    echo $REPLY | tr '[A-Z]' '[a-z]'
 }
 
 function readstring() {
