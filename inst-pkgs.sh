@@ -39,5 +39,6 @@ pkgs="$dbmspkgs $mtapkg apache2 libapache2-mod-php5 php5 php5-cli php5-common zi
 echo -e "\nThe following packages are required to be installed:\n$pkgs\n"
 waitconfirm
 aptitude install $pkgs
-#errcheck "Could not install all missing packages." # aptitude has unreliable return code behavior
+MISSING=$(packages_missing $pkgs)
+[ -n "$MISSING" ] && errcheck "Could not install required packages."
 
