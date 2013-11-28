@@ -31,7 +31,7 @@ function install_packages()
 
 function readkey() {
     # Read a single keypress and return it as lower-case.
-    read -n 1
+    read -p '> ' -n 1
     echo $REPLY | tr '[A-Z]' '[a-z]'
 }
 
@@ -39,7 +39,7 @@ function readstring() {
     # Show a preset string that can be changed or accepted.
     # Do not accept empty return values.
     while [ -z "$REPLY" ] ; do
-        read -e -i "$1"
+        read -p '> ' -e -i "$1"
     done
     echo $REPLY
 }
