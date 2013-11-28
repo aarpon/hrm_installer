@@ -10,6 +10,9 @@ function errcheck()
 }
 
 function packages_missing() {
+    # Check the debian dpkg database for one or more packages to ensure they
+    # are installed on the system. Returns the name of all packages that don't
+    # have the dpkg status "installed".
     unset PKGSMISSING
     for PKG in $* ; do
         # the only "valid" status that we can check for is "installed", which
