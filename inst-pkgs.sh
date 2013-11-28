@@ -27,6 +27,8 @@ case $dbtype in
 		;;
 	p) dbmspkgs="postgresql php5-pgsql"
 		;;
+	*) errcheck "Wrong database type selected: '$dbtype'."
+		;;
 esac
 
 #echo "Install optional LDAP support? [y/n]"
