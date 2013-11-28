@@ -4,7 +4,7 @@ source funs.sh
 
 echo "Create new database account for HRM? [y/n]"
 if [ $(readkey) == "y" ] ; then
-    echo "Enter new user name to create for the HRM database"
+    echo -e "\nEnter new user name to create for the HRM database"
     db_user=`readstring "hrm_user"`
 
     if [ "$dbtype" == "m" ];
@@ -17,7 +17,7 @@ if [ $(readkey) == "y" ] ; then
         dbtype="postgres"
     fi
 else
-    echo "Enter existing user name for the HRM database"
+    echo -e "\nEnter existing user name for the HRM database"
     db_user=`readstring "hrm_user"`
 
     echo "Enter password for the HRM database user"
