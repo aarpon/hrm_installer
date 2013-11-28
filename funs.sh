@@ -9,11 +9,16 @@ function errcheck()
         [ $? ] && abort "$1"
 }
 
-function packages_missing()
-{
-        pkglist=$1
-        pkgsmissing=`dpkg --get-selections $pkglist 2>&1 | grep "No packages found matching" | cut -c 28- | sed "s/\.$//"`
-        echo $pkgsmissing
+function packages_missing() {
+    unset PKGSMISSING
+    for PKG in $* ; do
+        # the only "valid" status that we can check for is "installed", which
+        # is printed at the line-end by dpkg:
+        if ! dpkg --get-selections $PKG 2>&1 | grep -q 'install$' ; then
+            PKGSMISSING="$PKGSMISSING $PKG"
+        fi
+    done
+    echo $PKGSMISSING
 }
 
 function install_packages()
