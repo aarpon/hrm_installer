@@ -3,11 +3,12 @@
 source funs.sh
 
 # copy config file
-cp $hrmdir/config/samples/hrm.conf.sample /etc/hrm.conf
+CONF_ETC="/etc/hrm.conf"
+cp $hrmdir/config/samples/hrm.conf.sample $CONF_ETC
 
 # do substitutions in config file
-sedconf /etc/hrm.conf "HRM_HOME=\"/path/to/hrm/home\"" "HRM_HOME=\"$hrmdir\""
-sedconf /etc/hrm.conf "SUSER=\"hrm\"" "SUSER=\"hrm-user\""
+sedconf $CONF_ETC "HRM_HOME=\"/path/to/hrm/home\"" "HRM_HOME=\"$hrmdir\""
+sedconf $CONF_ETC "SUSER=\"hrm\"" "SUSER=\"hrm-user\""
 
 # copy more config files
 CONF_SRV="$hrmdir/config/hrm_server_config.inc"
@@ -38,7 +39,7 @@ then
 	fi
 fi
 
-sedconf /etc/hrm.conf "HRM_DATA=\"/path/to/hrm/data\"" "HRM_DATA=\"$imgdir\""
+sedconf $CONF_ETC "HRM_DATA=\"/path/to/hrm/data\"" "HRM_DATA=\"$imgdir\""
 sedconf $CONF_SRV '$image_folder = "/path/to/hrm_data";' '$image_folder = "'$imgdir'";'
 sedconf $CONF_SRV '$huygens_server_image_folder = "/path/to/hrm_data/";' '$huygens_server_image_folder = "'$imgdir'/";'
 
