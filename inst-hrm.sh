@@ -20,12 +20,22 @@ mkdir -vp $hrmdir
 chown $hrm_user:$hrm_group $hrmdir
 chmod u+s,g+ws $hrmdir
 
-echo "Downloading and extracting HRM."
-HRMPKG="$(mktemp)"
-wget -nv -O $HRMPKG http://sourceforge.net/projects/hrm/files/latest/download
-tar xjf $HRMPKG -C $hrmdir --strip-components=1
+echo "Download [d] the HRM package or use an existing one [e]"
+if [ $(readkey_choice "d" "e") == "d" ] ; then
+    echo -e "\nDownloading the latest HRM package."
+    HRMPKGTMP="$(mktemp)"
+    HRMURI="http://sourceforge.net/projects/hrm/files/latest/download"
+    wget -nv -O $HRMPKGTMP $HRMURI
+    HRMTAR=$HRMPKGTMP
+else
+    echo -e "\nEnter the full path to an existing HRM tar.bz2 package"
+    HRMTAR=`readstring`
+fi
+echo "Extracting the HRM package."
+tar xjf $HRMTAR -C $hrmdir --strip-components=1
 #errcheck "Could not download and extract HRM."
-rm $HRMPKG
+# HRMPKGTMP is only set if we downloaded it, so we can use it to clean up:
+rm -f $HRMPKGTMP
 echo "Done."
 
 mkdir -vp /var/log/hrm
