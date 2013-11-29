@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Exit on any error. That's very important as we require being run as root and
+# thus anything that goes wrong has a huge potential impact on the system.
+set -o errexit
+
+# "xtrace" can be switched on for debugging if desired.
+# set -o xtrace
+
 # Ensure we don't get localized output from various tools, otherwise many of
 # the tests will behave pretty much unpredictable.
 export LC_ALL=C
@@ -10,7 +17,7 @@ source funs.sh
 
 echo -n "Looking for hucore installation: "
 hucorepath=`which hucore`
-[ -z  "$hucorepath" ] && abort "Hucore could not be found."
+[ -n "$hucorepath" ] || abort "Hucore could not be found."
 echo $hucorepath
 
 source inst-pkgs.sh

@@ -36,10 +36,9 @@ case $dbtype in
 esac
 
 #echo "Install optional LDAP support? [y/n]"
-#[ $(readkey) == "y" ] && dbmspkgs+=" php5-ldap"
+#[ $(readkey) == "n" ] || dbmspkgs+=" php5-ldap"
 
-mtainstalled=`which sendmail`
-[ -z  "$mtainstalled" ] && mtapkg="postfix"
+[ -n "$(which sendmail)" ] || mtapkg="postfix"
 
 pkgs="$dbmspkgs $mtapkg apache2 libapache2-mod-php5 php5 php5-cli php5-common zip"
 MISSING=$(packages_missing $pkgs)
@@ -48,5 +47,5 @@ if [ -n "$MISSING" ] ; then
     waitconfirm
     aptitude install $MISSING
     MISSING=$(packages_missing $pkgs)
-    [ -n "$MISSING" ] && errcheck "Could not install packages: $MISSING"
+    [ -z "$MISSING" ] || errcheck "Could not install packages: $MISSING"
 fi
