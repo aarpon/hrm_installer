@@ -23,9 +23,13 @@ fi
 dbtype=$ans;
 
 case $dbtype in
-	m) dbmspkgs="mysql-server php5-mysql"
+	m)
+		dbmspkgs="mysql-server php5-mysql"
+		dbtype="mysql"
 		;;
-	p) dbmspkgs="postgresql php5-pgsql"
+	p)
+		dbmspkgs="postgresql php5-pgsql"
+		dbtype="postgres"
 		;;
 	*) errcheck "Wrong database type selected: '$dbtype'."
 		;;

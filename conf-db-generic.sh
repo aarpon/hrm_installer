@@ -10,11 +10,9 @@ if [ $(readkey_choice) == "y" ] ; then
     if [ "$dbtype" == "m" ];
     then
         source conf-db-mysql.sh
-        dbtype="mysql"
     elif [ "$dbtype" == "p" ]
     then
         source conf-db-pgsql.sh
-        dbtype="postgres"
     fi
 else
     echo -e "\nEnter existing user name for the HRM database"
