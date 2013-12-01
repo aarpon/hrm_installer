@@ -12,10 +12,10 @@ if [ $(readkey_choice) == "y" ] ; then
     echo -e "\nEnter new user name to create for the HRM database"
     db_user=`readstring "hrm_user"`
 
-    if [ "$dbtype" == "m" ];
+    if [ "$dbtype" == "mysql" ];
     then
         source conf-db-mysql.sh
-    elif [ "$dbtype" == "p" ]
+    elif [ "$dbtype" == "postgres" ]
     then
         source conf-db-pgsql.sh
     fi
