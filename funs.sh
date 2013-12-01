@@ -12,13 +12,11 @@ function errcheck()
 function packages_missing() {
     # Check the debian dpkg database for one or more packages to ensure they
     # are installed on the system. Returns the name of all packages that don't
-    # have the dpkg status "installed".
-    # TODO: use dpkg-query as it's designed for this purpose!
+    # have the dpkg-query status "install ok installed".
+    local VALID='install ok installed$'
     unset PKGSMISSING
     for PKG in $* ; do
-        # the only "valid" status that we can check for is "install", which
-        # is printed at the line-end by dpkg:
-        if ! dpkg --get-selections $PKG 2>&1 | grep -q 'install$' ; then
+        if ! dpkg-query -W -f='${Status}' $PKG 2>&1 | grep -q "$VALID" ; then
             PKGSMISSING="$PKGSMISSING $PKG"
         fi
     done
