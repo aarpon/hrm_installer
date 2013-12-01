@@ -16,7 +16,7 @@ function packages_missing() {
     # TODO: use dpkg-query as it's designed for this purpose!
     unset PKGSMISSING
     for PKG in $* ; do
-        # the only "valid" status that we can check for is "installed", which
+        # the only "valid" status that we can check for is "install", which
         # is printed at the line-end by dpkg:
         if ! dpkg --get-selections $PKG 2>&1 | grep -q 'install$' ; then
             PKGSMISSING="$PKGSMISSING $PKG"
