@@ -2,6 +2,11 @@
 
 source funs.sh
 
+# The dbupdate script takes care if the DB already exists or creates it
+# otherwise, so wee need the name in any case for the config file:
+echo "Enter the name of the database to use for the HRM"
+db_name=`readstring "hrm"`
+
 echo "Create new database account for HRM?"
 if [ $(readkey_choice) == "y" ] ; then
     echo -e "\nEnter new user name to create for the HRM database"
@@ -21,8 +26,3 @@ else
     echo "Enter password for the HRM database user"
     db_pass=`readstring`
 fi
-
-# The dbupdate script takes care if the DB already exists or creates it
-# otherwise, so wee need the name in any case for the config file:
-echo "Enter the name of the database to use for the HRM"
-db_name=`readstring "hrm"`
