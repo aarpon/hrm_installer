@@ -16,8 +16,9 @@ echo "Welcome to the HRM installation script."
 source funs.sh
 
 echo -n "Looking for hucore installation: "
-hucorepath=`which hucore`
-[ -n "$hucorepath" ] || abort "Hucore could not be found."
+# "which" exits with non-zero in case the command couldn't be found, so we can
+# use the exit status directly to test for success:
+hucorepath=`which hucore` || abort "Hucore could not be found."
 echo $hucorepath
 
 source inst-pkgs.sh
