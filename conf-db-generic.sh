@@ -18,6 +18,8 @@ if [ $(readkey_choice) == "y" ] ; then
     elif [ "$dbtype" == "postgres" ]
     then
         source conf-db-pgsql.sh
+    else
+        abort "Could not configure database."
     fi
 else
     echo -e "\nEnter existing user name for the HRM database"
