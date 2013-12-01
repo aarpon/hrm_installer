@@ -4,25 +4,23 @@ source funs.sh
 
 dbmsmissing=`packages_missing mysql-server postgresql`
 
-if [ -z "$dbmsmissing" ]; # empty, so both dbms are installed
+if [ -z "$dbmsmissing" ]; # empty, so both DBMS are installed
 then
 	echo "Two DBMS have been found, choose to use MySQL or PostgreSQL."
 	ans=`readkey_choice 'm' 'p'`
 else # one or both dbms are missing
 	num_dbms=`echo $dbmsmissing | wc -w`
 
-	if [ $num_dbms == 2 ]; # both dbms are missing
+	if [ $num_dbms == 2 ]; # both DBMS are missing
 	then
 		echo "No DBMS has been found, choose to install MySQL or PostgreSQL."
 		ans=`readkey_choice 'm' 'p'`
-	else
+	else # one DBMS has been found
 		ans=`echo "mysql-server postgresql " | sed s/$dbmsmissing.//g | cut -c 1`
 	fi
 fi
 
-dbtype=$ans;
-
-case $dbtype in
+case $ans in
 	m)
 		dbmspkgs="mysql-server php5-mysql"
 		dbtype="mysql"
@@ -31,9 +29,10 @@ case $dbtype in
 		dbmspkgs="postgresql php5-pgsql"
 		dbtype="postgres"
 		;;
-	*) errcheck "Wrong database type selected: '$dbtype'."
+	*) abort "Wrong database type selected: '$dbtype'."
 		;;
 esac
+echo "Using $dbtype as DBMS."
 
 #echo "Install optional LDAP support? [y/n]"
 #[ $(readkey) == "n" ] || dbmspkgs+=" php5-ldap"
