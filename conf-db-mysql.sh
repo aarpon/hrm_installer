@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # start mysql, if its not running
-service mysql start
+if $(service mysql status | grep -q 'stop/waiting') ; then
+    service mysql start
+fi
 
 echo "Enter password for the new HRM database user"
 db_pass=`readstring`
