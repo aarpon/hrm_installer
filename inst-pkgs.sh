@@ -1,8 +1,24 @@
 #!/bin/bash
 
-source funs.sh
+#source funs.sh
 
-dbmsmissing=`packages_missing mysql-server postgresql`
+if [ "$dist" == "Ubuntu" ]
+then
+	dbpkgs="mysql-server postgresql-9.1"
+	mysqlpkgs="mysql-server php5-mysql"
+	pgsqlpkgs="postgresql-9.1 php5-pgsql"
+	morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip"
+elif [ "$dist" == "Fedora" ]
+then
+	dbpkgs="community-mysql-server postgresql-server"
+	mysqlpkgs="community-mysql-server php-mysqlnd"
+	pgsqlpkgs="postgresql-server postgresql-contrib php-pgsql"
+	morepkgs="httpd php php-cli php-common zip wget"
+else
+	abort "Distribution unsupported."
+fi
+
+dbmsmissing=`packages_missing $dbpkgs`
 
 if [ -z "$dbmsmissing" ]; # empty, so both DBMS are installed
 then
@@ -11,22 +27,26 @@ then
 else # one or both dbms are missing
 	num_dbms=`echo $dbmsmissing | wc -w`
 
-	if [ $num_dbms == 2 ]; # both DBMS are missing
+	if [ $num_dbms -eq 2 ]; # both DBMS are missing
 	then
 		echo "No DBMS has been found, choose to install MySQL or PostgreSQL."
 		ans=`readkey_choice 'm' 'p'`
-	else # one DBMS has been found
-		ans=`echo "mysql-server postgresql " | sed s/$dbmsmissing.//g | cut -c 1`
+	else # only one DBMS has been found
+		# which is missing/not installed, mysql?
+		set +o errexit # do not exit uppon error for this test
+		echo $dbmsmissing | grep -q "mysql"
+		[[ ${PIPESTATUS[1]} -eq 0 ]] && ans='p' || ans='m'
+		set -o errexit
 	fi
 fi
 
 case $ans in
 	m)
-		dbmspkgs="mysql-server php5-mysql"
+		dbmspkgs="$mysqlpkgs"
 		dbtype="mysql"
 		;;
 	p)
-		dbmspkgs="postgresql php5-pgsql"
+		dbmspkgs="$pgsqlpkgs"
 		dbtype="postgres"
 		;;
 	*) abort "Wrong database type selected: '$dbtype'."
@@ -39,12 +59,4 @@ echo "Using $dbtype as DBMS."
 
 [ -n "$(which sendmail)" ] || mtapkg="postfix"
 
-pkgs="$dbmspkgs $mtapkg apache2 libapache2-mod-php5 php5 php5-cli php5-common zip"
-MISSING=$(packages_missing $pkgs)
-if [ -n "$MISSING" ] ; then
-    echo -e "\nThe following packages will be installed:\n$MISSING\n"
-    waitconfirm
-    aptitude install $MISSING
-    MISSING=$(packages_missing $pkgs)
-    [ -z "$MISSING" ] || errcheck "Could not install packages: $MISSING"
-fi
+install_packages "$dbmspkgs $mtapkg $morepkgs"

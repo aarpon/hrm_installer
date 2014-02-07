@@ -9,25 +9,6 @@ function errcheck()
         [ $? ] && abort "$1"
 }
 
-function packages_missing() {
-    # Check the debian dpkg database for one or more packages to ensure they
-    # are installed on the system. Returns the name of all packages that don't
-    # have the dpkg-query status "install ok installed".
-    local VALID='install ok installed$'
-    unset PKGSMISSING
-    for PKG in $* ; do
-        if ! dpkg-query -W -f='${Status}' $PKG 2>&1 | grep -q "$VALID" ; then
-            PKGSMISSING="$PKGSMISSING $PKG"
-        fi
-    done
-    echo $PKGSMISSING
-}
-
-function install_packages()
-{
-        aptitude install "$1"
-}
-
 function readkey() {
     # Read a single keypress and return it as lower-case. Optionally, the
     # prompt can be set by providing a string as 1st positional parameter.
@@ -71,15 +52,15 @@ function waitconfirm() {
     done
 }
 
-function mysqlcmd()
-{
-	mysql -h localhost -u $1 -p$2 -e "$3"
-}
+#function mysqlcmd()
+#{
+#	mysql -h localhost -u $1 -p$2 -e "$3"
+#}
 
-function pgsqlcmd()
-{
-	su postgres -c "psql -c \"$1\""
-}
+#function pgsqlcmd()
+#{
+#	su postgres -c "psql -c \"$1\""
+#}
 
 function sedconf()
 {

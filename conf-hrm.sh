@@ -8,7 +8,7 @@ cp $hrmdir/config/samples/hrm.conf.sample $CONF_ETC
 
 # do substitutions in config file
 sedconf $CONF_ETC "HRM_HOME=\"/path/to/hrm/home\"" "HRM_HOME=\"$hrmdir\""
-sedconf $CONF_ETC "SUSER=\"hrm\"" "SUSER=\"hrm-user\""
+sedconf $CONF_ETC "SUSER=\"hrm\"" "SUSER=\"$hrm_user\""
 
 # copy more config files
 CONF_SRV="$hrmdir/config/hrm_server_config.inc"

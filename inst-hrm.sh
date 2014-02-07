@@ -3,14 +3,23 @@
 source funs.sh
 
 echo "Enter the name for a system user for the HRM:"
-hrm_user=`readstring "hrm-user"`
+hrm_user=`readstring "hrmuser"`
 echo "Enter the name for a system group for the HRM:"
 hrm_group=`readstring "hrm"`
 echo "Creating HRM system user and group."
 USEROPTS="--system --gid $hrm_group"
 groupadd --system $hrm_group
 useradd $hrm_user $USEROPTS
-usermod www-data --append --groups $hrm_group
+
+if [ "$dist" == "Ubuntu" ]
+then
+	usermod www-data --append --groups $hrm_group
+elif [ "$dist" == "Fedora" ]
+then
+	usermod apache --append --groups $hrm_group
+else
+	abort "Distribution unsupported."
+fi
 
 echo "Enter HRM installation directory (must be a sub-directory of Apache document root):"
 hrmdir=`readstring "/var/www/hrm"`

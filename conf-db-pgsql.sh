@@ -1,9 +1,17 @@
 #!/bin/bash
 
-# start mysql, if its not running
+# init and start pgsql
+[ "$dist" == "Fedora" ] && postgresql-setup initdb
 service postgresql start
 
 # create postgresql user
 pgret=`su postgres -c "createuser -e -P -d -A -S -R -N $db_user"`
 db_pass=`echo "$pgret" | awk -F"PASSWORD" '{print $2}' | awk '{print $1}' | tr -d "'"`
+pgret=`su postgres -c "createdb $db_name"`
+
+if [ "$dist" == "Fedora" ]
+then
+	echo "Configure postgres for MD5 host authentication?"
+	[[ $(readkey_choice) == "y" ]] && { echo -e "host all $db_user 127.0.0.1/32 md5 \n$(cat /var/lib/pgsql/data/pg_hba.conf)" > /var/lib/pgsql/data/pg_hba.conf; service postgresql restart; }
+fi
 

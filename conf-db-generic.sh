@@ -10,7 +10,7 @@ db_name=`readstring "hrm"`
 echo "Create new database account for HRM?"
 if [ $(readkey_choice) == "y" ] ; then
     echo -e "\nEnter new user name to create for the HRM database"
-    db_user=`readstring "hrm_user"`
+    db_user=`readstring "hrmuser"`
 
     if [ "$dbtype" == "mysql" ];
     then
@@ -23,7 +23,7 @@ if [ $(readkey_choice) == "y" ] ; then
     fi
 else
     echo -e "\nEnter existing user name for the HRM database"
-    db_user=`readstring "hrm_user"`
+    db_user=`readstring "hrmuser"`
 
     echo "Enter password for the HRM database user"
     db_pass=`readstring`
