@@ -15,3 +15,9 @@ group=`echo "$line" | cut -d ' ' -f 4`
 # patch script, which creates user dirs, hopefully not needed for next release
 sedconf $hrmdir/bin/hrm 'CMD="sudo -u \$SUSER"' 'CMD=""'
 
+if [ "$dist" == "Fedora" ]
+then
+	setsebool -P allow_httpd_anon_write=1
+	chcon -R -t httpd_sys_content_t "$imgdir"
+fi
+

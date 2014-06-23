@@ -4,9 +4,9 @@
 
 if [ "$dist" == "Ubuntu" ]
 then
-	dbpkgs="mysql-server postgresql-9.1"
+	dbpkgs="mysql-server postgresql-9.3"
 	mysqlpkgs="mysql-server php5-mysql"
-	pgsqlpkgs="postgresql-9.1 php5-pgsql"
+	pgsqlpkgs="postgresql-9.3 php5-pgsql"
 	morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip"
 elif [ "$dist" == "Fedora" ]
 then
