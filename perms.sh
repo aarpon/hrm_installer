@@ -19,5 +19,8 @@ if [ "$dist" == "Fedora" ]
 then
 	setsebool -P allow_httpd_anon_write=1
 	chcon -R -t httpd_sys_script_rw_t "$imgdir"
+	chcon -R -t httpd_sys_content_rw_t "$imgdir"
+	chcon -t httpd_exec_t $hrmdir/bin/hrm
+
 fi
 
