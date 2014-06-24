@@ -14,6 +14,8 @@ then
 elif [ "$dist" == "Fedora" ]
 then
 	phpinipath="/etc/php.ini"
+	tz=`ls -l /etc/localtime | sed "s:zoneinfo/:\n:g" | tail -1`
+	sedconf $phpinipath ";date.timezone = .*" "date.timezone = $tz"
 else
 	abort "Distribution unsupported."
 fi
