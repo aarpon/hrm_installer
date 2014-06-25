@@ -22,5 +22,9 @@ then
 	chcon -R -t httpd_sys_content_rw_t "$imgdir"
 	chcon -t httpd_exec_t $hrmdir/bin/hrm
 	setsebool -P httpd_can_network_connect 1
+	setsebool -P httpd_execmem 1
+	setsebool -P httpd_enable_cgi 1
+	setsebool -P httpd_unified 1
+	setsebool -P httpd_tty_comm 1
 fi
 
