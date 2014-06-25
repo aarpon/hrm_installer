@@ -15,7 +15,7 @@ then
 	groupadd --system $hrm_group
 fi
 
-if id $hrm_user
+if ! id $hrm_user
 then
 	echo "User does not exist, creating it..."
 	USEROPTS="--system --gid $hrm_group"
@@ -26,8 +26,8 @@ fi
 
 echo "Use default systems's apache user?"
 if [ $(readkey_choice "y" "n") == "y" ] ; then
-	[["$dist" == "Ubuntu" ]] && apache_user="www-data"
-	[["$dist" == "Fedora" ]] && apache_user="apache"
+	[[ "$dist" == "Ubuntu" ]] && apache_user="www-data"
+	[[ "$dist" == "Fedora" ]] && apache_user="apache"
 else
     echo -e "\nEnter apache user name"
     apache_user=`readstring`
