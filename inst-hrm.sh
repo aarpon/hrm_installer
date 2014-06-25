@@ -9,14 +9,14 @@ hrm_group=`readstring "hrm"`
 
 ############# check if user exists, if it doesnt.. create... ################################
 
-ret=`getent group | cut -f1 -d ":" | grep "^$hrm_group$"`
-if [ -z "$ret" ] ; then
+if ! getent group | cut -f1 -d ":" | grep -q "^$hrm_group$"
+then
 	echo "Group does not exist, creating it..."
 	groupadd --system $hrm_group
 fi
 
-ret=`id $hrm_user | grep "no such user"`
-if [ ! -z "$ret" ] ; then
+if id $hrm_user
+then
 	echo "User does not exist, creating it..."
 	USEROPTS="--system --gid $hrm_group"
 	useradd $hrm_user $USEROPTS
