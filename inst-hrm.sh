@@ -22,7 +22,7 @@ else
 fi
 
 echo "Enter HRM installation directory (must be a sub-directory of Apache document root):"
-hrmdir=`readstring "/var/www/hrm"`
+hrmdir=`readstring "/var/www/html/hrm"`
 
 # create hrmdir and set permission
 mkdir -vp $hrmdir
