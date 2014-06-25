@@ -45,7 +45,12 @@ source perms.sh
 
 echo "Please restart apache and change the default admin password 'pwd4hrm'."
 
-if [ "$dist" == "Fedora" ] && [ "$dbtype" == "postgres" ]
+if [ "$dist" == "Fedora" ]
 then
-	echo "Please make sure to add SELinux policy rules allowing access to the PostgeSQL database."
+	echo "Apache, dabase and queue manager system services will start automatically at boot."
+	systemctl enable httpd.service
+	systemctl hrmd.service
+	[ "$dbtype" == "postgres" ] && systemctl enable postgresql.service
+	[ "$dbtype" == "mysql" ] && systemctl enable mysqld.service
+	
 fi
