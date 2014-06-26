@@ -41,7 +41,7 @@ start() {
 	if [ "$?" = 0 ]
 	then
 		sleep 3
-		cmd="ps -o pid,command | grep \"$HRM_HOME\" | grep \"php\" | sed -e \"s/^ * //\" | cut -d\" \" -f1 > \"$HRM_LOG\"/hrmd.pid"
+		cmd="pidof php > \"$HRM_LOG\"/hrmd.pid"
 		su "$SUSER" -c "$cmd"
 		echo "Starting HRM daemon...................ok"
 	fi
