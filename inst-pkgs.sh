@@ -13,7 +13,7 @@ then
 	dbpkgs="community-mysql-server postgresql-server"
 	mysqlpkgs="community-mysql-server php-mysqlnd"
 	pgsqlpkgs="postgresql-server postgresql-contrib php-pgsql"
-	morepkgs="httpd php php-cli php-common zip wget"
+	morepkgs="httpd php php-cli php-common zip wget policycoreutils-python"
 else
 	abort "Distribution unsupported."
 fi

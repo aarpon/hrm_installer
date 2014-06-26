@@ -18,9 +18,11 @@ sedconf $hrmdir/bin/hrm 'CMD="sudo -u \$SUSER"' 'CMD=""'
 if [ "$dist" == "Fedora" ]
 then
 	setsebool -P allow_httpd_anon_write=1
-	chcon -R -t httpd_sys_script_rw_t "$imgdir"
-	chcon -R -t httpd_sys_content_rw_t "$imgdir"
-	chcon -t httpd_exec_t $hrmdir/bin/hrm
+	semanage fcontext -a -t httpd_sys_script_rw_t "$imgdir(/.*)?"
+	semanage fcontext -a -t httpd_sys_content_rw_t "$imgdir(/.*)?"
+	restorecon -RF "$imgdir"
+	semanage fcontext -t httpd_exec_t $hrmdir/bin/hrm
+	restorecon -RF $hrmdir/bin/hrm
 	setsebool -P httpd_can_network_connect 1
 	setsebool -P httpd_execmem 1
 	setsebool -P httpd_enable_cgi 1
