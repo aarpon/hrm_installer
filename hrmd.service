@@ -1,0 +1,9 @@
+[Unit]
+Description=Huygens Remote Manager daemon
+
+[Service]
+ExecStart=/etc/init.d/hrmd start
+
+[Install]
+WantedBy=multi-user.target
+
