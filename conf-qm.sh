@@ -11,8 +11,9 @@ then
 	/etc/init.d/hrmd start
 elif [ "$dist" == "Fedora" ]
 then
-	chkconfig --add hrmd
-	service hrmd start
+	cp hrmd.service /etc/systemd/system/
+	cp hrmd /etc/init.d/hrmd
+	systemctl enable hrmd.service
 else
 	abort "Distribution unsupported."
 fi

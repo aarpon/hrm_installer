@@ -41,7 +41,7 @@ start() {
 	if [ "$?" = 0 ]
 	then
 		sleep 3
-		cmd="pidof php > \"$HRM_LOG\"/hrmd.pid"
+		cmd="pidof php > $HRM_LOG/hrmd.pid"
 		su "$SUSER" -c "$cmd"
 		echo "Starting HRM daemon...................ok"
 	fi
@@ -53,7 +53,7 @@ start() {
 stop() {
 	if [ -f "$HRM_LOG"/hrmd.pid ]
 	then
-		cmd="kill -9 $(cat \"$HRM_LOG\"/hrmd.pid | tr '\n' ' ')"
+		cmd="kill -9 $(cat $HRM_LOG/hrmd.pid | tr '\n' ' ')"
 		su "$SUSER" -c "$cmd"
 		
 		if [ "$?" = 0 ]

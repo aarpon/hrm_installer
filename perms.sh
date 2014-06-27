@@ -17,6 +17,7 @@ sedconf $hrmdir/bin/hrm 'CMD="sudo -u \$SUSER"' 'CMD=""'
 
 if [ "$dist" == "Fedora" ]
 then
+	echo "Setting SELinux permissions, this may take a while..."
 	setsebool -P allow_httpd_anon_write=1
 	semanage fcontext -a -f d -t httpd_sys_rw_content_t "$imgdir"
 	restorecon -RF "$imgdir"

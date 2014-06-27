@@ -6,20 +6,34 @@ echo "Enter the name for a system user for the HRM:"
 hrm_user=`readstring "hrmuser"`
 echo "Enter the name for a system group for the HRM:"
 hrm_group=`readstring "hrm"`
-echo "Creating HRM system user and group."
-USEROPTS="--system --gid $hrm_group"
-groupadd --system $hrm_group
-useradd $hrm_user $USEROPTS
 
-if [ "$dist" == "Ubuntu" ]
-then
-	usermod www-data --append --groups $hrm_group
-elif [ "$dist" == "Fedora" ]
-then
-	usermod apache --append --groups $hrm_group
-else
-	abort "Distribution unsupported."
+############# check if user exists, if it doesnt.. create... ################################
+
+ret=`getent group | cut -f1 -d ":" | grep "^$hrm_group$"`
+if [ -z "$ret" ] ; then
+	echo "Group does not exist, creating it..."
+	groupadd --system $hrm_group
 fi
+
+ret=`id $hrm_user | grep "no such user"`
+if [ ! -z "$ret" ] ; then
+	echo "User does not exist, creating it..."
+	USEROPTS="--system --gid $hrm_group"
+	useradd $hrm_user $USEROPTS
+fi
+
+############# use default apache user?? #####################################################
+
+echo "Use default systems's apache user?"
+if [ $(readkey_choice "y" "n") == "y" ] ; then
+	[["$dist" == "Ubuntu" ]] && apache_user="www-data"
+	[["$dist" == "Fedora" ]] && apache_user="apache"
+else
+    echo -e "\nEnter apache user name"
+    apache_user=`readstring`
+fi
+
+usermod $apache_user --append --groups $hrm_group
 
 echo "Enter HRM installation directory (must be a sub-directory of Apache document root):"
 hrmdir=`readstring "/var/www/html/hrm"`

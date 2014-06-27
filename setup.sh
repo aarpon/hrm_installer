@@ -49,10 +49,6 @@ if [ "$dist" == "Fedora" ]
 then
 	echo "Apache, dabase and queue manager system services will start automatically at boot."
 	systemctl enable httpd.service
-	cp hrmd.service /etc/systemd/system/
-	cp hrmd /etc/init.d/hrmd
-	systemctl enable hrmd.service
 	[[ "$dbtype" == "postgres" ]] && systemctl enable postgresql.service
 	[[ "$dbtype" == "mysql" ]] && systemctl enable mysqld.service
-	
 fi
