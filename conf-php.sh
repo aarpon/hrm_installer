@@ -8,8 +8,6 @@ postmax=`readstring "256M"`
 echo "Enter PHP upload_max_filesize (limits file size for browser uploads)"
 upmax=`readstring "256M"`
 
-dist="Fedora"
-
 if [ "$dist" == "Ubuntu" ]
 then
 	phpinipath="/etc/php5/apache2/php.ini"
