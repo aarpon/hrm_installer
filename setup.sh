@@ -18,6 +18,11 @@ source funs.sh
 #dist=`cat /etc/issue | head -n1 | cut -d ' ' -f1`;
 dist=`cat /etc/os-release | head -n1 | grep -Po '".*?"' | tr -d '"'`
 
+if  [ "$dist" == "" ]
+then
+	dist=`cat /etc/os-release | head -n1 | cut -d '=' -f2`
+fi
+
 if [ "$dist" == "Ubuntu" ]
 then
 	source funs-ubu.sh
