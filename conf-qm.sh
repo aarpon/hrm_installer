@@ -7,6 +7,8 @@ chmod +x /etc/init.d/hrmd
 
 if [ "$dist" == "Ubuntu" ]
 then
+#	cp hrmd /etc/init.d/	### hotfix till next release
+#	chmod +x /etc/init.d/hrmd #####
 	update-rc.d hrmd defaults
 	/etc/init.d/hrmd start
 elif [ "$dist" == "Fedora" ]

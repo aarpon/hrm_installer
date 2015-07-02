@@ -15,13 +15,20 @@ echo "Welcome to the HRM installation script."
 
 source funs.sh
 
-dist=`cat /etc/issue | head -n1 | cut -d ' ' -f1`;
+#dist=`cat /etc/issue | head -n1 | cut -d ' ' -f1`;
+dist=`cat /etc/os-release | head -n1 | grep -Po '".*?"' | tr -d '"'`
 
 if [ "$dist" == "Ubuntu" ]
 then
 	source funs-ubu.sh
 elif [ "$dist" == "Fedora" ]
 then
+	fedpkg="dnf"
+	source funs-fed.sh
+elif [ "$dist" == "CentOS Linux" ]
+then
+	dist="Fedora"
+	fedpkg="yum"
 	source funs-fed.sh
 else
 	abort "Distribution unsupported."
@@ -43,12 +50,14 @@ source make-db.sh
 source conf-qm.sh
 source perms.sh
 
-echo "Please restart apache and change the default admin password 'pwd4hrm'."
-
 if [ "$dist" == "Fedora" ]
 then
-	echo "Apache, dabase and queue manager system services will start automatically at boot."
+	echo "Apache, database and queue manager system services will start automatically at boot."
 	systemctl enable httpd.service
 	[[ "$dbtype" == "postgres" ]] && systemctl enable postgresql.service
-	[[ "$dbtype" == "mysql" ]] && systemctl enable mysqld.service
+	[[ "$dbtype" == "mysql" ]] && systemctl enable mariadb.service
 fi
+
+echo "Please restart your system and open HRM in your web browser (e.g., http://localhost/hrm/)."
+echo "The default admin account is login 'admin' with password 'pwd4hrm'."
+

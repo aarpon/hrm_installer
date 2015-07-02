@@ -47,15 +47,19 @@ echo "Download [d] the HRM package or use an existing one [e]"
 if [ $(readkey_choice "d" "e") == "d" ] ; then
     echo -e "\nDownloading the latest HRM package."
     HRMPKGTMP="$(mktemp)"
-    HRMURI="http://sourceforge.net/projects/hrm/files/latest/download"
+#    HRMURI="http://sourceforge.net/projects/hrm/files/latest/download"
+    HRMURI="https://github.com/aarpon/hrm/archive/hotfix-3.2.3.zip"
     wget -nv -O $HRMPKGTMP $HRMURI
     HRMTAR=$HRMPKGTMP
 else
-    echo -e "\nEnter the full path to an existing HRM tar.bz2 package"
+    echo -e "\nEnter the full path to an existing HRM zip package"
     HRMTAR=`readstring`
 fi
 echo "Extracting the HRM package."
-tar xjf $HRMTAR -C $hrmdir --strip-components=1
+HRMTMPDIR="$(mktemp -d)"
+unzip $HRMTAR -d $HRMTMPDIR
+mv $HRMTMPDIR/hrm-hotfix-3.2.3/* $hrmdir
+rm -rf $HRMTMPDIR
 #errcheck "Could not download and extract HRM."
 # HRMPKGTMP is only set if we downloaded it, so we can use it to clean up:
 rm -f $HRMPKGTMP

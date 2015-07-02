@@ -52,16 +52,6 @@ function waitconfirm() {
     done
 }
 
-#function mysqlcmd()
-#{
-#	mysql -h localhost -u $1 -p$2 -e "$3"
-#}
-
-#function pgsqlcmd()
-#{
-#	su postgres -c "psql -c \"$1\""
-#}
-
 function sedconf()
 {
 	sed -i -e "s|$2|$3|" "$1"

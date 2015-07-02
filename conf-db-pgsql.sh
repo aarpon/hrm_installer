@@ -11,7 +11,8 @@ pgret=`su postgres -c "createdb $db_name"`
 
 if [ "$dist" == "Fedora" ]
 then
-	echo "Configure postgres for MD5 host authentication?"
-	[[ $(readkey_choice) == "y" ]] && { echo -e "host all $db_user 127.0.0.1/32 md5 \n$(cat /var/lib/pgsql/data/pg_hba.conf)" > /var/lib/pgsql/data/pg_hba.conf; service postgresql restart; }
+	echo "Configure postgres for MD5 host authentication..."
+	echo -e "host all $db_user 127.0.0.1/32 md5 \nhost all $db_user ::1/128 md5\n $(cat /var/lib/pgsql/data/pg_hba.conf)" > /var/lib/pgsql/data/pg_hba.conf
+	service postgresql restart
 fi
 

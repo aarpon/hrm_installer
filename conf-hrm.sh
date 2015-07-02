@@ -7,7 +7,7 @@ CONF_ETC="/etc/hrm.conf"
 cp $hrmdir/config/samples/hrm.conf.sample $CONF_ETC
 
 # do substitutions in config file
-sedconf $CONF_ETC "HRM_HOME=\"/path/to/hrm/home\"" "HRM_HOME=\"$hrmdir\""
+sedconf $CONF_ETC "HRM_HOME=\"/var/www/html/hrm\"" "HRM_HOME=\"$hrmdir\""
 sedconf $CONF_ETC "SUSER=\"hrm\"" "SUSER=\"$hrm_user\""
 
 # copy more config files
@@ -39,9 +39,9 @@ then
 	fi
 fi
 
-sedconf $CONF_ETC "HRM_DATA=\"/path/to/hrm/data\"" "HRM_DATA=\"$imgdir\""
-sedconf $CONF_SRV '$image_folder = "/path/to/hrm_data";' '$image_folder = "'$imgdir'";'
-sedconf $CONF_SRV '$huygens_server_image_folder = "/path/to/hrm_data/";' '$huygens_server_image_folder = "'$imgdir'/";'
+sedconf $CONF_ETC "HRM_DATA=\"/scratch/hrm_data\"" "HRM_DATA=\"$imgdir\""
+sedconf $CONF_SRV '$image_folder = "/scratch/hrm_data";' '$image_folder = "'$imgdir'";'
+sedconf $CONF_SRV '$huygens_server_image_folder = "/scratch/hrm_data/";' '$huygens_server_image_folder = "'$imgdir'/";'
 
 echo "Enter HRM administrator's email address"
 hrmemail=`readstring`

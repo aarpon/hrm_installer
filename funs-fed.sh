@@ -5,7 +5,7 @@ function packages_missing() {
     local VALID='Installed Packages$'
     unset PKGSMISSING
     for PKG in $* ; do
-        if ! yum list installed $PKG 2>&1 | grep -q "$VALID" ; then
+        if ! $fedpkg list installed $PKG 2>&1 | grep -q "$VALID" ; then
             PKGSMISSING="$PKGSMISSING $PKG"
         fi
     done
@@ -18,7 +18,7 @@ function install_packages()
 	if [ -n "$MISSING" ] ; then
 	    echo -e "\nThe following packages will be installed:\n$MISSING\n"
 	    waitconfirm
-	    yum install $MISSING
+	    $fedpkg install $MISSING
 	    MISSING=$(packages_missing $1)
 	    [ -z "$MISSING" ] || errcheck "Could not install packages: $MISSING"
 	fi
