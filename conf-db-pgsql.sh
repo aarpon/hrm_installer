@@ -9,6 +9,9 @@ pgret=`su postgres -c "createuser -e -P -d -A -S -R -N $db_user"`
 db_pass=`echo "$pgret" | awk -F"PASSWORD" '{print $2}' | awk '{print $1}' | tr -d "'"`
 pgret=`su postgres -c "createdb $db_name"`
 
+# enable MD5 password authentication
+# only necessary for Fedora and CentOS
+# under Ubuntu MD5 is already the default authentication
 if [ "$dist" == "Fedora" ]
 then
 	echo "Configure postgres for MD5 host authentication..."
