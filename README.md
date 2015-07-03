@@ -72,7 +72,7 @@ These are the steps performed by the installation script in more detail.
 7. Setting all necessary access permissions. The apache web server user will
    become member of the hrmgroup, the queue manager is run as hrmuser, and the
    image data storage directory's group is set to hrmgroup with sticky bit
-   enabled.
+   enabled. For Fedora and CentOS also the required SELinux rules are set.
 
 
 Troubleshooting
