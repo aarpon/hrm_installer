@@ -45,10 +45,10 @@ Go to the shell, change to the installation script's directory and run:
 $ su -c "bash setup.sh"
 ```
 
-Then follow the on-screen instuctions and fill in your desired settings. When
+Then follow the on-screen instructions and fill in your desired settings. When
 the installation has completed successfully, please reboot the computer. After
-that you may use HRM via your web browser on localhost under your chosen path,
-e.g. http://localhost/hrm/ . The default HRM admin account name and password are
+that you may use HRM via your web browser on localhost at your chosen path,e.g.
+http://localhost/hrm/ . The default HRM admin account name and password are
 admin / pwd4hrm .
 
 
@@ -68,7 +68,7 @@ These are the steps performed by the installation script in more detail.
    or you may offer an offline ZIP file. You have to provide the installation
    path and an image data storage path.
 6. Setup of web server, configuring PHP, creating the database and running the
-   HRM queue manager as system deamon.
+   HRM queue manager as system daemon.
 7. Setting all necessary access permissions. The apache web server user will
    become member of the hrmgroup, the queue manager is run as hrmuser, and the
    image data storage directory's group is set to hrmgroup with sticky bit
@@ -83,8 +83,8 @@ Contact
 
 Author of the HRM installation scripts:
 
-Torsten Stöter (torsten.stoeter@lin-magdeburg.de)
-Leibniz Institute for Neurobiology Magdeburg
+Torsten Stöter (torsten.stoeter@lin-magdeburg.de),
+Leibniz Institute for Neurobiology, Magdeburg
 
 Further authors of the Huygens Remote Manager:
 * Aaron Ponti, Department of Biosystems Science and Engineering, ETH Zurich
