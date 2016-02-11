@@ -2,21 +2,39 @@
 
 echo "Configuring HRM queue manager to start at boot"
 
-cp $hrmdir/bin/hrmd /etc/init.d/
-chmod +x /etc/init.d/hrmd
+echo "Please select which init system your distribution is using, 'systemd' [d]"
+echo "or classical 'System-V-init' [v] (shellscripts in /etc/init.d/ or similar)"
+ans=`readkey_choice 'd' 'v'`
 
-if [ "$dist" == "Ubuntu" ]
-then
-#	cp hrmd /etc/init.d/	### hotfix till next release
-#	chmod +x /etc/init.d/hrmd #####
-	update-rc.d hrmd defaults
-	/etc/init.d/hrmd start
-elif [ "$dist" == "Fedora" ]
-then
-	cp hrmd.service /etc/systemd/system/
-	cp hrmd /etc/init.d/hrmd
+case $ans in
+	d)
+		inittype="systemd"
+		;;
+	v)
+		inittype="sysv"
+		;;
+	*) abort "Wrong init system type selected!"
+		;;
+esac
+echo "Configuring startup for init system type '$inittype'."
+
+
+if [ "$inittype" == "systemd" ] ; then
+	cp $hrmdir/resources/systemd/hrmd.service /etc/systemd/system/
 	systemctl enable hrmd.service
-else
-	abort "Distribution unsupported."
+	systemctl start hrmd.service
+	systemctl status hrmd.service
+elif [ "$inittype" == "sysv" ] ; then
+	cp $hrmdir/resources/sysv-init-lsb/hrmd /etc/init.d/
+	chmod +x /etc/init.d/hrmd
+	if [ "$dist" == "Ubuntu" ] ; then
+		update-rc.d hrmd defaults
+	elif [ "$dist" == "Fedora" ] ; then
+		chkconfig hrmd on
+	else
+		abort "Distribution unsupported."
+	fi
+	service hrmd start
+	service hrmd status
 fi
 
