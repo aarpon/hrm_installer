@@ -1,10 +1,20 @@
 #!/bin/bash
 
+source test.sh
+
 echo "Configuring HRM queue manager to start at boot"
 
-echo "Please select which init system your distribution is using, 'systemd' [d]"
-echo "or classical 'System-V-init' [v] (shellscripts in /etc/init.d/ or similar)"
-ans=`readkey_choice 'd' 'v'`
+if [[ "$dist" == "Ubuntu" ]]
+	if [[ "$vers" < "14.10" ]]
+		ans="v"
+	else
+		ans="d"
+	fi
+else
+	echo "Please select which init system your distribution is using, 'systemd' [d]"
+	echo "or classical 'System-V-init' [v] (shellscripts in /etc/init.d/ or similar)"
+	ans=`readkey_choice 'd' 'v'`
+fi
 
 case $ans in
 	d)
