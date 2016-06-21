@@ -11,6 +11,10 @@ upmax=`readstring "256M"`
 if [ "$dist" == "Ubuntu" ]
 then
 	phpinipath="/etc/php5/apache2/php.ini"
+	if [[ "$vers" > '"15.10"' ]]
+	then
+		phpinipath="/etc/php/5.6/apache2/php.ini"
+	fi
 elif [ "$dist" == "Fedora" ]
 then
 	phpinipath="/etc/php.ini"
@@ -22,3 +26,9 @@ fi
 
 sedconf $phpinipath "post_max_size = .*" "post_max_size = $postmax"
 sedconf $phpinipath "upload_max_filesize = .*" "upload_max_filesize = $upmax"
+
+# restart Apache as otherwise it doesn't recognize the PHP-MySQL stuff (this
+# might be required for other distributions / versions as well!!)
+if [[ "$dist" == "Ubuntu" ]] && [[ "$vers" > '"15.10"' ]] ; then
+	service apache2 restart
+fi

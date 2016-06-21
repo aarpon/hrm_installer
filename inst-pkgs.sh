@@ -59,4 +59,14 @@ echo "Using $dbtype as DBMS."
 
 [ -n "$(which sendmail)" ] || mtapkg="postfix"
 
-install_packages "$dbmspkgs $mtapkg $morepkgs"
+if [[ "$dist" == "Ubuntu" ]] && [[ "$vers" > '"15.10"' ]] ; then
+    echo
+    echo "Detected Ubuntu newer than '15.10', installing PHP backports."
+    echo
+    # we need to add the backport repository for PHP5 in this case:
+    LC_ALL=C.UTF-8 apt-add-repository --yes --update ppa:ondrej/php
+    allpkgs="$(echo $dbmspkgs $mtapkg $morepkgs | sed 's,php5,php5.6,g')"
+else
+    allpkgs="$dbmspkgs $mtapkg $morepkgs"
+fi
+install_packages "$allpkgs"
