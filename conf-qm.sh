@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#source test.sh
-
 echo "Configuring HRM queue manager to start at boot"
 
 if [[ "$dist" == "Ubuntu" ]]
@@ -46,7 +44,8 @@ elif [ "$inittype" == "sysv" ] ; then
 	else
 		abort "Distribution unsupported."
 	fi
-#	service hrmd start
-#	service hrmd status
+	service hrmd start > /dev/null
+	sleep 2
+	service hrmd status
 fi
 
