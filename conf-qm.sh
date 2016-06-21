@@ -30,6 +30,7 @@ echo "Configuring startup for init system type '$inittype'."
 
 
 if [ "$inittype" == "systemd" ] ; then
+	sedconf $hrmdir/resources/systemd/hrmd.service "mariadb" "postgresql"
 	cp $hrmdir/resources/systemd/hrmd.service /etc/systemd/system/
 	systemctl enable hrmd.service
 	systemctl start hrmd.service
