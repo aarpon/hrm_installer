@@ -14,7 +14,7 @@ group=`echo "$line" | cut -d ' ' -f 4`
 
 if [ "$dist" == "Fedora" ]
 then
-	echo "Setting SELinux permissions, this may take a while..."
+	echo "Setting SELinux and firewall permissions, this may take a while..."
 	setsebool -P allow_httpd_anon_write=1
 	semanage fcontext -a -t httpd_sys_content_t "${hrmdir}(/.*)?"
 	restorecon -RF "$hrmdir"
@@ -27,5 +27,7 @@ then
 	setsebool -P httpd_enable_cgi 1
 	setsebool -P httpd_unified 1
 	setsebool -P httpd_tty_comm 1
+	firewall-cmd --permanent --add-port=80/tcp
+	firewall-cmd --reload
 fi
 
