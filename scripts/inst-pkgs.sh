@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#source funs.sh
+source funs.sh
 
 if [ "$dist" == "Ubuntu" ]
 then
@@ -10,7 +10,8 @@ then
 	morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip"
 elif [ "$dist" == "Fedora" ]
 then
-	dbpkgs="community-mysql-server postgresql-server"
+	#dbpkgs="community-mysql-server postgresql-server"
+	dbpkgs="mariadb postgresql-server"
 	mysqlpkgs="mariadb mariadb-server php-mysqlnd"
 	pgsqlpkgs="postgresql-server postgresql-contrib php-pgsql"
 	morepkgs="httpd php php-cli php-common zip unzip wget policycoreutils-python"
