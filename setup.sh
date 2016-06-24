@@ -13,7 +13,7 @@ export LC_ALL=C
 
 echo "Welcome to the HRM installation script."
 
-source funs.sh
+source scripts/funs.sh
 
 #dist=`cat /etc/issue | head -n1 | cut -d ' ' -f1`;
 dist=`cat /etc/os-release | head -n1 | grep -Po '".*?"' | tr -d '"'`
@@ -26,16 +26,16 @@ fi
 
 if [ "$dist" == "Ubuntu" ]
 then
-	source funs-ubu.sh
+	source scripts/funs-ubu.sh
 elif [ "$dist" == "Fedora" ]
 then
 	fedpkg="dnf"
-	source funs-fed.sh
+	source scripts/funs-fed.sh
 elif [ "$dist" == "CentOS Linux" ]
 then
 	dist="Fedora"
 	fedpkg="yum"
-	source funs-fed.sh
+	source scripts/funs-fed.sh
 else
 	abort "Distribution unsupported."
 fi
@@ -45,16 +45,16 @@ echo -n "Looking for hucore installation: "
 # use the exit status directly to test for success:
 hucorepath=`which hucore` || { echo "Hucore could not be found, please provide full path:"; hucorepath=`readstring "/usr/local/svi/bin/hucore"`; }
 
-source inst-pkgs.sh
+source scripts/inst-pkgs.sh
 
-source conf-db-generic.sh
+source scripts/conf-db-generic.sh
 
-source inst-hrm.sh
-source conf-hrm.sh
-source conf-php.sh
-source make-db.sh
-source conf-qm.sh
-source perms.sh
+source scripts/inst-hrm.sh
+source scripts/conf-hrm.sh
+source scripts/conf-php.sh
+source scripts/make-db.sh
+source scripts/conf-qm.sh
+source scripts/perms.sh
 
 if [ "$dist" == "Fedora" ]
 then
