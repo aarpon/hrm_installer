@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source funs.sh
+source scripts/funs.sh
 
 # The dbupdate script takes care if the DB already exists or creates it
 # otherwise, so wee need the name in any case for the config file:
@@ -14,10 +14,10 @@ if [ $(readkey_choice) == "y" ] ; then
 
     if [ "$dbtype" == "mysql" ];
     then
-        source conf-db-mysql.sh
+        source scripts/conf-db-mysql.sh
     elif [ "$dbtype" == "postgres" ]
     then
-        source conf-db-pgsql.sh
+        source scripts/conf-db-pgsql.sh
     else
         abort "Could not configure database."
     fi
