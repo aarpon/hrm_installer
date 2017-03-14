@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source funs.sh
+source scripts/funs.sh
 
 # copy config file
 CONF_ETC="/etc/hrm.conf"

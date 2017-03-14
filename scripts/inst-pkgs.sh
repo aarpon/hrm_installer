@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source funs.sh
+source scripts/funs.sh
 
 if [ "$dist" == "Ubuntu" ]
 then

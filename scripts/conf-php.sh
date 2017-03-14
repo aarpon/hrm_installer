@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source funs.sh
+source scripts/funs.sh
 
 echo "Enter PHP post_max_size (limits POST size for browser uploads)"
 postmax=`readstring "256M"`

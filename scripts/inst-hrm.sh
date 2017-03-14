@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source funs.sh
+source scripts/funs.sh
 
 echo "Enter the name for a system user for the HRM:"
 hrm_user=`readstring "hrmuser"`
@@ -35,7 +35,7 @@ fi
 
 usermod $apache_user --append --groups $hrm_group
 
-echo "Enter HRM installation directory (must be a sub-directory of Apache document root):"
+echo -e "\nEnter HRM installation directory (must be a sub-directory of Apache document root):"
 hrmdir=`readstring "/var/www/html/hrm"`
 
 # create hrmdir and set permission
