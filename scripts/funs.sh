@@ -44,6 +44,14 @@ function readstring() {
     echo $REPLY
 }
 
+function getvalidpath() {
+    file_path=""
+    while [ ! -f "$file_path" ] ; do
+        file_path=$(readstring "$1")
+    done
+    echo $file_path
+}
+
 function waitconfirm() {
     # Display a message and wait for the user to confirm by pressing 'y'.
     echo "Press [y] to continue, [Ctrl]-[C] to abort."
