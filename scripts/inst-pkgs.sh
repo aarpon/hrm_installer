@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source scripts/funs.sh
+source "$(dirname $BASH_SOURCE)/funs.sh"
 
 if [ "$dist" == "Ubuntu" ]
 then

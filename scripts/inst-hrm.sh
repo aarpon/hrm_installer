@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source scripts/funs.sh
+source "$(dirname $BASH_SOURCE)/funs.sh"
 
 echo "Enter the name for a system user for the HRM:"
 hrm_user=`readstring "hrmuser"`
