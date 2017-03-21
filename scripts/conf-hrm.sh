@@ -49,4 +49,8 @@ sedconf $CONF_SRV '$email_sender = "hrm@localhost";' '$email_sender = "'$hrmemai
 sedconf $CONF_SRV '$email_admin = "hrm@localhost";' '$email_admin = "'$hrmemail'";'
 
 # assume client and server run on same machine, config file are identical
-ln -s $CONF_SRV $hrmdir/config/hrm_client_config.inc
+link="$hrmdir/config/hrm_client_config.inc"
+if [ ! -f "$link" ];
+then
+    ln -s $CONF_SRV "$link"
+fi
