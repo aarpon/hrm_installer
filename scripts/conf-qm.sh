@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source "$(dirname $BASH_SOURCE)/funs.sh"
+
 echo "Configuring HRM queue manager to start at boot"
 
 if [[ "$dist" == "Ubuntu" ]]
@@ -47,6 +49,6 @@ elif [ "$inittype" == "sysv" ] ; then
 	fi
 	service hrmd start > /dev/null
 	sleep 2
-	service hrmd status
+    /etc/init.d/hrmd status
 fi
 
