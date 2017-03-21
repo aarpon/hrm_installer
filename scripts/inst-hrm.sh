@@ -69,6 +69,12 @@ if [ $(readkey_choice "d" "e") == "d" ] ; then
     else
         git -C $hrmdir checkout $tag
     fi
+
+    # Versions 3.4+ have third party packages to be installed (the archive installation has those already included)
+    hrmsetup="$hrmdir/setup/"
+    if [ -f "$hrmsetup/setup_release.sh" ] ; then
+        $hrmsetup./setup_release.sh
+    fi
 else
     echo -e "\nEnter the full path to an existing HRM zip package"
     HRMTAR=`readstring`
