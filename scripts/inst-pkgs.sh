@@ -7,14 +7,14 @@ then
 	dbpkgs="mysql-server postgresql"
 	mysqlpkgs="mysql-server php5-mysql"
 	pgsqlpkgs="postgresql php5-pgsql"
-	morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip"
+	morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip git"
 elif [ "$dist" == "Fedora" ]
 then
 	#dbpkgs="community-mysql-server postgresql-server"
 	dbpkgs="mariadb postgresql-server"
 	mysqlpkgs="mariadb mariadb-server php-mysqlnd"
 	pgsqlpkgs="postgresql-server postgresql-contrib php-pgsql"
-	morepkgs="httpd php php-cli php-common zip unzip wget policycoreutils-python"
+	morepkgs="httpd php php-cli php-common zip unzip wget policycoreutils-python git"
 else
 	abort "Distribution unsupported."
 fi
