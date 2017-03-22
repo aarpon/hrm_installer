@@ -27,6 +27,7 @@ fi
 echo "Use default systems's apache user?"
 if [ $(readkey_choice "y" "n") == "y" ] ; then
 	[[ "$dist" == "Ubuntu" ]] && apache_user="www-data"
+	[[ "$dist" == "Debian" ]] && apache_user="www-data"
 	[[ "$dist" == "Fedora" ]] && apache_user="apache"
 else
     echo -e "\nEnter apache user name"
@@ -47,10 +48,10 @@ chmod u+s,g+ws $hrmdir
 
 echo "Download [d] the HRM package or use an existing one [e]:"
 if [ $(readkey_choice "d" "e") == "d" ] ; then
+    echo " "
     if [ -d "$hrmdir/.git" ] ; then
         echo "$hrmdir already contains the git repository."
     else
-#        echo ""
         git clone "https://github.com/aarpon/hrm.git" $hrmdir
     fi
 

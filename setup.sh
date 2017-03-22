@@ -17,14 +17,23 @@ source scripts/funs.sh
 
 #dist=`cat /etc/issue | head -n1 | cut -d ' ' -f1`;
 dist=`cat /etc/os-release | head -n1 | grep -Po '".*?"' | tr -d '"'`
+dist=${dist%% *}
 vers=`cat /etc/os-release | grep VERSION_ID | cut -d '=' -f2`
+echo "Detected $dist $vers installation"
 
 if  [ "$dist" == "" ]
 then
 	dist=`cat /etc/os-release | head -n1 | cut -d '=' -f2`
 fi
 
-if [ "$dist" == "Ubuntu" ]
+if [ "$dist" == "Debian" ]
+then
+    if [ "$(whoami)" != "root" ]
+    then
+        abort "You need to run setup.sh as root."
+    fi
+    source scripts/funs-ubu.sh
+elif [ "$dist" == "Ubuntu" ]
 then
 	source scripts/funs-ubu.sh
 elif [ "$dist" == "Fedora" ]
