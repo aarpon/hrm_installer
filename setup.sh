@@ -13,23 +13,70 @@ export LC_ALL=C
 
 echo "Welcome to the HRM installation script."
 
-source funs.sh
+source scripts/funs.sh
 
-echo -n "Looking for hucore installation: "
-# "which" exits with non-zero in case the command couldn't be found, so we can
-# use the exit status directly to test for success:
-hucorepath=`which hucore` || abort "Hucore could not be found."
-echo $hucorepath
+#dist=`cat /etc/issue | head -n1 | cut -d ' ' -f1`;
+dist=`cat /etc/os-release | head -n1 | grep -Po '".*?"' | tr -d '"'`
+dist=${dist%% *}
+vers=`cat /etc/os-release | grep VERSION_ID | cut -d '=' -f2`
+echo "Detected $dist $vers installation"
 
-source inst-pkgs.sh
+if  [ "$dist" == "" ]
+then
+	dist=`cat /etc/os-release | head -n1 | cut -d '=' -f2`
+fi
 
-source conf-db-generic.sh
+if [ "$dist" == "Debian" ]
+then
+    if [ "$(whoami)" != "root" ]
+    then
+        abort "You need to run setup.sh as root."
+    fi
+    source scripts/funs-ubu.sh
+elif [ "$dist" == "Ubuntu" ]
+then
+	source scripts/funs-ubu.sh
+elif [ "$dist" == "Fedora" ]
+then
+	fedpkg="dnf"
+	source scripts/funs-fed.sh
+elif [ "$dist" == "CentOS Linux" ]
+then
+	dist="Fedora"
+	fedpkg="yum"
+	source scripts/funs-fed.sh
+else
+	abort "Distribution unsupported."
+fi
 
-source inst-hrm.sh
-source conf-hrm.sh
-source conf-php.sh
-source make-db.sh
-source conf-qm.sh
-source perms.sh
+echo -n "Looking for hucore executable... "
+hucorepath=`which hucore || true`
+if [ -z "$hucorepath" ] || [ ! -f "$hucorepath" ]
+then
+    echo "not found. Please provide full path"
+    hucorepath=$(getvalidpath "/usr/local/svi/bin/hucore")
+else
+    echo "ok."
+fi
 
-echo "Please restart apache and change the default admin password 'pwd4hrm'."
+source scripts/inst-pkgs.sh
+
+source scripts/conf-db-generic.sh
+
+source scripts/inst-hrm.sh
+source scripts/conf-hrm.sh
+source scripts/conf-php.sh
+source scripts/make-db.sh
+source scripts/conf-qm.sh
+source scripts/perms.sh
+
+if [ "$dist" == "Fedora" ]
+then
+	echo "Apache, database and queue manager system services will start automatically at boot."
+	systemctl enable httpd.service
+	[[ "$dbtype" == "postgres" ]] && systemctl enable postgresql.service
+	[[ "$dbtype" == "mysql" ]] && systemctl enable mariadb.service
+fi
+
+echo "Please restart your system and open HRM in your web browser (e.g., http://localhost/hrm/)."
+echo "The default admin account is login 'admin' with password 'pwd4hrm'."

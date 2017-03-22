@@ -1,14 +1,14 @@
 #!/bin/bash
 
-source funs.sh
+source "$(dirname $BASH_SOURCE)/funs.sh"
 
 # copy config file
 CONF_ETC="/etc/hrm.conf"
 cp $hrmdir/config/samples/hrm.conf.sample $CONF_ETC
 
 # do substitutions in config file
-sedconf $CONF_ETC "HRM_HOME=\"/path/to/hrm/home\"" "HRM_HOME=\"$hrmdir\""
-sedconf $CONF_ETC "SUSER=\"hrm\"" "SUSER=\"hrm-user\""
+sedconf $CONF_ETC "HRM_HOME=\"/var/www/html/hrm\"" "HRM_HOME=\"$hrmdir\""
+sedconf $CONF_ETC "SUSER=\"hrm\"" "SUSER=\"$hrm_user\""
 
 # copy more config files
 CONF_SRV="$hrmdir/config/hrm_server_config.inc"
@@ -39,9 +39,9 @@ then
 	fi
 fi
 
-sedconf $CONF_ETC "HRM_DATA=\"/path/to/hrm/data\"" "HRM_DATA=\"$imgdir\""
-sedconf $CONF_SRV '$image_folder = "/path/to/hrm_data";' '$image_folder = "'$imgdir'";'
-sedconf $CONF_SRV '$huygens_server_image_folder = "/path/to/hrm_data/";' '$huygens_server_image_folder = "'$imgdir'/";'
+sedconf $CONF_ETC "HRM_DATA=\"/scratch/hrm_data\"" "HRM_DATA=\"$imgdir\""
+sedconf $CONF_SRV '$image_folder = "/scratch/hrm_data";' '$image_folder = "'$imgdir'";'
+sedconf $CONF_SRV '$huygens_server_image_folder = "/scratch/hrm_data/";' '$huygens_server_image_folder = "'$imgdir'/";'
 
 echo "Enter HRM administrator's email address"
 hrmemail=`readstring`
@@ -49,4 +49,8 @@ sedconf $CONF_SRV '$email_sender = "hrm@localhost";' '$email_sender = "'$hrmemai
 sedconf $CONF_SRV '$email_admin = "hrm@localhost";' '$email_admin = "'$hrmemail'";'
 
 # assume client and server run on same machine, config file are identical
-ln -s $CONF_SRV $hrmdir/config/hrm_client_config.inc
+link="$hrmdir/config/hrm_client_config.inc"
+if [ ! -f "$link" ];
+then
+    ln -s $CONF_SRV "$link"
+fi
