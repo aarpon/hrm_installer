@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # start mysql, if its not running
-if [ "$dist" == "Ubuntu" ]
+if [ "$dist" == "Ubuntu" ] || [ "$dist" == "Debian" ]
 then
 	if $(service mysql status | grep -q 'inactive') ; then
 		service mysql start

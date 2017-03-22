@@ -17,14 +17,23 @@ source scripts/funs.sh
 
 #dist=`cat /etc/issue | head -n1 | cut -d ' ' -f1`;
 dist=`cat /etc/os-release | head -n1 | grep -Po '".*?"' | tr -d '"'`
+dist=${dist%% *}
 vers=`cat /etc/os-release | grep VERSION_ID | cut -d '=' -f2`
+echo "Detected $dist $vers installation"
 
 if  [ "$dist" == "" ]
 then
 	dist=`cat /etc/os-release | head -n1 | cut -d '=' -f2`
 fi
 
-if [ "$dist" == "Ubuntu" ]
+if [ "$dist" == "Debian" ]
+then
+    if [ "$(whoami)" != "root" ]
+    then
+        abort "You need to run setup.sh as root."
+    fi
+    source scripts/funs-ubu.sh
+elif [ "$dist" == "Ubuntu" ]
 then
 	source scripts/funs-ubu.sh
 elif [ "$dist" == "Fedora" ]
@@ -40,10 +49,15 @@ else
 	abort "Distribution unsupported."
 fi
 
-echo -n "Looking for hucore installation: "
-# "which" exits with non-zero in case the command couldn't be found, so we can
-# use the exit status directly to test for success:
-hucorepath=`which hucore` || { echo "Hucore could not be found, please provide full path:"; hucorepath=`readstring "/usr/local/svi/bin/hucore"`; }
+echo -n "Looking for hucore executable... "
+hucorepath=`which hucore || true`
+if [ -z "$hucorepath" ] || [ ! -f "$hucorepath" ]
+then
+    echo "not found. Please provide full path"
+    hucorepath=$(getvalidpath "/usr/local/svi/bin/hucore")
+else
+    echo "ok."
+fi
 
 source scripts/inst-pkgs.sh
 
@@ -66,4 +80,3 @@ fi
 
 echo "Please restart your system and open HRM in your web browser (e.g., http://localhost/hrm/)."
 echo "The default admin account is login 'admin' with password 'pwd4hrm'."
-

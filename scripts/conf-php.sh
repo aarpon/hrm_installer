@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source scripts/funs.sh
+source "$(dirname $BASH_SOURCE)/funs.sh"
 
 echo "Enter PHP post_max_size (limits POST size for browser uploads)"
 postmax=`readstring "256M"`
@@ -8,7 +8,10 @@ postmax=`readstring "256M"`
 echo "Enter PHP upload_max_filesize (limits file size for browser uploads)"
 upmax=`readstring "256M"`
 
-if [ "$dist" == "Ubuntu" ]
+if [ "$dist" == "Debian" ]
+then
+    phpinipath="/etc/php5/apache2/php.ini"
+elif [ "$dist" == "Ubuntu" ]
 then
 	phpinipath="/etc/php5/apache2/php.ini"
 	if [[ "$vers" > '"15.10"' ]]
