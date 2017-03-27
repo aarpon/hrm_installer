@@ -32,6 +32,7 @@ then
 	echo "Image storage directory $imgdir does not exist, create it?"
 	if [ $(readkey_choice) == "y" ];
 	then
+	    echo " "
 		mkdir -vp $imgdir
 		chown $hrm_user $imgdir
 		chgrp $hrm_group $imgdir

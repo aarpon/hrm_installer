@@ -59,7 +59,7 @@ case $ans in
 	*) abort "Wrong database type selected: '$dbtype'."
 		;;
 esac
-echo "Using $dbtype as DBMS."
+echo -e "\nUsing $dbtype as DBMS."
 
 #echo "Install optional LDAP support? [y/n]"
 #[ $(readkey) == "n" ] || dbmspkgs+=" php5-ldap"
