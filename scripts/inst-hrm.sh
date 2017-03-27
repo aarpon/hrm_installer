@@ -55,13 +55,15 @@ if [ $(readkey_choice "d" "e") == "d" ] ; then
         git clone "https://github.com/aarpon/hrm.git" $hrmdir
     fi
 
-    echo "Use the latest HRM version [l] or choose an older one [o]:"
-    tag="$(git -C $hrmdir tag -l | tail -n 1)"
-    if [ $(readkey_choice "l" "o") == "o" ] ; then
-        git -C $hrmdir tag -l
-        echo "Choose and input one of the version numbers above:"
-        tag=$(readstring "$tag")
-    fi
+    # Get the latest tag
+    tag="$(git -C $hrmdir tag -l | grep '[0-9]\{1,2\}\.[0-9]\{1,2\}\.[0-9]\{1,2\}' | tail -n 1)"
+
+#    echo "Use the latest HRM version [l] or choose an older one [o]:"
+#    if [ $(readkey_choice "l" "o") == "o" ] ; then
+#        git -C $hrmdir tag -l
+#        echo "Choose and input one of the version numbers above:"
+#        tag=$(readstring "$tag")
+#    fi
 
     branch=$(git -C $hrmdir branch | grep $tag || true)
     echo $branch
