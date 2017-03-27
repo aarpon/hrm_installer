@@ -2,7 +2,7 @@ hrm_installer
 =============
 
 Set of bash scripts for the automated installation and configuration of the
-Huygens Remote Manager (HRM).
+Huygens Remote Manager ([HRM][hrm]).
 
 
 About
@@ -14,8 +14,7 @@ dependencies, configures the web server, sets up the database, downloads the
 latest version of HRM and sets the required permissions, SELinux and firewall
 rules. The scripts may be used for quick installation of HRM and testing.
 However, for production use review and further configuration is recommended.
-In this case, please also read the HRM installation documentation
-(http://huygens-remote-manager.readthedocs.org/en/latest/admin/index.html)
+In this case, please also read the HRM [installation documentation][doc].
 
 
 Changelog
@@ -31,12 +30,13 @@ Version 0.1 (Jun. 2015):
 Requirements
 ------------
 
-* Ubuntu 14.04+, CentOS 7
+* Ubuntu 14.04+, CentOS 7 or Debian 8
 * Superuser rights
 * Internet connection
 * HuCore installation and license
 
-HuCore must already be running on the machine.
+HuCore must already be running on the machine. The working installation can 
+easily be tested by using the `hucore` command in a terminal window.
 
 
 Usage
@@ -99,5 +99,9 @@ Copyright and licensing
 -----------------------
 
 This software is copyright by the HRM developers (see above) and licensed under
-GPLv3 (http://www.gnu.org/licenses/gpl.txt).
+[GPLv3][gpl].
 
+
+[doc]: http://huygens-remote-manager.readthedocs.org/en/latest/admin/index.html
+[hrm]: http://www.huygens-rm.org/wp/
+[gpl]: http://www.gnu.org/licenses/gpl.txt
