@@ -2,7 +2,7 @@
 
 source "$(dirname $BASH_SOURCE)/funs.sh"
 
-if [ "$dist" == "Ubuntu" ] || [ "$dist" == "Debian" ]
+if [ "$dist" == "Ubuntu" ]
 then
 	dbpkgs="mysql-server postgresql"
 	mysqlpkgs="mysql-server php5-mysql"
@@ -17,10 +17,10 @@ then
 	morepkgs="httpd php php-cli php-common zip unzip wget policycoreutils-python git"
 elif [ "$dist" == "Debian" ]
 then
-    dbpkgs="mysql-server postgresql"
-	mysqlpkgs="mysql-server php5-mysql"
-	pgsqlpkgs="postgresql php5-pgsql"
-	morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip git sysvinit-utils"
+        dbpkgs="mysql-server postgresql"
+	mysqlpkgs="mysql-server php-mysql"
+	pgsqlpkgs="postgresql php-pgsql"
+	morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git sysvinit-utils"
 else
 	abort "Distribution unsupported."
 fi
