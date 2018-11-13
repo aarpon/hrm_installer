@@ -7,6 +7,10 @@ echo "Configuring HRM queue manager to start at boot"
 if [[ "$dist" == "Debian" ]]
 then
     ans="v"
+    if [[ "$vers" < "14.10" ]]
+    then
+        ans="d"
+    fi
 elif [[ "$dist" == "Ubuntu" ]]
 then
 	if [[ "$vers" < "14.10" ]]
@@ -36,6 +40,7 @@ echo "Configuring startup for init system type '$inittype'."
 
 if [ "$inittype" == "systemd" ] ; then
 	sedconf $hrmdir/resources/systemd/hrmd.service "mariadb" "postgresql"
+	sedconf $hrmdir/resources/systems/hrmd.server "User=hrm" "User=$hrmuser"
 	cp $hrmdir/resources/systemd/hrmd.service /etc/systemd/system/
 	chmod +x /etc/systemd/system/hrmd.service
 	systemctl enable hrmd.service

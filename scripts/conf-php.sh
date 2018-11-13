@@ -1,5 +1,7 @@
 #!/bin/bash
 
+dist="Debian"
+
 source "$(dirname $BASH_SOURCE)/funs.sh"
 
 echo "Enter PHP post_max_size (limits POST size for browser uploads)"
@@ -10,7 +12,7 @@ upmax=`readstring "256M"`
 
 if [ "$dist" == "Debian" ]
 then
-    phpinipath="/etc/php5/apache2/php.ini"
+    phpinipath="/etc/php/7.0/apache2/php.ini"
 elif [ "$dist" == "Ubuntu" ]
 then
 	phpinipath="/etc/php5/apache2/php.ini"

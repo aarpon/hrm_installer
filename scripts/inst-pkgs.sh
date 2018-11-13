@@ -5,9 +5,9 @@ source "$(dirname $BASH_SOURCE)/funs.sh"
 if [ "$dist" == "Ubuntu" ] || [ "$dist" == "Debian" ]
 then
 	dbpkgs="mysql-server postgresql"
-	mysqlpkgs="mysql-server php5-mysql"
-	pgsqlpkgs="postgresql php5-pgsql"
-	morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip git"
+	mysqlpkgs="mysql-server php7.0-mysql"
+	pgsqlpkgs="postgresql php7.0-pgsql"
+	morepkgs="apache2 libapache2-mod-php7.0 php7.0 php7.0-cli php7.0-common zip git"
 elif [ "$dist" == "Fedora" ]
 then
 	#dbpkgs="community-mysql-server postgresql-server"
@@ -18,9 +18,9 @@ then
 elif [ "$dist" == "Debian" ]
 then
     dbpkgs="mysql-server postgresql"
-	mysqlpkgs="mysql-server php5-mysql"
-	pgsqlpkgs="postgresql php5-pgsql"
-	morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip git sysvinit-utils"
+	mysqlpkgs="mysql-server php7.0-mysql"
+	pgsqlpkgs="postgresql php7.0-pgsql"
+	morepkgs="apache2 libapache2-mod-php7.0 php7.0 php7.0-cli php7.o-common zip git sysvinit-utils"
 else
 	abort "Distribution unsupported."
 fi
