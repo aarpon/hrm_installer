@@ -1,6 +1,8 @@
 #!/bin/bash
 
-source "$(dirname $BASH_SOURCE)/funs.sh"
+context="$(dirname $BASH_SOURCE)"
+source "$context/funs.sh"
+source "$context/funs-input.sh"
 
 echo "Enter PHP post_max_size (limits POST size for browser uploads)"
 postmax=`readstring "256M"`
@@ -12,8 +14,15 @@ if [ "$dist" == "Debian" ]
 then
     # This will(?) return the correct path for Debian 9
     # and a valid path for previous versions
-    # TODO do we need a test in the path does not exist?
-    phppath=`find /etc/{php,php?} -maxdepth 0 -type d | tail -n 1`
+    if [ "$vers" \< '"9"' ]; then
+        phppath=`find /etc/php? -maxdepth 0 -type d | tail -n 1`
+    else
+        phppath=`find /etc/php -maxdepth 1 -type d | tail -n 1`
+    fi
+    if [ ! -d $phppath ]; then
+        msg="$phppath does not exist. Contact your system administrator."
+        wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
+    fi
     phpinipath="$phppath/apache2/php.ini"
 elif [ "$dist" == "Ubuntu" ]
 then
