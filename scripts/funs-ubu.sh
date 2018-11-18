@@ -1,3 +1,9 @@
+#!/bin/bash
+
+context="$(dirname $BASH_SOURCE)"
+source "$context/funs.sh"
+source "$context/funs-input.sh"
+
 function packages_missing() {
     # Check the debian dpkg database for one or more packages to ensure they
     # are installed on the system. Returns the name of all packages that don't
@@ -16,11 +22,20 @@ function install_packages()
 {
 	MISSING=$(packages_missing $1)
 	if [ -n "$MISSING" ] ; then
-	    echo -e "\nThe following packages will be installed:\n$MISSING\n"
-	    waitconfirm
-	    apt-get install $MISSING
+	    msg="The following packages will be installed:\n$MISSING"
+        if [ $interactive == true ]; then
+            # Here we exit if user selected no.
+            (whiptail --title "$title" --yesno "$msg" 8 70) || exit 1
+        else
+            printf "$msg\n"
+        fi
+        apt-get -y install $MISSING
+
 	    MISSING=$(packages_missing $1)
-	    [ -z "$MISSING" ] || errcheck "Could not install packages: $MISSING"
+	    if [ -z "$MISSING" ]; then
+            msg="Could not install packages: $MISSING"
+            wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
+        fi
 	fi
 }
 

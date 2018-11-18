@@ -10,7 +10,8 @@ upmax=`readstring "256M"`
 
 if [ "$dist" == "Debian" ]
 then
-    phpinipath="/etc/php5/apache2/php.ini"
+    phppath=`find /etc/php -maxdepth 1 -type d | tail -n 1`
+    phpinipath="$phppath/apache2/php.ini"
 elif [ "$dist" == "Ubuntu" ]
 then
 	phpinipath="/etc/php5/apache2/php.ini"
