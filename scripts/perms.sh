@@ -5,12 +5,12 @@ chmod g+w /var/log/hrm/*
 
 # check for $imgdir permissions
 # check group, owner,and sticky
-line=`ls -la $imgdir | head -n2 | tail -n1`
+line=`ls -la $imgdir | head -n2 | tail -n1 | tr -s ' '`
 sticky=`echo "$line" | cut -c 7`
 owner=`echo "$line" | cut -d ' ' -f 3`
 group=`echo "$line" | cut -d ' ' -f 4`
 
-[ "$sticky" != "s" ] || [ "$owner" != "$sysuser" ] || [ "$group" != "$sysgroup" ] && echo "Bad permissions on $imgdir, please set permissions (drwsrwsr-x) and ownership (hrmuser hrm)."
+[ "$sticky" != "s" ] || [ "$owner" != "$sysuser" ] || [ "$group" != "$sysgroup" ] && echo "Bad permissions on $imgdir, please set permissions (drwsrwsr-x) and ownership ($sysuser $sysgroup)."
 
 if [ "$dist" == "Fedora" ]
 then
