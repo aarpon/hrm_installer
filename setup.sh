@@ -27,6 +27,7 @@ hrmrepo="https://github.com/aarpon/hrm.git"
 hrmtag="latest"
 imgdir="/data/images"
 hrmemail="hrm@localhost"
+hrmpass="pwd4hrm"
 
 declare -A ARGPARSER_MAP
 ARGPARSER_MAP=(
@@ -116,26 +117,53 @@ then
     wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
 fi
 
+title="Installing system packages (step 1/7)" 
+$interactive || echo "---- $title ----"
 source scripts/inst-pkgs.sh
 
+title="Configuring the database (step 2/7)" 
+$interactive || echo "---- $title ----"
 source scripts/conf-db-generic.sh
 #TODO postgresql in the script above...
+
+title="Installing HRM files (step 3/7)" 
+$interactive || echo "---- $title ----"
 source scripts/inst-hrm.sh
+
+title="Configuring HRM (step 4/7)" 
+$interactive || echo "---- $title ----"
 source scripts/conf-hrm.sh
 
+title="Configuring PHP (step 5/7)" 
+$interactive || echo "---- $title ----"
 source scripts/conf-php.sh
+
+title="Making the database (step 6/7)" 
+$interactive || echo "---- $title ----"
 source scripts/make-db.sh
+
+title="Configuring the queue manager (step 7/7)" 
+$interactive || echo "---- $title ----"
 source scripts/conf-qm.sh
+
+title="HRM installation complete" 
+$interactive || echo "---- $title ----"
 source scripts/perms.sh
 
 if [ "$dist" == "Fedora" ]
 then
-    echo "Apache, database and queue manager system services will start automatically at boot."
+    msg="Apache, database and queue manager system services will start automatically at boot."
+    wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
     systemctl enable httpd.service
     [[ "$dbtype" == "postgres" ]] && systemctl enable postgresql.service
     [[ "$dbtype" == "mysql" ]] && systemctl enable mariadb.service
 fi
 
-msg="Please restart your system and open HRM in your web browser (e.g., http://localhost/hrm/)."
-msg="$msg\nThe default admin account is login 'admin' with password 'pwd4hrm'."
-wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
+hqn=`host -TtA $(hostname -s)|grep "has address"|awk '{print $1}'`
+hrmd=`basename $hrmdir`
+
+msg="Please restart your system and open HRM in your web browser\n(e.g., http://localhost/$hrmd or http://$hqn/$hrmd)."
+msg="$msg\nThe default admin account is login 'admin' with password '$hrmpass'."
+
+wt_print "$msg" --title="$title" --interactive="$interactive" --debug=$debug
+$interactive && printf "$msg\n"
