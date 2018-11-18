@@ -82,7 +82,6 @@ do
 
     # create hrmdir and set permission
     catch stdout stderr mkdir -vp $hrmdir && rc=$? || rc=$?
-    echo "rc=$rc"
 
     if [ $rc -ne 0 ]; then
         msg="Could not create $hrmdir\n($stderr)"
@@ -144,7 +143,7 @@ fi
 
 if [ "$hrmtag" != "zip" ]; then
     # At this point, the answer is a valid tag.
-    echo "The \$hrmtag is now $hrmtag"
+    #echo "The \$hrmtag is now $hrmtag"
 
     if [ -d "$hrmdir/.git" ] ; then
         echo "$hrmdir already contains the git repository."
@@ -153,7 +152,7 @@ if [ "$hrmtag" != "zip" ]; then
     fi
 
     branch=$(git -C $hrmdir branch | grep $hrmtag || true)
-    echo $branch
+    #echo $branch
 
     if [ -z "$branch" ] ; then
         git -C $hrmdir checkout -b $hrmtag
