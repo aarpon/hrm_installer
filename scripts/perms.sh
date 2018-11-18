@@ -10,7 +10,7 @@ sticky=`echo "$line" | cut -c 7`
 owner=`echo "$line" | cut -d ' ' -f 3`
 group=`echo "$line" | cut -d ' ' -f 4`
 
-[ "$sticky" != "s" ] || [ "$owner" != "$hrm_user" ] || [ "$group" != "$hrm_group" ] && echo "Bad permissions on $imgdir, please set permissions (drwsrwsr-x) and ownership (hrmuser hrm)."
+[ "$sticky" != "s" ] || [ "$owner" != "$sysuser" ] || [ "$group" != "$sysgroup" ] && echo "Bad permissions on $imgdir, please set permissions (drwsrwsr-x) and ownership (hrmuser hrm)."
 
 if [ "$dist" == "Fedora" ]
 then
