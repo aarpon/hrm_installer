@@ -10,7 +10,10 @@ upmax=`readstring "256M"`
 
 if [ "$dist" == "Debian" ]
 then
-    phppath=`find /etc/php -maxdepth 1 -type d | tail -n 1`
+    # This will(?) return the correct path for Debian 9
+    # and a valid path for previous versions
+    # TODO do we need a test in the path does not exist?
+    phppath=`find /etc/{php,php?} -maxdepth 0 -type d | tail -n 1`
     phpinipath="$phppath/apache2/php.ini"
 elif [ "$dist" == "Ubuntu" ]
 then
