@@ -45,7 +45,7 @@ do
     fi
 
     # create imgdir and set permission
-    if [ $ans == true]; then
+    if [ $ans == true ]; then
         catch stdout stderr mkdir -vp $imgdir
         rc=$?
         msg="Could not create $imgdir"

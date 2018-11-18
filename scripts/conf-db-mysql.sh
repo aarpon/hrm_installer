@@ -40,8 +40,6 @@ function docommand() {
 }
 
 function check_user() {
-    #dbadmin="rororor"
-    
     sql="SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user='$dbuser');"
     cmd="mysql -u $dbadmin -p$adminpass --host=$dbhost --database=$dbname -sse \"$sql\""
     [ -z "$adminpass" ] && cmd=${cmd/ -p/}
