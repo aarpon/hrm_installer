@@ -32,7 +32,7 @@ function install_packages()
         apt-get -y install $MISSING
 
 	    MISSING=$(packages_missing $1)
-	    if [ -z "$MISSING" ]; then
+	    if [ -n "$MISSING" ]; then
             msg="Could not install packages: $MISSING"
             wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
         fi
