@@ -21,6 +21,9 @@ In this case, please also read the HRM installation documentation
 Changelog
 ---------
 
+Version 0.3 (Nov. 2018):
+  - Added whiptail dialogs and a non-interactive mode
+  
 Version 0.2 (Jun. 2016):
   - Updated scripts for Ubuntu 16.04 and CentOS 7
 
@@ -45,7 +48,7 @@ Usage
 Go to the shell, change to the installation script's directory and run:
 
 ```
-$ su -c "bash setup.sh"
+$ sudo ./setup.sh
 ```
 
 Then follow the on-screen instructions and fill in your desired settings. When
@@ -58,7 +61,17 @@ admin / pwd4hrm .
 Detailed steps
 --------------
 
-These are the steps performed by the installation script in more detail.
+These are the steps performed by the installation script in more detail. They are grouped under 7 different headings:
+
+1. Installing system packages (step 1/7)
+2. Configuring the database (step 2/7)
+3. Installing HRM files (step 3/7)
+4. Configuring HRM (step 4/7)
+5. Configuring PHP (step 5/7)
+6. Making the database (step 6/7)
+7. Configuring the queue manager (step 7/7)
+
+And under the hood, the following operations are performed:
 
 1. Check for HuCore installation and get installation path.
 2. Check for missing dependencies and try to install those packages. If a
@@ -79,6 +92,77 @@ These are the steps performed by the installation script in more detail.
    are set.
 
 
+Non-interactive mode and script modifiers
+-----------------------------------------
+
+In non-interactive mode, the script can perform a complete installation without any user intervention. Simply add the `--interactive=false` flag to the command:
+
+```
+$ sudo ./setup.sh --interactive=false
+```
+
+The following default values will be used. However, any of those can be set via the command-line (e.g. `--hrmtag="devel"`).
+
+| Variable name | Default value | Function |
+| --- | --- | --- |
+| interactive | true | Interactive mode |
+| debug | false | Some debug output |
+| devel | false | Install the development version of HRM |
+| help | false | Very limited help |
+| dbtype | "mysql" | The database type ("mysql" or "pgsql") |
+| dbhost | "localhost" | The database hostname |
+| dbadmin | "root" | The database admin user |
+| adminpass | "" | The default admin password |
+| dbname | "hrm" | The name of the HRM database |
+| dbuser | "hrmuser" | The name of the database user for HRM |
+| dbpass | "pwd4hrm" | The password of the HRM database user |
+| sysuser | "hrmuser" | The system user that will run the HRM queue manager |
+| sysgroup | "hrm" | The system group the of the HRM system user |
+| apache_user | "www-data" | The apache user |
+| hrmdir | "/var/www/html/hrm" | The location of the HRM website |
+| hrmrepo | "https://github.com/aarpon/hrm.git" | The GIT repository used for pulling HRM |
+| hrmtag | "latest" | The HRM tar or branch ("latest" is converted to the tag of the current release) |
+| imgdir | "/data/images" | The folder HRM will use to store images and user data |
+| hrmemail | "hrm@localhost" | The email address which will appear when HRM sends e-mails |
+| hrmpass | "pwd4hrm" | The default HRM admin password |
+| zippath | "" | The path of a zip installation file which will be used instead of the GIT repository |
+
+Script usage
+------------
+
+Here are some ways in which the script can be used.
+
+To run the script in non-interactive mode:
+
+```
+$ sudo ./setup.sh --interactive=false
+```
+
+To install the development version of HRM, use the following command:
+
+```
+$ sudo ./setup.sh -D
+```
+
+To install from a zip file (the path will be checked):
+
+```
+$ sudo ./setup.sh --zipfile="hrm_v3.4.0.zip"
+```
+
+To change the folder in which HRM will be installed:
+
+```
+$ sudo ./setup.sh --hrmdir="/var/www"
+```
+
+To change the email address HRM uses to communicate:
+
+```
+$ sudo ./setup.sh --hrmmail="hrm@valid.email.address"
+```
+
+
 Authors and contact
 -------------------
 
@@ -93,7 +177,7 @@ Further authors of the Huygens Remote Manager:
 * Niko Ehrenfeuchter, Biozentrum (Basel)
 * Olivier Burri, BioImaging and Optics Platform, EPFL (Lausanne)
 * Frederik Grüll, Biozentrum (Basel)
-
+* Egor Zindy, University of Manchester
 
 Copyright and licensing
 -----------------------
