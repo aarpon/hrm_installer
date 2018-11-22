@@ -53,7 +53,6 @@ usermod $apache_user --append --groups $sysgroup
 
 
 ######################### choose where hrm directory ########################################
-#interactive=true
 
 while : ;
 do
@@ -75,7 +74,9 @@ do
             # Do we abort?
             # Right now, we do an automatic update
             echo "The $hrmdir folder will be automaticaly updated"
-            git -C $hrmdir fetch
+            if [ -d "$hrmdir/.git" ] ; then
+                git -C $hrmdir fetch
+            fi
             break
         fi
     fi
@@ -94,27 +95,47 @@ do
     chown $sysuser:$sysgroup $hrmdir
     chmod u+s,g+ws $hrmdir
 done
-#interactive=true
 
 ######################### get the hrm executable ############################################
 #
 # In non-interactive mode, the latest HRM is checked out from github
 
-#Here we get the tags from the hrm repo without a local copy. (Thanks Nico!)
-tags=$(git ls-remote "$hrmrepo" | grep tags | grep -v '\^' | cut -d/ -f 3 | tail -n 5 | tac)
+# Here we get the tags from the hrm repo without a local copy. (Thanks Niko!)
+#tags=$(git ls-remote "$hrmrepo" | grep tags | grep -v '\^' | LC_ALL=C sed -e 's/.*\ //' | tail -n 5 | tac)
+tags=$(git ls-remote --refs --tags "$hrmrepo" | awk -F 'tags/' '{print $2}' | tail -n 3 | tac)
 
 # For non interactive mode, we need to get the latest tag if hrmtag is "latest"
 [ "$hrmtag" == "latest" ] && hrmtag=`echo "${tags}" | head -1`
 
 if [ $interactive == true ]; then
+    #Extra matches for master, pre-release and devel
+    match="master\|release"
+    [ $devel == true ] && match+="\|devel"
+    tags+=" $(git ls-remote --refs "$hrmrepo" | grep $match | awk -F 'heads/' '{print $2}')"
+
     LIST=()
     selection="on"
     for tag in $tags; do 
-        LIST+=( "$tag" "Download HRM revision $tag" $selection )
+        # This selects the development version if the script was launched with -D
+        if [ $devel == true ]; then
+            [[ $tag == "devel" ]] && selection="on" || selection="off"
+        fi
+
+        # Generate an appropriate message for the current tag
+        if [[ $tag == *"release"* ]]; then
+            msg="Pre-release, use with caution!"
+        elif [[ $tag == "devel" ]]; then
+            msg="For HRM development only" 
+        elif [[ $tag == "master" ]]; then
+            msg="Rolling fixes for the latest release" 
+        else
+            msg="HRM release v$tag" 
+        fi
+
+        LIST+=( "$tag" "$msg" $selection )
         selection="off"
     done
 
-    LIST+=( "master" "Download HRM pre-release" $selection )
     LIST+=( "zip" "Extract HRM from a local ZIP file" $selection )
 
     msg="Choose which version of HRM to install:" 
@@ -143,16 +164,25 @@ fi
 
 if [ "$hrmtag" != "zip" ]; then
     # At this point, the answer is a valid tag.
-    #echo "The \$hrmtag is now $hrmtag"
 
     if [ -d "$hrmdir/.git" ] ; then
         echo "$hrmdir already contains the git repository."
+        #FIXME There's probably a more robust way to do this:
+        # We need to make sure we can actually checkout the branch or tag $hrmtag.
+        # If we already have a repository in $hrmdir, git checkout -d simply creates a new branch
+        # On the other hand, git clone below will fail if $hrmtag can't be checked out.
+        lc=$(git ls-remote --refs "$hrmrepo" | awk '{print $2}' | grep -F "$hrmtag" | wc -l)
+        if [ $lc -eq 0 ]; then
+            msg="$hrmtag cannot be checked out from $hrmrepo"
+            wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
+        fi
     else
-        git clone "$hrmrepo" $hrmdir
+        #FIXME according to: https://stackoverflow.com/questions/35979642/what-is-git-tag-how-to-create-tags-how-to-checkout-git-remote-tags
+        #Might be worth adding  --single-branch --depth 1 if all we're trying to do here is clone for deployment (unless devel?).
+        git clone -b "$hrmtag" "$hrmrepo" $hrmdir
     fi
 
-    branch=$(git -C $hrmdir branch | grep $hrmtag || true)
-    #echo $branch
+    branch=$(git -C $hrmdir branch | grep -F "$hrmtag" || true)
 
     if [ -z "$branch" ] ; then
         git -C $hrmdir checkout -b $hrmtag
@@ -162,8 +192,9 @@ if [ "$hrmtag" != "zip" ]; then
 
     # Versions 3.4+ have third party packages to be installed (the archive installation has those already included)
     hrmsetup="$hrmdir/setup/"
-    if [ -f "$hrmsetup/setup_release.sh" ] ; then
-        $hrmsetup./setup_release.sh
+    $devel && release="devel" || release="release"
+    if [ -f "$hrmsetup/setup_$release.sh" ] ; then
+        $hrmsetup./setup_$release.sh
     fi
 fi
 

@@ -10,6 +10,7 @@ opti=true
 interactive=true
 optd=false
 debug=false
+devel=false
 opth=false
 help=false
 dbtype="mysql"
@@ -34,9 +35,17 @@ ARGPARSER_MAP=(
     [h]=help
     [i]=interactive
     [d]=debug
+    [D]=devel
 )
  
 parse_args "$@"
+
+$optD && devel=true || devel=false
+
+# This ensures we run the right installation script
+# Can either run with hrmtag="devel" or run with -D
+[[ "$hrmtag" == "devel" ]] && devel=true
+$devel && hrmtag="devel"
 
 if [ $opth == true ]; then
     echo "This is all the help you will ever need..."
@@ -58,6 +67,13 @@ if [ $optd == true ]; then
     echo "\$interactive = $interactive" 
     echo "\$debug = $debug" 
     echo "\$help = $help" 
+
+    # FIXME xtrace breaks the script because of the extra output
+    # May need to fix that, xtrace can be quite useful...
+    #
+    # "xtrace" can be switched on for debugging if desired.
+    #set -o xtrace
+
 fi
 
 source scripts/funs.sh
@@ -66,9 +82,6 @@ source scripts/funs-input.sh
 # Exit on any error. That's very important as we require being run as root and
 # thus anything that goes wrong has a huge potential impact on the system.
 set -o errexit
-
-# "xtrace" can be switched on for debugging if desired.
-#set -o xtrace
 
 # Ensure we don't get localized output from various tools, otherwise many of
 # the tests will behave pretty much unpredictable.
@@ -80,28 +93,27 @@ dist=${dist%% *}
 vers=`cat /etc/os-release | grep VERSION_ID | cut -d '=' -f2`
 msg="Detected $dist $vers installation"
 
-if  [ "$dist" == "" ]
-then
+if  [ "$dist" == "" ]; then
     dist=`cat /etc/os-release | head -n1 | cut -d '=' -f2`
 fi
 
-if [ "$dist" == "Debian" ]
-then
-    if [ "$(whoami)" != "root" ]
-    then
-        msg="$msg\n\nYou need to run setup.sh as root (sudo ./setup.sh)."
-        wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
+if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]; then
+    msg1=""
+    if [[ "$(whoami)" != "root" ]]; then
+        msg1="You need to run setup.sh as root (sudo ./setup.sh)."
+    elif [[ "$dist" == "Ubuntu" ]]  && [[ "$vers" < '"18"' ]]; then
+        # FIXME Which version of Ubuntu are we targetting for devel?
+        [ $devel == true ] && msg1="Devel HRM only supports Ubuntu 18.04 or above."
+    elif [[ "$dist" == "Debian" ]]  && [[ "$vers" < '"9"' ]]; then
+        # FIXME Which version of Debian are we targetting for devel?
+        [ $devel == true ] && msg1="Devel HRM only supports Debian 9 or above."
     fi
+    [ -n "$msg1" ] && wt_print "$msg\n\n$msg1" -q --title="$title" --interactive="$interactive" --debug=$debug
     source scripts/funs-ubu.sh
-elif [ "$dist" == "Ubuntu" ]
-then
-    source scripts/funs-ubu.sh
-elif [ "$dist" == "Fedora" ]
-then
+elif [ "$dist" == "Fedora" ]; then
     fedpkg="dnf"
     source scripts/funs-fed.sh
-elif [ "$dist" == "CentOS Linux" ]
-then
+elif [ "$dist" == "CentOS Linux" ]; then
     dist="Fedora"
     fedpkg="yum"
     source scripts/funs-fed.sh
@@ -111,8 +123,7 @@ else
 fi
 
 hucorepath=`which hucore || true`
-if [ -z "$hucorepath" ] || [ ! -f "$hucorepath" ]
-then
+if [ -z "$hucorepath" ] || [ ! -f "$hucorepath" ]; then
     msg="$msg\n\nPlease install hucore first (https://svi.nl/Download)"
     wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
 fi

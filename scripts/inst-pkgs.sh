@@ -10,6 +10,9 @@ if [ "$dist" == "Ubuntu" ]; then
     mysqlpkgs="mysql-server php5-mysql"
     pgsqlpkgs="postgresql php5-pgsql"
     morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip git"
+    if [ $devel == true ]; then
+        morepkgs+=" php5-simplexml php5-xmlreader php5-xmlwriter"
+    fi
 elif [ "$dist" == "Fedora" ];
 then
     #dbpkgs="community-mysql-server postgresql-server"
@@ -23,6 +26,9 @@ then
     mysqlpkgs="mysql-server php-mysql"
     pgsqlpkgs="postgresql php-pgsql"
     morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git sysvinit-utils"
+    if [ $devel == true ]; then
+        morepkgs+=" php-simplexml php-xmlreader php-xmlwriter"
+    fi
 
     if [ "$vers" \< '"9"' ]; then
         #For version < 9 install the php5 packages instead of php
