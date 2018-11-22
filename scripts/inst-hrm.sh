@@ -114,12 +114,9 @@ if [ $interactive == true ]; then
     tags+=" $(git ls-remote --refs "$hrmrepo" | grep $match | awk -F 'heads/' '{print $2}')"
 
     LIST=()
-    selection="on"
     for tag in $tags; do 
-        # This selects the development version if the script was launched with -D
-        if [ $devel == true ]; then
-            [[ $tag == "devel" ]] && selection="on" || selection="off"
-        fi
+        # This selects the currently defined $hrmtag (if in $tags)
+        [[ $tag == $hrmtag ]] && selection="on" || selection="off"
 
         # Generate an appropriate message for the current tag
         if [[ $tag == *"release"* ]]; then
@@ -133,8 +130,9 @@ if [ $interactive == true ]; then
         fi
 
         LIST+=( "$tag" "$msg" $selection )
-        selection="off"
     done
+
+    [ -n "$zippath" ] && selection="on" || selection="off"
 
     LIST+=( "zip" "Extract HRM from a local ZIP file" $selection )
 
@@ -150,12 +148,12 @@ if [ $interactive == true ]; then
         while : ;
         do
             msg="the full path to an existing HRM zip package"
-            HRMTAR=$(wt_read "" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
-            [ -f "$HRMTAR" ] && break
+            zippath=$(wt_read $zippath --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
+            [ -f "$zippath" ] && break
         done
 
         HRMTMPDIR="$(mktemp -d)"
-        unzip $HRMTAR -d $HRMTMPDIR
+        unzip $zippath -d $HRMTMPDIR
         mv $HRMTMPDIR/hrm/* $hrmdir
         rm -rf $HRMTMPDIR
     fi

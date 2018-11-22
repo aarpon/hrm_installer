@@ -48,7 +48,7 @@ if [ "$dbtype" == "mysql" ]; then
     REPLY=$(check_db) && rc=$? || rc=$?
     if [ $rc == 0 ]; then
         msg="The database $dbname already exists."
-        wt_print "$msg" --title="$title" --interactive=$interactive
+        wt_print "$msg" --title="$title" --interactive=false
     else
         # If not, create one.
         REPLY=$(create_db) && rc=$? || rc=$?
@@ -62,7 +62,7 @@ if [ "$dbtype" == "mysql" ]; then
     REPLY=$(check_user) && rc=$? || rc=$?
     if [ $rc == 0 ]; then
         msg="The user $dbuser already exists."
-        wt_print "$msg" --title="$title" --interactive=$interactive
+        wt_print "$msg" --title="$title" --interactive=false
     else
         # If not, create one.
         REPLY=$(create_user) && rc=$? || rc=$?

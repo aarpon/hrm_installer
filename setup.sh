@@ -29,6 +29,7 @@ hrmtag="latest"
 imgdir="/data/images"
 hrmemail="hrm@localhost"
 hrmpass="pwd4hrm"
+zippath=""
 
 declare -A ARGPARSER_MAP
 ARGPARSER_MAP=(
@@ -46,6 +47,9 @@ $optD && devel=true || devel=false
 # Can either run with hrmtag="devel" or run with -D
 [[ "$hrmtag" == "devel" ]] && devel=true
 $devel && hrmtag="devel"
+
+# Handling of zip file installation
+[ -n "$zippath" ] && hrmtag="zip"
 
 if [ $opth == true ]; then
     echo "This is all the help you will ever need..."

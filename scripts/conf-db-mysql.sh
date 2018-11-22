@@ -47,7 +47,7 @@ function check_user() {
     #We need both stdout and stderr for this one.
     catch stdout stderr eval $cmd && rc=$? || rc=$?
 
-    if [ -z $stderr ]; then
+    if [ -z "$stderr" ]; then
         #This means the command was successful (no error message).
         #stdout contains the number of existing users for the query (1 or 0)
         if [ $stdout -eq 0 ]; then
