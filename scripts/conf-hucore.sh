@@ -21,7 +21,7 @@ intro="If you do not have a license string, please send an email to info@svi.nl 
 CONF_LICENSE="/usr/local/svi/huygensLicense"
 
 # When a license string is supplied, run once in non-interactive mode to check whether the license is valid or not
-[ -n $license ] && interac=false || interac=$interactive
+[ -n "$license" ] && interac=false || interac=$interactive
 
 while ! validlic
 do
