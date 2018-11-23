@@ -109,6 +109,7 @@ The following default values will be used. However, any of those can be set via 
 | debug | false | Some debug output |
 | devel | false | Install the development version of HRM |
 | help | false | Very limited help |
+| license | "" | The hucore license string |
 | dbtype | "mysql" | The database type ("mysql" or "pgsql") |
 | dbhost | "localhost" | The database hostname |
 | dbadmin | "root" | The database admin user |
