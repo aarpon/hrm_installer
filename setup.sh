@@ -30,6 +30,7 @@ imgdir="/data/images"
 hrmemail="hrm@localhost"
 hrmpass="pwd4hrm"
 zippath=""
+license=""
 
 declare -A ARGPARSER_MAP
 ARGPARSER_MAP=(
@@ -131,6 +132,8 @@ if [ -z "$hucorepath" ] || [ ! -f "$hucorepath" ]; then
     msg="$msg\n\nPlease install hucore first (https://svi.nl/Download)"
     wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
 fi
+
+source scripts/conf-hucore.sh
 
 title="Installing system packages (step 1/7)" 
 $interactive || echo "---- $title ----"

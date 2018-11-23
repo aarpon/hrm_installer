@@ -78,6 +78,12 @@ function waitconfirm() {
 
 function sedconf()
 {
-	sed -i -e "s|$2|$3|" "$1"
+    [ -f "$1" ] && sed -i -e "s|$2|$3|" "$1"
+}
+
+# remove a line according to a pattern
+function rmline()
+{
+    [ -f "$1" ] && sed -i -e "/^$2/d" "$1"
 }
 

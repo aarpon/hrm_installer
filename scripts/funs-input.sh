@@ -5,6 +5,7 @@ source "$context/argparser.sh"
 function wt_read()
 {
     local title="Input box"
+    local intro=""
     local message="Please type in a value:"
     local interactive=false #Interactive input
     local value="" #Default value
@@ -48,10 +49,13 @@ function wt_read()
     fi
 
     if [ $opti == true ]; then
+        message="Enter the $message:"
+        [ -n "$intro" ] && message="$intro\n$message"
+
         $password && password="--passwordbox" || password="--inputbox"
         while : ;
         do
-            REPLY=$(whiptail "$password" "Enter the $message:" 8 70 "$value" \
+            REPLY=$(whiptail "$password" "$message" 12 70 "$value" \
                 --title "$title" 3>&1 1>&2 2>&3)
             rc=$?
             value=$REPLY
