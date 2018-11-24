@@ -17,21 +17,16 @@ sysgroup=$(wt_read "$sysgroup" --interactive=$interactive --title="$title" --mes
 
 ############# check if user exists, if it doesnt.. create... ################################
 
-if ! getent group | cut -f1 -d ":" | grep -q "^$sysgroup$"
-then
+getent group | cut -f1 -d ":" | grep -q "^$sysgroup$" && rc=$? || rc=$?
+if  [ $rc -eq 1 ]; then
 	[ $interactive == false ] && echo "Group does not exist, creating it..."
-    catch stdout stderr groupadd --system $sysgroup
+    groupadd --system $sysgroup
 fi
 
-catch stdout stderr id $sysuser
-
-if [ $? -eq 0 ]; then
-    msg="HRM will run with:\n$stdout"
-    wt_print "$msg" --title="$title" --interactive=$interactive
-else
+if ! id -u $sysuser > /dev/null 2>&1; then
 	[ $interactive == false ] && echo "User does not exist, creating it..."
 	USEROPTS="--system --gid $sysgroup"
-    catch stdout stderr useradd $sysuser $USEROPTS
+    useradd $sysuser $USEROPTS
 fi
 
 
@@ -82,7 +77,7 @@ do
     fi
 
     # create hrmdir and set permission
-    catch stdout stderr mkdir -vp $hrmdir && rc=$? || rc=$?
+    mkdir -vp $hrmdir && rc=$? || rc=$?
 
     if [ $rc -ne 0 ]; then
         msg="Could not create $hrmdir\n($stderr)"
