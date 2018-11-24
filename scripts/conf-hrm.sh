@@ -14,7 +14,6 @@ hrmemail=$(wt_read "$hrmemail" --interactive=$interactive --title="$title" --mes
 # For non-interactive mode, we create the folder if not present. Abort if cannot be created
 ans=true
 
-interactive=true
 while : ;
 do
     msg="image storage directory"
