@@ -14,6 +14,7 @@ hrmemail=$(wt_read "$hrmemail" --interactive=$interactive --title="$title" --mes
 # For non-interactive mode, we create the folder if not present. Abort if cannot be created
 ans=true
 
+interactive=true
 while : ;
 do
     msg="image storage directory"
@@ -41,26 +42,24 @@ do
     # Here we ask whether to create the folder (in non-interactive mode, the answer is yes)
     if [ $interactive == true ]; then
         msg="$imgdir does not exist, create it?"
-        ans=(whiptail --title "$title" --yesno "$msg" 8 70)
+        if (whiptail --title "$title" --yesno "$msg" 8 70); then
+            ans=true
+        else
+            ans=false
+        fi
     fi
 
     # create imgdir and set permission
     if [ $ans == true ]; then
-        catch stdout stderr mkdir -vp $imgdir
+        mkdir -vp $imgdir
         rc=$?
-        msg="Could not create $imgdir"
 
-        if [ $interactive == true ]; then
+        if [ $rc -ne 0 ]; then
+            msg="Could not create $imgdir"
             wt_print "$msg" --title="$title" --interactive=$interactive
+            [ $interactive == false ] && exit 1
         else
-            if [ $rc -ne 0 ]; then
-                echo msg
-                exit 1
-            fi
-        fi
-
-        # Here we change permissions on the newly created folder
-        if [ rc -eq 0 ]; then
+            # Here we change permissions on the newly created folder
             # This should not fail:
             chown $sysuser:$sysgroup $imgdir
             chmod u+s,g+ws $imgdir
