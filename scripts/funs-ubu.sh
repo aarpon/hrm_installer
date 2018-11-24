@@ -23,11 +23,22 @@ function install_packages()
 	MISSING=$(packages_missing $1)
 	if [ -n "$MISSING" ] ; then
 	    msg="The following packages will be installed:\n$MISSING"
+
+        set_adminpass=false
+        if [[ $MISSING == *"mysql-server"* ]]; then
+            if [ $dbadmin != "root" ]; then
+                echo "New mysql-server install, changing dbadmin to root"
+                dbadmin="root"
+            fi
+            [ -n "$adminpass" ] && set_adminpass=true
+        fi
+
         if [ $interactive == true ]; then
             # Here we exit if user selected no.
             (whiptail --title "$title" --yesno "$msg" 8 70) || exit 1
         else
             printf "$msg\n"
+            export DEBIAN_FRONTEND=noninteractive
         fi
         apt-get -y install $MISSING
 
@@ -35,6 +46,11 @@ function install_packages()
 	    if [ -n "$MISSING" ]; then
             msg="Could not install packages: $MISSING"
             wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
+        fi
+
+        # Set the root password
+        if [ $set_adminpass == true ]; then
+            mysqladmin -u root password "$adminpass"
         fi
 	fi
 }
