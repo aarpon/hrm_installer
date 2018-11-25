@@ -58,37 +58,31 @@ if [ $interactive == true ]; then
     if [ -z "$dbmsmissing" ]; # empty, so both DBMS are installed
     then
         msg="Two database management systems were found on this system.\n\nChoose which DBMS HRM will use" 
-        ans=""
     else # one or both dbms are missing
         num_dbms=`echo $dbmsmissing | wc -w`
 
         if [ $num_dbms -eq 2 ]; # both DBMS are missing
         then
             msg="No database management system installed on this system\n\nPlease choose one of the following:"
-            ans=""
         else # only one DBMS has been found
             # which is missing/not installed, mysql?
-            set +o errexit # do not exit uppon error for this test
-            echo $dbmsmissing | grep -q "mysql"
-            [[ ${PIPESTATUS[1]} -eq 0 ]] && ans=array[1] || ans=array[0]
-            set -o errexit
+            [ "$dbmissing" == "mysql" ] && dbtype="postgres" || dbtype="mysql"
         fi
     fi
 
-    # we do not have an answer yet, so need to ask...
-    if [ -z "$ans" ];
+    # we must choose between multiple possibilities
+    if [ $num_dbms -ne 1 ] # both DBMS are missing
     then
         ans=$(whiptail --title "$title" --radiolist \
             "$msg" 20 70 ${#array[@]} \
             "${LIST[@]}" \
                       3>&1 1>&2 2>&3 )
-    fi
-
-    if [ $ans = ${array[0]} ];
-    then
-        dbtype="mysql"
-    else
-        dbtype="postgres"
+        if [ "$ans" == "${array[0]}" ];
+        then
+            dbtype="mysql"
+        else
+            dbtype="postgres"
+        fi
     fi
 fi
 
