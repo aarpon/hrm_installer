@@ -131,7 +131,7 @@ if [ $interactive == true ]; then
 
     LIST+=( "zip" "Extract HRM from a local ZIP file" $selection )
 
-    msg="Choose which version of HRM to install:" 
+    msg="The HRM repo is: $hrmrepo\n\nChoose which version of HRM to install:" 
 
     ans=$(whiptail --title "$title" --radiolist \
         "$msg" 20 70 $(( ${#LIST[@]}/3 )) \
