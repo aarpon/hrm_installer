@@ -4,11 +4,15 @@ context="$(dirname $BASH_SOURCE)"
 source "$context/funs.sh"
 source "$context/funs-input.sh"
 
-echo "Enter PHP post_max_size (limits POST size for browser uploads)"
-postmax=`readstring "256M"`
+############################### PHP post_max_size (limits POST size for browser uploads) ####
 
-echo "Enter PHP upload_max_filesize (limits file size for browser uploads)"
-upmax=`readstring "256M"`
+msg="PHP post_max_size (limits POST size for browser uploads)"
+postmax=$(wt_read "$postmax" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
+
+######################### PHP upload_max_filesize (limits file size for browser uploads) ####
+
+msg="PHP upload_max_filesize (limits file size for browser uploads)"
+upmax=$(wt_read "$upmax" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
 
 if [ "$dist" == "Debian" ]
 then

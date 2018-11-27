@@ -31,6 +31,8 @@ hrmemail="hrm@localhost"
 hrmpass="pwd4hrm"
 zippath=""
 license=""
+postmax="256M"
+upmax="256M"
 
 declare -A ARGPARSER_MAP
 ARGPARSER_MAP=(
