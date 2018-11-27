@@ -1,3 +1,5 @@
+declare -A dbms=( ["mysql"]="MySQL" ["mysql-server"]="MySQL" ["mariadb"]="MariaDB" ["pgsql"]="PostgreSQL" ["postgresql"]="PostgreSQL")
+
 #As per Tino @ https://stackoverflow.com/questions/11027679/capture-stdout-and-stderr-into-different-variables
 function catch()
 {

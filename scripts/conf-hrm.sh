@@ -80,7 +80,11 @@ CONF_SRV="$hrmdir/config/hrm_server_config.inc"
 cp $hrmdir/config/samples/hrm_server_config.inc.sample $CONF_SRV
 
 # do substitutions in config file
-sedconf $CONF_SRV '$db_type = "mysql";' '$db_type = "'$dbtype'";'
+
+if [ "$dbtype" != "mysql" ]; then
+    sedconf $CONF_SRV '$db_type = "mysqli";' '$db_type = "'$dbtype'";'
+fi
+
 sedconf $CONF_SRV '$db_user = "dbuser";' '$db_user = "'$dbuser'";'
 sedconf $CONF_SRV '$db_password = "dbpasswd";' '$db_password = "'$dbpass'";'
 sedconf $CONF_SRV '$db_name = "hrm";' '$db_name = "'$dbname'";'

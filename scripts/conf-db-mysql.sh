@@ -3,7 +3,7 @@
 context="$(dirname $BASH_SOURCE)"
 source "$context/funs.sh"
 
-function start_mysql() {
+function init_dbms() {
     rc=0
     if [ "$dist" == "Ubuntu" ] || [ "$dist" == "Debian" ]
     then
@@ -39,6 +39,36 @@ function docommand() {
     return $rc
 }
 
+function create_db() {
+    sql="CREATE DATABASE $dbname;"
+    REPLY=$(docommand "$sql") && rc=$? || rc=$?
+    echo $REPLY
+    return $rc
+}
+
+function drop_db() {
+    sql="DROP DATABASE $dbname;"
+    REPLY=$(docommand "$sql") && rc=$? || rc=$?
+    echo $REPLY
+    return $rc
+}
+
+function check_db() {
+    cmd="mysql -u $dbadmin -p$adminpass --database=$dbname --host=$dbhost -e;"
+    [ -z "$adminpass" ] && cmd=${cmd/ -p/}
+    REPLY=$($cmd 3>&1 1>&2 2>&3) && rc=$? || rc=$?
+    echo $REPLY
+    return $rc
+}
+
+function create_user() {
+    sql="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
+    echo $sql
+    REPLY=$(docommand "$sql") && rc=$? || rc=$?
+    echo $REPLY
+    return $rc
+}
+
 function check_user() {
     sql="SELECT EXISTS(SELECT 1 FROM mysql.user WHERE user='$dbuser');"
     cmd="mysql -u $dbadmin -p$adminpass --host=$dbhost --database=$dbname -sse \"$sql\""
@@ -65,26 +95,10 @@ function check_user() {
     return $rc
 }
 
-function create_user() {
-    sql="CREATE USER '$dbuser'@'localhost' IDENTIFIED BY '$dbpass';"
-    echo $sql
-    REPLY=$(docommand "$sql") && rc=$? || rc=$?
-    echo $REPLY
-    return $rc
-}
-
 function link_user_db() {
     sql="GRANT ALL PRIVILEGES ON $dbname.* TO '$dbuser'@'localhost' WITH GRANT OPTION; FLUSH PRIVILEGES;"
     echo $sql
     REPLY=$(docommand "$sql") && rc=$? || rc=$?
-    echo $REPLY
-    return $rc
-}
-
-function check_db() {
-    cmd="mysql -u $dbadmin -p$adminpass --database=$dbname --host=$dbhost -e;"
-    [ -z "$adminpass" ] && cmd=${cmd/ -p/}
-    REPLY=$($cmd 3>&1 1>&2 2>&3) && rc=$? || rc=$?
     echo $REPLY
     return $rc
 }
@@ -98,9 +112,3 @@ function check_admin() {
     return $rc
 }
 
-function create_db() {
-    sql="CREATE DATABASE $dbname;"
-    REPLY=$(docommand "$sql") && rc=$? || rc=$?
-    echo $REPLY
-    return $rc
-}

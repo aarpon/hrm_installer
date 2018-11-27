@@ -40,8 +40,6 @@ else
     abort "Distribution unsupported."
 fi
 
-declare -A dbms=( ["mysql-server"]="MySQL" ["mariadb"]="MariaDB" ["postgresql"]="PostgreSQL")
-
 dbmsmissing=`packages_missing $dbpkgs`
 
 if [ $interactive == true ]; then
@@ -55,12 +53,11 @@ if [ $interactive == true ]; then
         LIST+=( "${array[$index]}" "${dbms[${array[$index]}]} database server" $selection )
     done
 
-    if [ -z "$dbmsmissing" ]; # empty, so both DBMS are installed
+    num_dbms=$(echo $dbmsmissing | wc -w) && rc=$? || rc=$?
+    if [ $num_dbms -eq 0 ]; # empty, so both DBMS are installed
     then
         msg="Two database management systems were found on this system.\n\nChoose which DBMS HRM will use" 
     else # one or both dbms are missing
-        num_dbms=`echo $dbmsmissing | wc -w`
-
         if [ $num_dbms -eq 2 ]; # both DBMS are missing
         then
             msg="No database management system installed on this system\n\nPlease choose one of the following:"
@@ -71,7 +68,7 @@ if [ $interactive == true ]; then
     fi
 
     # we must choose between multiple possibilities
-    if [ $num_dbms -ne 1 ] # both DBMS are missing
+    if [ $num_dbms -ne 1 ] # both DBMS are missing or both are available
     then
         ans=$(whiptail --title "$title" --radiolist \
             "$msg" 20 70 ${#array[@]} \
@@ -90,7 +87,7 @@ fi
 [ "$dbtype" == "mysql" ] && dbmspkgs="$mysqlpkgs" || dbmspkgs="$pgsqlpkgs"
 
 #Only echo this if non-interactive mode
-[ $interactive == false ] && echo "Using $dbtype as DBMS."
+[ $interactive == false ] && echo "Using ${dbms[$dbtype]} as the DBMS."
 
 #echo "Install optional LDAP support? [y/n]"
 #[ $(readkey) == "n" ] || dbmspkgs+=" php-ldap"
