@@ -13,6 +13,8 @@ debug=false
 devel=false
 opth=false
 help=false
+optb=false
+bypass=false
 dbtype="mysql"
 dbhost="localhost"
 dbadmin="root"
@@ -40,11 +42,13 @@ ARGPARSER_MAP=(
     [i]=interactive
     [d]=debug
     [D]=devel
+    [b]=bypass
 )
  
 parse_args "$@"
 
 $optD && devel=true || devel=false
+$optb && bypass=true || bypass=false
 
 # This ensures we run the right installation script
 # Can either run with hrmtag="devel" or run with -D
@@ -165,6 +169,20 @@ source scripts/make-db.sh
 title="Configuring the queue manager (step 7/7)" 
 $interactive || echo "---- $title ----"
 source scripts/conf-qm.sh
+
+# This bypasses the license check in login.php (devel option to test the web interface)
+if [ $bypass == true ]; then
+    echo "WARNING! Added $hrmdir/.hrm_devel_version"
+    echo "  to bypass the front-end license check."
+    echo "  HRM may break silently because of this."
+    echo "  Remove the file for normal HRM operation."
+    [ -f $hrmdir/.hrm_devel_version ] || touch $hrmdir/.hrm_devel_version
+else
+    if [ -f $hrmdir/.hrm_devel_version ]; then 
+        rm -f $hrmdir/.hrm_devel_version
+        echo "Removed the front-end license check bypass ($hrmdir/.hrm_devel_version)"
+    fi
+fi
 
 title="HRM installation complete" 
 $interactive || echo "---- $title ----"

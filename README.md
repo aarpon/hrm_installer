@@ -107,7 +107,6 @@ The following default values will be used. However, any of those can be set via 
 | --- | --- | --- |
 | interactive | true | Interactive mode |
 | debug | false | Some debug output |
-| devel | false | Install the development version of HRM |
 | help | false | Very limited help |
 | license | "" | The hucore license string |
 | dbtype | "mysql" | The database type ("mysql" or "pgsql") |
@@ -129,6 +128,8 @@ The following default values will be used. However, any of those can be set via 
 | zippath | "" | The path of a zip installation file which will be used instead of the GIT repository |
 | postmax | "256M" | PHP post_max_size (limits POST size for browser uploads) |
 | upmax | "256M" | PHP  PHP upload_max_filesize (limits file size for browser uploads) |
+| devel | false | Install the development version of HRM |
+| bypass | false | This bypasses the license check in login.php (devel option to test the web interface) |
 
 Script usage
 ------------
