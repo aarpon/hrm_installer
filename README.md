@@ -127,6 +127,8 @@ The following default values will be used. However, any of those can be set via 
 | hrmemail | "hrm@localhost" | The email address which will appear when HRM sends e-mails |
 | hrmpass | "pwd4hrm" | The default HRM admin password |
 | zippath | "" | The path of a zip installation file which will be used instead of the GIT repository |
+| postmax | "256M" | PHP post_max_size (limits POST size for browser uploads) |
+| upmax | "256M" | PHP  PHP upload_max_filesize (limits file size for browser uploads) |
 
 Script usage
 ------------
