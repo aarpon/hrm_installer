@@ -42,7 +42,7 @@ fi
 
 dbmsmissing=`packages_missing $dbpkgs`
 
-if [ $interactive == true ]; then
+if [ $interactive == true ] && [ -z dbtype ]; then
     IFS=' ' read -r -a array <<< "$dbpkgs"
     LIST=()
     for index in ${!array[*]}; do 
@@ -57,14 +57,12 @@ if [ $interactive == true ]; then
     if [ $num_dbms -eq 0 ]; # empty, so both DBMS are installed
     then
         msg="Two database management systems were found on this system.\n\nChoose which DBMS HRM will use" 
-    else # one or both dbms are missing
-        if [ $num_dbms -eq 2 ]; # both DBMS are missing
-        then
-            msg="No database management system installed on this system\n\nPlease choose one of the following:"
-        else # only one DBMS has been found
-            # which is missing/not installed, mysql?
-            [ "$dbmissing" == "mysql" ] && dbtype="postgres" || dbtype="mysql"
-        fi
+    elif [ $num_dbms -eq 2 ]; # both DBMS are missing
+    then
+      msg="No database management system installed on this system\n\nPlease choose one of the following:"
+    else # only one DBMS has been found
+      # which is missing/not installed, mysql?
+      [ "$dbmissing" == "mysql-server" ] && dbtype="postgres" || dbtype="mysql"
     fi
 
     # we must choose between multiple possibilities
@@ -83,11 +81,14 @@ if [ $interactive == true ]; then
     fi
 fi
 
+# By default, install mysql (case where non-interactive mode, but no dbtype was specified)
+[ -z dbtype ] && dbtype="mysql"
+
 # Once dbtype is defined (interactively or pre-defined), we can select the appropriate dbmspkgs
 [ "$dbtype" == "mysql" ] && dbmspkgs="$mysqlpkgs" || dbmspkgs="$pgsqlpkgs"
 
-#Only echo this if non-interactive mode
-[ $interactive == false ] && echo "Using ${dbms[$dbtype]} as the DBMS."
+#Always echo the following (this is good info)
+echo "Using ${dbms[$dbtype]} as the DBMS."
 
 #echo "Install optional LDAP support? [y/n]"
 #[ $(readkey) == "n" ] || dbmspkgs+=" php-ldap"
