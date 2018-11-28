@@ -82,7 +82,7 @@ if [ $interactive == true ] && [ -z dbtype ]; then
 fi
 
 # By default, install mysql (case where non-interactive mode, but no dbtype was specified)
-[ -z dbtype ] && dbtype="mysql"
+[ -z $dbtype ] && dbtype="mysql"
 
 # Once dbtype is defined (interactively or pre-defined), we can select the appropriate dbmspkgs
 [ "$dbtype" == "mysql" ] && dbmspkgs="$mysqlpkgs" || dbmspkgs="$pgsqlpkgs"
