@@ -7,11 +7,11 @@ source "$context/funs.sh"
 if [ "$dist" == "Ubuntu" ]; then
     #dbpkgs="mariadb-server mysql-server postgresql"
     dbpkgs="mysql-server postgresql"
-    mysqlpkgs="mysql-server php5-mysql"
-    pgsqlpkgs="postgresql php5-pgsql"
-    morepkgs="apache2 libapache2-mod-php5 php5 php5-cli php5-common zip git"
+    mysqlpkgs="mysql-server php-mysql"
+    pgsqlpkgs="postgresql php-pgsql"
+    morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git php-xml"
     if [ $devel == true ]; then
-        morepkgs+=" php5-simplexml php5-xmlreader php5-xmlwriter"
+        morepkgs+=" php-simplexml php-xmlreader"
     fi
 elif [ "$dist" == "Fedora" ];
 then
@@ -100,8 +100,9 @@ if [[ "$dist" == "Ubuntu" ]] && [[ "$vers" > '"15.10"' ]] ; then
     echo "Detected Ubuntu newer than '15.10', installing PHP backports."
     echo
     # we need to add the backport repository for PHP5 in this case:
-    LC_ALL=C.UTF-8 apt-add-repository --yes --update ppa:ondrej/php
-    allpkgs="$(echo $dbmspkgs $mtapkg $morepkgs | sed 's,php5,php5.6,g')"
+    #LC_ALL=C.UTF-8 apt-add-repository --yes --update ppa:ondrej/php
+    #allpkgs="$(echo $dbmspkgs $mtapkg $morepkgs | sed 's,php5,php5.6,g')"
+    allpkgs="$dbmspkgs $mtapkg $morepkgs"
 else
     allpkgs="$dbmspkgs $mtapkg $morepkgs"
 fi

@@ -77,18 +77,13 @@ function check_user() {
     #We need both stdout and stderr for this one.
     catch stdout stderr eval $cmd && rc=$? || rc=$?
 
-    if [ -z "$stderr" ]; then
-        #This means the command was successful (no error message).
-        #stdout contains the number of existing users for the query (1 or 0)
-        if [ $stdout -eq 0 ]; then
-            rc=1
-            REPLY="User $dbuser not in database $dbname"
-        else
-            rc=0
-        fi
-    else
-        #There was an error message, return 1
+    #stdout contains the number of existing users for the query (1 or 0)
+    if [ $stdout -eq 0 ]; then
         rc=1
+        REPLY="User $dbuser not in database $dbname"
+    else
+        REPLY="Found user $dbuser"
+        rc=0
     fi
 
     echo $REPLY

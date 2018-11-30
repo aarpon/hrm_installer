@@ -14,11 +14,11 @@ postmax=$(wt_read "$postmax" --interactive=$interactive --title="$title" --messa
 msg="PHP upload_max_filesize (limits file size for browser uploads)"
 upmax=$(wt_read "$upmax" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
 
-if [ "$dist" == "Debian" ]
+if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]
 then
-    # This will(?) return the correct path for Debian 9
+    # This will(?) return the correct path for Debian 9 or any recent Ubuntu
     # and a valid path for previous versions
-    if [ "$vers" \< '"9"' ]; then
+    if [ "$dist" == "Debian" ] && [ "$vers" \< '"9"' ]; then
         phppath=`find /etc/php? -maxdepth 0 -type d | tail -n 1`
     else
         phppath=`find /etc/php -maxdepth 1 -type d | tail -n 1`
@@ -28,13 +28,6 @@ then
         wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
     fi
     phpinipath="$phppath/apache2/php.ini"
-elif [ "$dist" == "Ubuntu" ]
-then
-	phpinipath="/etc/php5/apache2/php.ini"
-	if [[ "$vers" > '"15.10"' ]]
-	then
-		phpinipath="/etc/php/5.6/apache2/php.ini"
-	fi
 elif [ "$dist" == "Fedora" ]
 then
 	phpinipath="/etc/php.ini"
