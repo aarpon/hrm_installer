@@ -102,7 +102,7 @@ export LC_ALL=C
 dist=`cat /etc/os-release | head -n1 | grep -Po '".*?"' | tr -d '"'`
 dist=${dist%% *}
 vers=`cat /etc/os-release | grep VERSION_ID | cut -d '=' -f2`
-msg="Detected $dist $vers installation"
+msg="Installation detected: $dist $vers"
 
 if  [ "$dist" == "" ]; then
     dist=`cat /etc/os-release | head -n1 | cut -d '=' -f2`
@@ -124,14 +124,28 @@ if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]; then
 elif [ "$dist" == "Fedora" ]; then
     fedpkg="dnf"
     source scripts/funs-fed.sh
-elif [ "$dist" == "CentOS Linux" ]; then
+elif [[ $dist == CentOS* ]]; then
     dist="Fedora"
-    fedpkg="yum"
+    fedpkg="yum -y"
+    apache_user="apache"
     source scripts/funs-fed.sh
+    if [[ "$vers" == '"7"' ]] ; then
+        # As per https://www.tecmint.com/install-php-5-6-on-centos-7/
+        yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
+        yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm || true
+        yum -y install yum-utils || true
+        #yum-config-manager --enable remi-php55
+        yum-config-manager --enable remi-php56
+        #yum-config-manager --enable remi-php72
+    fi
+
+
 else
     msg="$msg\n\nThis distribution is not supported."
     wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
 fi
+
+echo $msg
 
 hucorepath=`which hucore || true`
 if [ -z "$hucorepath" ] || [ ! -f "$hucorepath" ]; then

@@ -18,7 +18,7 @@ function init_dbms() {
         fi
     else
         #unknown distribution
-        return 1
+        rc=1
     fi
     return $rc
 }

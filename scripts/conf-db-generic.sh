@@ -19,8 +19,8 @@ fi
 # Add the DBMS type to the title
 title=${title//database/${dbms[$dbtype]} database}
 
-#REPLY=$(init_dbms) && rc=$? || rc=$?
-#echo "Initializing the DBMS: rc=$rc -- $REPLY"
+REPLY=$(init_dbms) && rc=$? || rc=$?
+echo "Initializing the DBMS: rc=$rc -- $REPLY"
 
 # For mysql, we allow the possibility to connect to a remote database
 # FIXME do the same for pgsql

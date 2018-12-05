@@ -55,12 +55,21 @@ do
     [ $interactive == true ] && msg="$msg (must be a sub-directory of Apache document root)"
     hrmdir=$(wt_read "$hrmdir" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
     if [ -d "$hrmdir" ]; then
+
+        #This (badly) checks the git version to support Centos7
+        gitversion=$(git --version | cut -d' ' -f3)
+        if [[ $gitversion < "1.8.5" ]]; then
+            intohrm="--git-dir=$hrmdir/.git --work-tree=$hrmdir"
+        else
+            intohrm="-C $hrmdir"
+        fi
+
         if [ $interactive == true ]; then
             if [ -d "$hrmdir/.git" ] ; then
                 # The hrmdir is a git repository!
                 msg="$hrmdir already contains the git repository.\nDo you want to update it now? (git fetch)"
                 if (whiptail --title "$title" --yesno "$msg" 8 70); then
-                    git -C $hrmdir fetch
+                    git $intohrm fetch
                 fi
                 break
             fi
@@ -70,7 +79,7 @@ do
             # Right now, we do an automatic update
             echo "The $hrmdir folder will be automaticaly updated"
             if [ -d "$hrmdir/.git" ] ; then
-                git -C $hrmdir fetch
+                git $intohrm fetch
             fi
             break
         fi
@@ -175,12 +184,12 @@ if [ "$hrmtag" != "zip" ]; then
         git clone -b "$hrmtag" "$hrmrepo" $hrmdir
     fi
 
-    branch=$(git -C $hrmdir branch | grep -F "$hrmtag" || true)
+    branch=$(git $intohrm branch | grep -F "$hrmtag" || true)
 
     if [ -z "$branch" ] ; then
-        git -C $hrmdir checkout -b $hrmtag
+        git $intohrm checkout -b $hrmtag
     else
-        git -C $hrmdir checkout $hrmtag
+        git $intohrm checkout $hrmtag
     fi
 
     # Versions 3.4+ have third party packages to be installed (the archive installation has those already included)
