@@ -186,10 +186,11 @@ if [ "$hrmtag" != "zip" ]; then
 
     branch=$(git $intohrm branch | grep -F "$hrmtag" || true)
 
+    # FIXME This describes the problem I'm having with git 1.8.13 https://stackoverflow.com/questions/51279331/difference-between-git-git-dir-checkout-and-git-checkout -- Had to add the cd hrmdir to fix the issue.
     if [ -z "$branch" ] ; then
-        git $intohrm checkout -b $hrmtag
+        ( cd $hrmdir ; git $intohrm checkout -b $hrmtag )
     else
-        git $intohrm checkout $hrmtag
+        ( cd $hrmdir ; git $intohrm checkout $hrmtag )
     fi
 
     # Versions 3.4+ have third party packages to be installed (the archive installation has those already included)
