@@ -7,15 +7,16 @@ source "$context/funs-input.sh"
 ######################### check if we have a valid hucore license ###########################
 function validlic()
 {
-    catch stdout stderr `which hucore` /dev/null
+    catch stdout stderr $hucorepath /dev/null
     [[ $stderr =~ "No valid" ]] && return 1 || return 0
 }
 
 ######################### In interactive mode, ask the user to enter a license string #######
 
-catch stdout stderr `which hucore` /dev/null
+catch stdout stderr $hucorepath /dev/null
 sysid=$(echo "$stdout" | grep 'The system ID is') # | awk -F ' ' '{print $5}')
 intro="If you do not have a license string, please send an email to info@svi.nl including the system ID below for a full test license.\n\n$sysid\n"
+echo "$intro"
 
 #TODO Any way to make sure this is the right path?
 CONF_LICENSE="/usr/local/svi/huygensLicense"

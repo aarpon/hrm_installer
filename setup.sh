@@ -129,16 +129,6 @@ elif [[ $dist == CentOS* ]]; then
     fedpkg="yum -y"
     apache_user="apache"
     source scripts/funs-fed.sh
-    if [[ "$vers" == '"7"' ]] ; then
-        # As per https://www.tecmint.com/install-php-5-6-on-centos-7/
-        yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
-        yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm || true
-        yum -y install yum-utils || true
-        #yum-config-manager --enable remi-php55
-        yum-config-manager --enable remi-php56
-        #yum-config-manager --enable remi-php72
-    fi
-
 
 else
     msg="$msg\n\nThis distribution is not supported."
@@ -147,10 +137,24 @@ fi
 
 echo $msg
 
-hucorepath=`which hucore || true`
+hucorepath=`type -pf hucore 2>/dev/null`
+
 if [ -z "$hucorepath" ] || [ ! -f "$hucorepath" ]; then
     msg="$msg\n\nPlease install hucore first (https://svi.nl/Download)"
     wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
+fi
+
+# For CentOS 7, install a more recent PHP
+if [ "$dist" == "Fedora" ]; then
+    if [[ "$vers" == '"7"' ]] ; then
+        # As per https://www.tecmint.com/install-php-5-6-on-centos-7/
+        yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
+        yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm || true
+        yum -y install yum-utils || true
+        #yum-config-manager --enable remi-php55
+        yum-config-manager --enable remi-php56 || true
+        #yum-config-manager --enable remi-php72
+    fi
 fi
 
 source scripts/conf-hucore.sh
