@@ -19,7 +19,9 @@ then
     dbpkgs="mariadb postgresql-server"
     mysqlpkgs="mariadb mariadb-server php-mysqlnd"
     pgsqlpkgs="postgresql-server postgresql-contrib php-pgsql"
-    morepkgs="httpd php php-cli php-common zip unzip wget policycoreutils-python git php-xml"
+    # FIXME why did we add policycoreutils-python ? Doesn't seem to apply to Fedora 28
+    # composer install from source seems to need php-json
+    morepkgs="httpd php php-cli php-common php-json zip unzip wget git php-xml"
 elif [ "$dist" == "Debian" ];
 then
     dbpkgs="mysql-server postgresql"

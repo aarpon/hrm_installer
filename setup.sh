@@ -123,6 +123,7 @@ if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]; then
     source scripts/funs-ubu.sh
 elif [ "$dist" == "Fedora" ]; then
     fedpkg="dnf"
+    apache_user="apache"
     source scripts/funs-fed.sh
 elif [[ $dist == CentOS* ]]; then
     dist="Fedora"
