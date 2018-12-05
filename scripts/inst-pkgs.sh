@@ -93,7 +93,7 @@ echo "Using ${dbms[$dbtype]} as the DBMS."
 #echo "Install optional LDAP support? [y/n]"
 #[ $(readkey) == "n" ] || dbmspkgs+=" php-ldap"
 
-[ -n "$(which sendmail)" ] || mtapkg="postfix"
+[ -n "$(type -pf sendmail 2>/dev/null)" ] || mtapkg="postfix"
 
 if [[ "$dist" == "Ubuntu" ]] && [[ "$vers" > '"15.10"' ]] ; then
     echo
