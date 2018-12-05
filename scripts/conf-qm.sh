@@ -15,6 +15,9 @@ then
 	else
 		ans="d"
 	fi
+elif [[ "$dist" == "Fedora" ]]
+then
+    ans="d"
 else
 	echo "Please select which init system your distribution is using, 'systemd' [d]"
 	echo "or classical 'System-V-init' [v] (shellscripts in /etc/init.d/ or similar)"
@@ -35,9 +38,17 @@ echo "Configuring startup for init system type '$inittype'."
 
 
 if [ "$inittype" == "systemd" ] ; then
-	sedconf $hrmdir/resources/systemd/hrmd.service "mariadb" "postgresql"
+    if [ "$dbtype" == "mysql" ]; then
+        sedconf $hrmdir/resources/systemd/hrmd.service "Requires=mysql" "Requires=postgresql"
+        sedconf $hrmdir/resources/systemd/hrmd.service "After=mysql" "After=postgresql"
+    fi
+    sedconf $hrmdir/resources/systemd/hrmd.service "User=hrm" "User=$sysuser"
+    sedconf $hrmdir/resources/systemd/hrmd.service "Group=hrm" "Group=$sysgroup"
+    sedconf $hrmdir/resources/systemd/hrmd.service "ExecStart=/var/www/html/hrm" "ExecStart=$hrmdir"
+
 	cp $hrmdir/resources/systemd/hrmd.service /etc/systemd/system/
-	chmod +x /etc/systemd/system/hrmd.service
+	#chmod +x /etc/systemd/system/hrmd.service
+	systemctl daemon-reload
 	systemctl enable hrmd.service
 	systemctl start hrmd.service
 	systemctl status hrmd.service

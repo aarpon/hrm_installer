@@ -19,7 +19,7 @@ then
     dbpkgs="mariadb postgresql-server"
     mysqlpkgs="mariadb mariadb-server php-mysqlnd"
     pgsqlpkgs="postgresql-server postgresql-contrib php-pgsql"
-    morepkgs="httpd php php-cli php-common zip unzip wget policycoreutils-python git"
+    morepkgs="httpd php php-cli php-common zip unzip wget policycoreutils-python git php-xml"
 elif [ "$dist" == "Debian" ];
 then
     dbpkgs="mysql-server postgresql"
