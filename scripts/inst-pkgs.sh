@@ -27,7 +27,7 @@ then
     dbpkgs="mysql-server postgresql"
     mysqlpkgs="mysql-server php-mysql"
     pgsqlpkgs="postgresql php-pgsql"
-    morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git sysvinit-utils"
+    morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git sysvinit-utils php-xml"
     if [ $devel == true ]; then
         morepkgs+=" php-simplexml php-xmlreader php-xmlwriter"
     fi

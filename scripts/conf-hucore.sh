@@ -16,7 +16,7 @@ function validlic()
 catch stdout stderr $hucorepath /dev/null
 sysid=$(echo "$stdout" | grep 'The system ID is') # | awk -F ' ' '{print $5}')
 intro="If you do not have a license string, please send an email to info@svi.nl including the system ID below for a full test license.\n\n$sysid\n"
-echo "$intro"
+printf "$intro"
 
 #TODO Any way to make sure this is the right path?
 CONF_LICENSE="/usr/local/svi/huygensLicense"
