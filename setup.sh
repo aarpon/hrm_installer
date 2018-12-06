@@ -102,11 +102,12 @@ export LC_ALL=C
 dist=`cat /etc/os-release | head -n1 | grep -Po '".*?"' | tr -d '"'`
 dist=${dist%% *}
 vers=`cat /etc/os-release | grep VERSION_ID | cut -d '=' -f2`
-msg="Installation detected: $dist $vers"
 
-if  [ "$dist" == "" ]; then
+if  [ -z "$dist" ]; then
     dist=`cat /etc/os-release | head -n1 | cut -d '=' -f2`
 fi
+
+msg="OS detected: $dist $vers"
 
 if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]; then
     msg1=""
@@ -122,21 +123,26 @@ if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]; then
     [ -n "$msg1" ] && wt_print "$msg\n\n$msg1" -q --title="$title" --interactive="$interactive" --debug=$debug
     source scripts/funs-ubu.sh
 elif [ "$dist" == "Fedora" ]; then
-    fedpkg="dnf"
+    fedpkg="dnf -y"
     apache_user="apache"
     source scripts/funs-fed.sh
+
 elif [[ $dist == CentOS* ]]; then
     dist="Fedora"
     fedpkg="yum -y"
     apache_user="apache"
     source scripts/funs-fed.sh
-
 else
     msg="$msg\n\nThis distribution is not supported."
-    wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
+    wt_print "$msg" -q --title="$title" --interactive=false --debug=$debug
 fi
 
 echo $msg
+
+# No whiptail by default on Centos or Fedora, so install it if interactive mode
+if $interactive && [ "$dist" == "Fedora" ]; then
+    $fedpkg install newt || true
+fi
 
 hucorepath=`type -pf hucore 2>/dev/null`
 
