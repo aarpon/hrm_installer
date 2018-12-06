@@ -38,20 +38,22 @@ echo "Configuring startup for init system type '$inittype'."
 
 
 if [ "$inittype" == "systemd" ] ; then
+    sysdir="/etc/systemd/system/"
+    cp $hrmdir/resources/systemd/hrmd.service $sysdir
+
     if [ "$dbtype" == "pgsql" ]; then
-        sedconf $hrmdir/resources/systemd/hrmd.service "Requires=mysql" "Requires=postgresql"
-        sedconf $hrmdir/resources/systemd/hrmd.service "After=mysql" "After=postgresql"
+        sedconf $sysdir/hrmd.service "Requires=mysql" "Requires=postgresql"
+        sedconf $sysdir/hrmd.service "After=mysql" "After=postgresql"
     elif [ "$dist" == "Fedora" ] ; then
         # FIXME CentOS 7 uses mariadb -- Maybe need better tests here?
-        sedconf $hrmdir/resources/systemd/hrmd.service "Requires=mysql" "Requires=mariadb"
-        sedconf $hrmdir/resources/systemd/hrmd.service "After=mysql" "After=mariadb"
+        sedconf $sysdir/hrmd.service "Requires=mysql" "Requires=mariadb"
+        sedconf $sysdir/hrmd.service "After=mysql" "After=mariadb"
     fi
 
-    sedconf $hrmdir/resources/systemd/hrmd.service "User=hrm" "User=$sysuser"
-    sedconf $hrmdir/resources/systemd/hrmd.service "Group=hrm" "Group=$sysgroup"
-    sedconf $hrmdir/resources/systemd/hrmd.service "ExecStart=/var/www/html/hrm" "ExecStart=$hrmdir"
+    sedconf $sysdir/hrmd.service "User=hrm" "User=$sysuser"
+    sedconf $sysdir/hrmd.service "Group=hrm" "Group=$sysgroup"
+    sedconf $sysdir/hrmd.service "ExecStart=/var/www/html/hrm" "ExecStart=$hrmdir"
 
-    cp $hrmdir/resources/systemd/hrmd.service /etc/systemd/system/
     #chmod +x /etc/systemd/system/hrmd.service
     systemctl daemon-reload
     systemctl enable hrmd.service
