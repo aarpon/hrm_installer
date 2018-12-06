@@ -177,20 +177,18 @@ if [ "$hrmtag" != "zip" ]; then
         if [ $lc -eq 0 ]; then
             msg="$hrmtag cannot be checked out from $hrmrepo"
             wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
+        else
+            branch=$(git $intohrm branch | grep -F "$hrmtag" || true)
+            if [ -z "$branch" ] ; then
+                ( cd $hrmdir ; git $intohrm checkout -b $hrmtag )
+            else
+                ( cd $hrmdir ; git $intohrm checkout $hrmtag )
+            fi
         fi
     else
         #FIXME according to: https://stackoverflow.com/questions/35979642/what-is-git-tag-how-to-create-tags-how-to-checkout-git-remote-tags
         #Might be worth adding  --single-branch --depth 1 if all we're trying to do here is clone for deployment (unless devel?).
         git clone -b "$hrmtag" "$hrmrepo" $hrmdir
-    fi
-
-    branch=$(git $intohrm branch | grep -F "$hrmtag" || true)
-
-    # FIXME This describes the problem I'm having with git 1.8.13 https://stackoverflow.com/questions/51279331/difference-between-git-git-dir-checkout-and-git-checkout -- Had to add the cd hrmdir to fix the issue.
-    if [ -z "$branch" ] ; then
-        ( cd $hrmdir ; git $intohrm checkout -b $hrmtag )
-    else
-        ( cd $hrmdir ; git $intohrm checkout $hrmtag )
     fi
 
     # Versions 3.4+ have third party packages to be installed (the archive installation has those already included)
