@@ -52,7 +52,9 @@ if [ "$inittype" == "systemd" ] ; then
 
     sedconf $sysdir/hrmd.service "User=hrm" "User=$sysuser"
     sedconf $sysdir/hrmd.service "Group=hrm" "Group=$sysgroup"
-    sedconf $sysdir/hrmd.service "ExecStart=/var/www/html/hrm" "ExecStart=$hrmdir"
+    # TODO Check Debian + systemd. Hopefully doesn't mess things up. Fix for Fedora as per
+    # https://stackoverflow.com/questions/45776003/fixing-a-systemd-service-203-exec-failure-no-such-file-or-directory
+    sedconf $sysdir/hrmd.service "ExecStart=/var/www/html/hrm" "ExecStart=/bin/bash $hrmdir"
 
     #chmod +x /etc/systemd/system/hrmd.service
     systemctl daemon-reload
