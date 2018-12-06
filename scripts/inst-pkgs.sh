@@ -19,8 +19,12 @@ then
     dbpkgs="mariadb postgresql-server"
     mysqlpkgs="mariadb mariadb-server php-mysqlnd"
     pgsqlpkgs="postgresql-server postgresql-contrib php-pgsql"
+    morepkgs="httpd php php-cli php-common zip unzip wget git php-xml policycoreutils-python*"
     # composer install from source seems to need php-json
-    morepkgs="httpd php php-cli php-common php-json zip unzip wget git php-xml policycoreutils-python*"
+    # but is already installed with the remi package (Centos 7)
+    if [ "$vers" != '"7"' ]; then
+        morepkgs+=" php-json"
+    fi
 elif [ "$dist" == "Debian" ];
 then
     dbpkgs="mysql-server postgresql"

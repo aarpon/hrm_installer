@@ -154,7 +154,7 @@ fi
 # For CentOS 7, install a more recent PHP
 if [ "$dist" == "Fedora" ]; then
     if [[ "$vers" == '"7"' ]] ; then
-        # As per https://www.tecmint.com/install-php-5-6-on-centos-7/
+        # As per https://rpms.remirepo.net/wizard/
         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
         yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm || true
         yum -y install yum-utils || true
