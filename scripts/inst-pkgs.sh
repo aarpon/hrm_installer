@@ -11,7 +11,7 @@ if [ "$dist" == "Ubuntu" ]; then
     pgsqlpkgs="postgresql php-pgsql"
     morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git php-xml"
     if [ $devel == true ]; then
-        morepkgs+=" php-simplexml php-xmlreader"
+        morepkgs+=" php-mbstring"
     fi
 elif [ "$dist" == "Fedora" ];
 then
