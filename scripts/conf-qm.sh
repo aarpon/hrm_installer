@@ -9,7 +9,7 @@ then
     ans="v"
 elif [[ "$dist" == "Ubuntu" ]]
 then
-    if [[ "$vers" < "14.10" ]]
+    if [[ "$vers" < '"14.10"' ]]
     then
         ans="v"
     else
@@ -41,7 +41,7 @@ if [ "$inittype" == "systemd" ] ; then
     sysdir="/etc/systemd/system/"
     cp $hrmdir/resources/systemd/hrmd.service $sysdir
 
-    if [ "$dbtype" == "pgsql" ]; then
+    if [ "$dbtype" == "postgres" ]; then
         sedconf $sysdir/hrmd.service "Requires=mysql" "Requires=postgresql"
         sedconf $sysdir/hrmd.service "After=mysql" "After=postgresql"
     elif [ "$dist" == "Fedora" ] ; then

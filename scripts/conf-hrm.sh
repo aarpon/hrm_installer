@@ -81,7 +81,9 @@ cp $hrmdir/config/samples/hrm_server_config.inc.sample $CONF_SRV
 
 # do substitutions in config file
 
-if [ "$dbtype" != "mysql" ]; then
+if [ "$dbtype" == "postgres" ]; then
+    sedconf $CONF_SRV '$db_type = "mysqli";' '$db_type = "postgres";'
+elif [ "$dbtype" != "mysql" ]; then
     sedconf $CONF_SRV '$db_type = "mysqli";' '$db_type = "'$dbtype'";'
 fi
 
