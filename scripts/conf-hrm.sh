@@ -87,7 +87,7 @@ elif [ "$dbtype" != "mysql" ]; then
     sedconf $CONF_SRV '$db_type = "mysqli";' '$db_type = "'$dbtype'";'
 fi
 
-sedconf $CONF_SRV '$db_user = "dbuser";' '$db_user = "'$dbuser'";'
+sedconf $CONF_SRV '$db_user = "hrm";' '$db_user = "'$dbuser'";'
 sedconf $CONF_SRV '$db_password = "dbpasswd";' '$db_password = "'$dbpass'";'
 sedconf $CONF_SRV '$db_name = "hrm";' '$db_name = "'$dbname'";'
 sedconf $CONF_SRV '$hrm_path = "/var/www/html/hrm";' '$hrm_path = "'$hrmdir'";'
