@@ -67,6 +67,10 @@ do
     fi
 done
 
+# The server image folder
+msg="image storage directory on the server"
+srvimgdir=$(wt_read "$srvimgdir" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
+
 # copy config file
 CONF_ETC="/etc/hrm.conf"
 cp $hrmdir/config/samples/hrm.conf.sample $CONF_ETC
@@ -86,6 +90,11 @@ if [ "$dbtype" == "postgres" ]; then
 elif [ "$dbtype" != "mysql" ]; then
     sedconf $CONF_SRV '$db_type = "mysqli";' '$db_type = "'$dbtype'";'
 fi
+
+sedconf $CONF_SRV '$huygens_user = "hrm";' '$huygens_user = "'$sysuser'";'
+sedconf $CONF_SRV '$huygens_group = "hrm";' '$huygens_group = "'$sysgroup'";'
+sedconf $CONF_SRV '$image_folder = "/data/hrm_data";' '$image_folder = "'$imgdir'";'
+sedconf $CONF_SRV '$huygens_server_image_folder = "/data/hrm_data";' '$huygens_server_image_folder = "'$srvimgdir'";'
 
 sedconf $CONF_SRV '$db_user = "hrm";' '$db_user = "'$dbuser'";'
 sedconf $CONF_SRV '$db_password = "dbpasswd";' '$db_password = "'$dbpass'";'
