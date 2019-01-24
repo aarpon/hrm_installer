@@ -6,7 +6,12 @@ echo "Configuring HRM queue manager to start at boot"
 
 if [[ "$dist" == "Debian" ]]
 then
-    ans="v"
+    if [[ "$vers" < '"8.0"' ]]
+    then
+        ans="v"
+    else
+        ans="d"
+    fi
 elif [[ "$dist" == "Ubuntu" ]]
 then
     if [[ "$vers" < '"14.10"' ]]
