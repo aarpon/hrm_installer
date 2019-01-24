@@ -123,6 +123,7 @@ The following default values will be used. However, any of those can be set via 
 | hrmrepo | "https://github.com/aarpon/hrm.git" | The GIT repository used for pulling HRM |
 | hrmtag | "latest" | The HRM tar or branch ("latest" is converted to the tag of the current release) |
 | imgdir | "/data/images" | The folder HRM will use to store images and user data |
+| srvimgdir | "/data/images" | File server base folder as seen from the Huygens server machines |
 | hrmemail | "hrm@localhost" | The email address which will appear when HRM sends e-mails |
 | hrmpass | "pwd4hrm" | The default HRM admin password |
 | zippath | "" | The path of a zip installation file which will be used instead of the GIT repository |
