@@ -199,6 +199,9 @@ if [ "$hrmtag" != "zip" ]; then
     fi
 fi
 
+#Here we want to make sure PHP scripts in $hrmdir run as $sysuser
+chown -R $sysuser:$sysgroup $hrmdir
+
 ######################## create the HRM log directory ######################################
 
 mkdir -vp /var/log/hrm
