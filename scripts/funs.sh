@@ -1,3 +1,21 @@
+declare -A dbms=( ["mysql"]="MySQL" ["mysql-server"]="MySQL" ["mariadb"]="MariaDB" ["pgsql"]="PostgreSQL" ["postgresql"]="PostgreSQL" ["postgres"]="PostgreSQL")
+
+#As per Tino @ https://stackoverflow.com/questions/11027679/capture-stdout-and-stderr-into-different-variables
+function catch()
+{
+eval "$({
+__2="$(
+  { __1="$("${@:3}")"; } 2>&1;
+  ret=$?;
+  printf '%q=%q\n' "$1" "$__1" >&2;
+  exit $ret
+  )"
+ret="$?";
+printf '%s=%q\n' "$2" "$__2" >&2;
+printf '( exit %q )' "$ret" >&2;
+} 2>&1 )";
+}
+
 function abort()
 {
         echo -e "$1\nAborting HRM installation."
@@ -62,5 +80,12 @@ function waitconfirm() {
 
 function sedconf()
 {
-	sed -i -e "s|$2|$3|" "$1"
+    [ -f "$1" ] && sed -i -e "s|$2|$3|" "$1"
 }
+
+# remove a line according to a pattern
+function rmline()
+{
+    [ -f "$1" ] && sed -i -e "/^$2/d" "$1"
+}
+
