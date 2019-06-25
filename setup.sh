@@ -145,7 +145,7 @@ if $interactive && [ "$dist" == "Fedora" ]; then
     $fedpkg install newt || true
 fi
 
-hucorepath=`type -pf hucore 2>/dev/null`
+hucorepath=`type -pf hucore 2>/dev/null` || true
 
 if [ -z "$hucorepath" ] || [ ! -f "$hucorepath" ]; then
     msg="$msg\n\nPlease install hucore first (https://svi.nl/Download)"
