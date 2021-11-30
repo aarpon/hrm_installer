@@ -18,7 +18,7 @@ if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]
 then
     # This will(?) return the correct path for Debian 9 or any recent Ubuntu
     # and a valid path for previous versions
-    if [ "$dist" == "Debian" ] && [ "$vers" \< '"9"' ]; then
+    if [ "$dist" == "Debian" ] && [ $(ver $vers) -lt $(ver "9") ]; then
         phppath=`find /etc/php? -maxdepth 0 -type d | tail -n 1`
     else
         phppath=`find /etc/php -maxdepth 1 -type d | tail -n 1`
@@ -42,6 +42,6 @@ sedconf $phpinipath "upload_max_filesize = .*" "upload_max_filesize = $upmax"
 
 # restart Apache as otherwise it doesn't recognize the PHP-MySQL stuff (this
 # might be required for other distributions / versions as well!!)
-if [[ "$dist" == "Ubuntu" ]] && [[ "$vers" > '"15.10"' ]] ; then
+if [ "$dist" == "Ubuntu" ] && [ $(ver $vers) -gt $(ver "15.10") ]; then
 	service apache2 restart
 fi

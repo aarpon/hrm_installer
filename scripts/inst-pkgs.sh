@@ -22,20 +22,22 @@ then
     morepkgs="httpd php php-cli php-common zip unzip wget git php-xml policycoreutils-python*"
     # composer install from source seems to need php-json
     # but is already installed with the remi package (Centos 7)
-    if [ "$vers" != '"7"' ]; then
+    if [ $(ver $vers) -ne $(ver "7") ]; then
         morepkgs+=" php-json"
     fi
 elif [ "$dist" == "Debian" ];
 then
-    dbpkgs="mysql-server postgresql"
-    mysqlpkgs="mysql-server php-mysql"
+    dbpkgs="mariadb-server postgresql"
+    mysqlpkgs="mariadb-server php-mysql"
     pgsqlpkgs="postgresql php-pgsql"
     morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git sysvinit-utils php-xml"
     if [ $devel == true ]; then
         morepkgs+=" php-mbstring"
     fi
 
-    if [ "$vers" \< '"9"' ]; then
+    echo "$vers is < 9 ???"
+    if [ $(ver $vers) -lt $(ver "9") ]; then
+	echo "$vers is < 9"
         #For version < 9 install the php5 packages instead of php
         mysqlpkgs=${mysqlpkgs//php/php5}
         pgsqlpkgs=${pgsqlpkgs//php/php5}
@@ -100,7 +102,7 @@ echo "Using ${dbms[$dbtype]} as the DBMS."
 
 [ -n "$(type -pf sendmail 2>/dev/null)" ] || mtapkg="postfix"
 
-if [[ "$dist" == "Ubuntu" ]] && [[ "$vers" > '"15.10"' ]] ; then
+if [ "$dist" == "Ubuntu" ] && [ $(ver $vers) -gt $(ver "15.10") ] ; then
     echo
     echo "Detected Ubuntu newer than '15.10', installing PHP backports."
     echo

@@ -58,7 +58,7 @@ do
 
         #This (badly) checks the git version to support Centos7
         gitversion=$(git --version | cut -d' ' -f3)
-        if [[ $gitversion < "1.8.5" ]]; then
+	if [ $(ver $gitversion) -lt $(ver "1.8.5") ]; then
             intohrm="--git-dir=$hrmdir/.git --work-tree=$hrmdir"
         else
             intohrm="-C $hrmdir"

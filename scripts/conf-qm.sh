@@ -4,23 +4,23 @@ source "$(dirname $BASH_SOURCE)/funs.sh"
 
 echo "Configuring HRM queue manager to start at boot"
 
-if [[ "$dist" == "Debian" ]]
+if [ "$dist" == "Debian" ]
 then
-    if [[ "$vers" < '"8.0"' ]]
+    if [ $(ver $vers) -lt $(ver "8.0") ]
     then
         ans="v"
     else
         ans="d"
     fi
-elif [[ "$dist" == "Ubuntu" ]]
+elif [ "$dist" == "Ubuntu" ]
 then
-    if [[ "$vers" < '"14.10"' ]]
+    if [ $(ver $vers) -lt $(ver "14.10") ]
     then
         ans="v"
     else
         ans="d"
     fi
-elif [[ "$dist" == "Fedora" ]]
+elif [ "$dist" == "Fedora" ]
 then
     ans="d"
 else
@@ -74,7 +74,7 @@ if [ "$inittype" == "systemd" ] ; then
 elif [ "$inittype" == "sysv" ] ; then
     cp $hrmdir/resources/sysv-init-lsb/hrmd /etc/init.d/
     chmod +x /etc/init.d/hrmd
-    if [ "$dist" == "Ubuntu" ] || [[ "$dist" == "Debian" ]]; then
+    if [ "$dist" == "Ubuntu" ] || [ "$dist" == "Debian" ]; then
         update-rc.d hrmd defaults
     elif [ "$dist" == "Fedora" ] ; then
         chkconfig hrmd on

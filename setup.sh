@@ -103,7 +103,7 @@ export LC_ALL=C
 dist=`cat /etc/os-release | head -n1 | grep -Po '".*?"' | tr -d '"'`
 dist=${dist%% *}
 vers=`cat /etc/os-release | grep VERSION_ID | cut -d '=' -f2`
-
+vers=${vers:1:-1}
 if  [ -z "$dist" ]; then
     dist=`cat /etc/os-release | head -n1 | cut -d '=' -f2`
 fi
@@ -114,10 +114,10 @@ if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]; then
     msg1=""
     if [[ "$(whoami)" != "root" ]]; then
         msg1="You need to run setup.sh as root (sudo ./setup.sh)."
-    elif [[ "$dist" == "Ubuntu" ]]  && [[ "$vers" < '"18"' ]]; then
+    elif [ "$dist" == "Ubuntu" ]  && [ $(ver $vers) -lt $(ver "18") ]; then
         # FIXME Which version of Ubuntu are we targetting for devel?
         [ $devel == true ] && msg1="Devel HRM only supports Ubuntu 18.04 or above."
-    elif [[ "$dist" == "Debian" ]]  && [[ "$vers" < '"9"' ]]; then
+    elif [ "$dist" == "Debian" ]  && [ $(ver $vers) -lt $(ver "9") ]; then
         # FIXME Which version of Debian are we targetting for devel?
         [ $devel == true ] && msg1="Devel HRM only supports Debian 9 or above."
     fi
@@ -154,7 +154,7 @@ fi
 
 # For CentOS 7, install a more recent PHP
 if [ "$dist" == "Fedora" ]; then
-    if [[ "$vers" == '"7"' ]] ; then
+    if [ $(ver $vers) -eq $(ver "7") ]; then
         # As per https://rpms.remirepo.net/wizard/
         yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
         yum -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm || true

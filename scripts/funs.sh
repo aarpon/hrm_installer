@@ -89,3 +89,9 @@ function rmline()
     [ -f "$1" ] && sed -i -e "/^$2/d" "$1"
 }
 
+# https://stackoverflow.com/a/37939589
+# Used for comparing version strings
+function ver()
+{
+    echo "$@" | awk -F. '{ printf("%d%03d%03d", $1,$2,$3); }';
+}
