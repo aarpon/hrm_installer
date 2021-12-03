@@ -188,7 +188,8 @@ if [ "$hrmtag" != "zip" ]; then
     else
         #FIXME according to: https://stackoverflow.com/questions/35979642/what-is-git-tag-how-to-create-tags-how-to-checkout-git-remote-tags
         #Might be worth adding  --single-branch --depth 1 if all we're trying to do here is clone for deployment (unless devel?).
-        git clone -b "$hrmtag" "$hrmrepo" $hrmdir
+        #git clone -b "$hrmtag" "$hrmrepo" $hrmdir
+	git clone -b "$hrmtag" --single-branch --depth 1 "$hrmrepo" $hrmdir
     fi
 
     # Versions 3.4+ have third party packages to be installed (the archive installation has those already included)
