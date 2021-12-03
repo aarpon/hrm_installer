@@ -191,17 +191,17 @@ if [ "$hrmtag" != "zip" ]; then
         #git clone -b "$hrmtag" "$hrmrepo" $hrmdir
 	git clone -b "$hrmtag" --single-branch --depth 1 "$hrmrepo" $hrmdir
     fi
-
-    # Versions 3.4+ have third party packages to be installed (the archive installation has those already included)
-    hrmsetup="$hrmdir/setup/"
-    $devel && release="devel" || release="release"
-    if [ -f "$hrmsetup/setup_$release.sh" ] ; then
-        $hrmsetup./setup_$release.sh
-    fi
 fi
 
 #Here we want to make sure PHP scripts in $hrmdir run as $sysuser
 chown -R $sysuser:$sysgroup $hrmdir
+
+# Versions 3.4+ have third party packages to be installed (the archive installation has those already included)
+hrmsetup="$hrmdir/setup/"
+$devel && release="devel" || release="release"
+if [ -f "$hrmsetup/setup_$release.sh" ] ; then
+    su -c "$hrmsetup./setup_$release.sh" $sysuser
+fi
 
 ######################## create the HRM log directory ######################################
 
