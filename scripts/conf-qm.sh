@@ -64,7 +64,7 @@ if [ "$inittype" == "systemd" ] ; then
     #chmod +x /etc/systemd/system/hrmd.service
     systemctl daemon-reload
     systemctl enable hrmd.service
-    #systemctl start hrmd.service
+    systemctl restart hrmd.service
     #systemctl status hrmd.service
 
     if [ "$dist" == "Fedora" ] ; then
