@@ -130,6 +130,7 @@ The following default values will be used. However, any of those can be set via 
 | postmax | "256M" | PHP post_max_size (limits POST size for browser uploads) |
 | upmax | "256M" | PHP  PHP upload_max_filesize (limits file size for browser uploads) |
 | devel | false | Install the development version of HRM |
+| rolling | false | Show GIT master (rolling changes) as an install option for HRM |
 | bypass | false | This bypasses the license check in login.php (devel option to test the web interface) |
 
 Script usage

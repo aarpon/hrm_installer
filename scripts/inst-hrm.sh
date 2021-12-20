@@ -113,7 +113,9 @@ tags=$(git ls-remote --refs --tags "$hrmrepo" | awk -F 'tags/' '{print $2}' | ta
 
 if [ $interactive == true ]; then
     #Extra matches for master, pre-release and devel
-    match="master\|release"
+    [ $rolling == true ] && match="master\|" || match=""
+    match+="release"
+
     [ $devel == true ] && match+="\|devel"
     tags+=" $(git ls-remote --refs "$hrmrepo" | grep $match | awk -F 'heads/' '{print $2}')"
 

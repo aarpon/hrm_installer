@@ -11,6 +11,7 @@ interactive=true
 optd=false
 debug=false
 devel=false
+rolling=false
 opth=false
 help=false
 optb=false
