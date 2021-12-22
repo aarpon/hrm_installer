@@ -80,13 +80,25 @@ function waitconfirm() {
 
 function sedconf()
 {
-    [ -f "$1" ] && sed -i -e "s|$2|$3|" "$1"
+    if [ -f "$1" ] ; then
+	if [[ ! -z $(grep "$2" "$1") ]]; then
+            sed -i -e "s|$2|$3|" "$1"
+	else
+	    echo -e "\e[1;43mCould not find pattern >>>$2<<< in $1\e[0m"
+        fi
+    fi
 }
 
 # remove a line according to a pattern
 function rmline()
 {
-    [ -f "$1" ] && sed -i -e "/^$2/d" "$1"
+    if [ -f "$1" ] ; then
+	if [[ ! -z $(grep "$2" "$1") ]]; then
+            sed -i -e "/^$2/d" "$1"
+	else
+	    echo -e "\e[1;43mCould not find pattern >>>$2<<< in $1\e[0m"
+        fi
+    fi
 }
 
 # https://stackoverflow.com/a/37939589
