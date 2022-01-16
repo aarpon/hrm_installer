@@ -84,7 +84,9 @@ function sedconf()
 	if [[ ! -z $(grep "$2" "$1") ]]; then
             sed -i -e "s|$2|$3|" "$1"
 	else
+	    # If we can't find the pattern, we append to the new line and output a warning
 	    echo -e "\e[1;43mCould not find pattern >>>$2<<< in $1\e[0m"
+	    echo "$3" >> $1
         fi
     fi
 }
@@ -96,6 +98,7 @@ function rmline()
 	if [[ ! -z $(grep "$2" "$1") ]]; then
             sed -i -e "/^$2/d" "$1"
 	else
+	    # If we can't find the pattern, output a warning
 	    echo -e "\e[1;43mCould not find pattern >>>$2<<< in $1\e[0m"
         fi
     fi
