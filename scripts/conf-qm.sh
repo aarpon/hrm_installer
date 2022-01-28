@@ -47,19 +47,19 @@ if [ "$inittype" == "systemd" ] ; then
     cp $hrmdir/resources/systemd/hrmd.service $sysdir
 
     if [ "$dbtype" == "postgres" ]; then
-        sedconf $sysdir/hrmd.service "Requires=mysql" "Requires=postgresql"
-        sedconf $sysdir/hrmd.service "After=mysql" "After=postgresql"
+        sedconf $sysdir/hrmd.service "^Requires=.*" "Requires=postgresql"
+        sedconf $sysdir/hrmd.service "^After=.*" "After=postgresql"
     elif [ "$dist" == "Fedora" ] ; then
         # FIXME CentOS 7 uses mariadb -- Maybe need better tests here?
-        sedconf $sysdir/hrmd.service "Requires=mysql" "Requires=mariadb"
-        sedconf $sysdir/hrmd.service "After=mysql" "After=mariadb"
+        sedconf $sysdir/hrmd.service "^Requires=.*" "Requires=mariadb"
+        sedconf $sysdir/hrmd.service "^After=.*" "After=mariadb"
     fi
 
-    sedconf $sysdir/hrmd.service "User=hrm" "User=$sysuser"
-    sedconf $sysdir/hrmd.service "Group=hrm" "Group=$sysgroup"
+    sedconf $sysdir/hrmd.service "^User=.*" "User=$sysuser"
+    sedconf $sysdir/hrmd.service "^Group=.*" "Group=$sysgroup"
     # TODO Check Debian + systemd. Hopefully doesn't mess things up. Fix for Fedora as per
     # https://stackoverflow.com/questions/45776003/fixing-a-systemd-service-203-exec-failure-no-such-file-or-directory
-    sedconf $sysdir/hrmd.service "ExecStart=/var/www/html/hrm" "ExecStart=/bin/bash $hrmdir"
+    sedconf $sysdir/hrmd.service "^ExecStart=.*" "ExecStart=/bin/bash $hrmdir"
 
     #chmod +x /etc/systemd/system/hrmd.service
     systemctl daemon-reload

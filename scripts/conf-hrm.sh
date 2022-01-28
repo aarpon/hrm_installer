@@ -16,7 +16,7 @@ ans=true
 
 while : ;
 do
-    msg="image storage directory"
+    msg="Image storage directory"
     [ $interactive == true ] && msg="$msg (will be created if needed)"
     imgdir=$(wt_read "$imgdir" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
 
@@ -76,8 +76,8 @@ CONF_ETC="/etc/hrm.conf"
 cp $hrmdir/config/samples/hrm.conf.sample $CONF_ETC
 
 # do substitutions in config file
-sedconf $CONF_ETC "HRM_HOME=\"/var/www/html/hrm\"" "HRM_HOME=\"$hrmdir\""
-sedconf $CONF_ETC "SUSER=\"hrm\"" "SUSER=\"$sysuser\""
+sedconf $CONF_ETC "^HRM_HOME=.*" "HRM_HOME=\"$hrmdir\""
+sedconf $CONF_ETC "^SUSER=.*" "SUSER=\"$sysuser\""
 
 # copy more config files
 CONF_SRV="$hrmdir/config/hrm_server_config.inc"
@@ -86,28 +86,28 @@ cp $hrmdir/config/samples/hrm_server_config.inc.sample $CONF_SRV
 # do substitutions in config file
 
 if [ "$dbtype" == "postgres" ]; then
-    sedconf $CONF_SRV '$db_type = "mysqli";' '$db_type = "postgres";'
+    sedconf $CONF_SRV '^$db_type =.*' '$db_type = "postgres";'
 elif [ "$dbtype" != "mysql" ]; then
-    sedconf $CONF_SRV '$db_type = "mysqli";' '$db_type = "'$dbtype'";'
+    sedconf $CONF_SRV '^$db_type =.*' '$db_type = "'$dbtype'";'
 fi
 
-sedconf $CONF_SRV '$huygens_user = "hrm";' '$huygens_user = "'$sysuser'";'
-sedconf $CONF_SRV '$huygens_group = "hrm";' '$huygens_group = "'$sysgroup'";'
-sedconf $CONF_SRV '$image_folder = "/data/hrm_data";' '$image_folder = "'$imgdir'";'
-sedconf $CONF_SRV '$huygens_server_image_folder = "/data/hrm_data";' '$huygens_server_image_folder = "'$srvimgdir'";'
+sedconf $CONF_SRV '^$huygens_user =.*' '$huygens_user = "'$sysuser'";'
+sedconf $CONF_SRV '^$huygens_group =.*' '$huygens_group = "'$sysgroup'";'
+sedconf $CONF_SRV '^$image_folder =.*' '$image_folder = "'$imgdir'";'
+sedconf $CONF_SRV '^$huygens_server_image_folder =.*' '$huygens_server_image_folder = "'$srvimgdir'";'
 
-sedconf $CONF_SRV '$db_user = "hrm";' '$db_user = "'$dbuser'";'
-sedconf $CONF_SRV '$db_password = "dbpasswd";' '$db_password = "'$dbpass'";'
-sedconf $CONF_SRV '$db_name = "hrm";' '$db_name = "'$dbname'";'
-sedconf $CONF_SRV '$hrm_path = "/var/www/html/hrm";' '$hrm_path = "'$hrmdir'";'
-sedconf $CONF_SRV '$local_huygens_core = "/usr/local/bin/hucore";' '$local_huygens_core = "'$hucorepath'";'
+sedconf $CONF_SRV '^$db_user =.*' '$db_user = "'$dbuser'";'
+sedconf $CONF_SRV '^$db_password =.*' '$db_password = "'$dbpass'";'
+sedconf $CONF_SRV '^$db_name =.*' '$db_name = "'$dbname'";'
+sedconf $CONF_SRV '^$hrm_path =.*' '$hrm_path = "'$hrmdir'";'
+sedconf $CONF_SRV '^$local_huygens_core =.*' '$local_huygens_core = "'$hucorepath'";'
 
-sedconf $CONF_ETC "HRM_DATA=\"/scratch/hrm_data\"" "HRM_DATA=\"$imgdir\""
-sedconf $CONF_SRV '$image_folder = "/scratch/hrm_data";' '$image_folder = "'$imgdir'";'
-sedconf $CONF_SRV '$huygens_server_image_folder = "/scratch/hrm_data/";' '$huygens_server_image_folder = "'$imgdir'/";'
+sedconf $CONF_ETC "^HRM_DATA=.*" "HRM_DATA=\"$imgdir\""
+sedconf $CONF_SRV '^$image_folder =.*' '$image_folder = "'$imgdir'";'
+sedconf $CONF_SRV '^$huygens_server_image_folder =.*' '$huygens_server_image_folder = "'$imgdir'/";'
 
-sedconf $CONF_SRV '$email_sender = "hrm@localhost";' '$email_sender = "'$hrmemail'";'
-sedconf $CONF_SRV '$email_admin = "hrm@localhost";' '$email_admin = "'$hrmemail'";'
+sedconf $CONF_SRV '^$email_sender =.*' '$email_sender = "'$hrmemail'";'
+sedconf $CONF_SRV '^$email_admin =.*' '$email_admin = "'$hrmemail'";'
 
 # assume client and server run on same machine, config file are identical
 link="$hrmdir/config/hrm_client_config.inc"
