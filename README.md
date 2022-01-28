@@ -132,6 +132,8 @@ The following default values will be used. However, any of those can be set via 
 | devel | false | Install the development version of HRM |
 | rolling | false | Show GIT master (rolling changes) as an install option for HRM |
 | bypass | false | This bypasses the license check in login.php (devel option to test the web interface) |
+| remotedeconv | false | Set to true to deconvolve on a machine different that the one hosting HRM |
+| srvhostname | "remote.server.com" | The name of the remote machine which deconvolves images |
 
 Script usage
 ------------
