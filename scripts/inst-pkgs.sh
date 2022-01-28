@@ -35,9 +35,7 @@ then
         morepkgs+=" php-mbstring"
     fi
 
-    echo "$vers is < 9 ???"
     if [ $(ver $vers) -lt $(ver "9") ]; then
-	echo "$vers is < 9"
         #For version < 9 install the php5 packages instead of php
         mysqlpkgs=${mysqlpkgs//php/php5}
         pgsqlpkgs=${pgsqlpkgs//php/php5}
