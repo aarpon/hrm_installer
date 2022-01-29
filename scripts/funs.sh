@@ -1,8 +1,7 @@
 declare -A dbms=( ["mysql"]="MySQL" ["mysql-server"]="MySQL" ["mariadb"]="MariaDB" ["pgsql"]="PostgreSQL" ["postgresql"]="PostgreSQL" ["postgres"]="PostgreSQL")
 
+function catch() {
 #As per Tino @ https://stackoverflow.com/questions/11027679/capture-stdout-and-stderr-into-different-variables
-function catch()
-{
 eval "$({
 __2="$(
   { __1="$("${@:3}")"; } 2>&1;
@@ -16,15 +15,13 @@ printf '( exit %q )' "$ret" >&2;
 } 2>&1 )";
 }
 
-function abort()
-{
-        echo -e "$1\nAborting HRM installation."
-        exit 1
+function abort() {
+    echo -e "$1\nAborting HRM installation."
+    exit 1
 }
 
-function errcheck()
-{
-        [ $? ] && abort "$1"
+function errcheck() {
+    [ $? ] && abort "$1"
 }
 
 function readkey() {
@@ -78,35 +75,63 @@ function waitconfirm() {
     done
 }
 
-function sedconf()
-{
+function sedconf() {
+    # set a line in a text file based on a pattern
+    # sedconf 'the_file.txt' '^some_variable_name=.*' 'some_variable_name="new value"'
     if [ -f "$1" ] ; then
-	if [[ ! -z $(grep "$2" "$1") ]]; then
+        if [[ ! -z $(grep "$2" "$1") ]]; then
             sed -i -e "s|$2|$3|" "$1"
-	else
-	    # If we can't find the pattern, we append to the new line and output a warning
-	    echo -e "\e[1;43mCould not find pattern >>>$2<<< in $1\e[0m"
-	    echo "$3" >> $1
+        else
+            # If we can't find the pattern, we append to the new line and output a warning
+            echo -e "\e[1;43mCould not find pattern >>>$2<<< in $1\e[0m"
+            echo "$3" >> $1
         fi
     fi
 }
 
-# remove a line according to a pattern
-function rmline()
-{
+function rmline() {
+    # remove a line based on a pattern
+    # rmline 'the_file.txt' '^some_variable_name=.*'
     if [ -f "$1" ] ; then
-	if [[ ! -z $(grep "$2" "$1") ]]; then
+        if [[ ! -z $(grep "$2" "$1") ]]; then
             sed -i -e "/^$2/d" "$1"
-	else
-	    # If we can't find the pattern, output a warning
-	    echo -e "\e[1;43mCould not find pattern >>>$2<<< in $1\e[0m"
+        else
+            # If we can't find the pattern, output a warning
+            echo -e "\e[1;43mCould not find pattern >>>$2<<< in $1\e[0m"
         fi
     fi
 }
 
-# https://stackoverflow.com/a/37939589
-# Used for comparing version strings
-function ver()
-{
+function getconf() {
+    # get a variable value defined in a text file. $1: the file, $2 the variable. To use it:
+    # REPLY=$(getconf 'the_file.txt' '^some_variable_name=.*') && myvar=$REPLY
+    if [ -f "$1" ] ; then
+        match=$(grep -m 1 "$2" "$1")
+        if [[ ! -z $match ]]; then
+            # Here we found the pattern
+            echo ${match#*=} | xargs
+        else
+            exit 1
+        fi
+    else
+        exit 1
+    fi
+}
+
+function diffconf() {
+    # diff between $1=orig and $2=changed files for $3=pattern, if different then return value from changed
+    # REPLY=$(diffconf 'orig_file.txt' 'changed_file.txt' '^some_variable_name=.*') && myvar=$REPLY
+    REPLY=$(getconf "$1" "$3") && var1=$REPLY || exit 1
+    REPLY=$(getconf "$2" "$3") && var2=$REPLY || exit 1
+    if [[ $var2 != $var1 ]]; then
+        echo $var2
+        exit 0
+    fi
+    exit 1
+}
+
+function ver() {
+    # https://stackoverflow.com/a/37939589
+    # Used for comparing version strings
     echo "$@" | awk -F. '{ printf("%d%03d%03d", $1,$2,$3); }';
 }
