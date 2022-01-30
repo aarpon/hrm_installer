@@ -209,7 +209,7 @@ if [ $bypass == true ]; then
 else
     if [ -f $hrmdir/.hrm_devel_version ]; then 
         rm -f $hrmdir/.hrm_devel_version
-        echo "Removed the front-end license check bypass ($hrmdir/.hrm_devel_version)"
+        echo "Removed the front-end bypass for license check ($hrmdir/.hrm_devel_version)"
     fi
 fi
 

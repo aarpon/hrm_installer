@@ -31,6 +31,8 @@ do
     # It's OK if just left empty, but warn the user.
     if [ -z "$license" ]; then
         echo "Warning! Add a valid license string to $CONF_LICENSE - $sysid"
+        echo "For testing, hucore license check in HRM will be bypassed."
+        bypass=true
         break
     fi
 
