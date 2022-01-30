@@ -74,7 +74,7 @@ done
 if [ $interactive == true ]; then
     #the default answer can be modified using remotedeconv
     msg="Will you be performing deconvolution on a remote machine?"
-    if (whiptail --title "$title" --yesno $( [ $remotedeconv == true ] && printf %s '--defaultno' ) "$msg" 8 70); then
+    if (whiptail --title "$title" --yesno $( [ $remotedeconv == false ] && printf %s '--defaultno' ) "$msg" 8 70); then
         remotedeconv=true
     else
         remotedeconv=false
