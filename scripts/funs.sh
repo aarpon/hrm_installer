@@ -119,10 +119,14 @@ function getconf() {
 }
 
 function diffconf() {
-    # diff between $1=orig and $2=changed files for $3=pattern, if different then return value from changed
+    # diff between $1=orig and $2=changed files for $3=pattern (and $4 pattern for changed file if given). If different then return value from changed
     # REPLY=$(diffconf 'orig_file.txt' 'changed_file.txt' '^some_variable_name=.*') && myvar=$REPLY
-    REPLY=$(getconf "$1" "$3") && var1=$REPLY || exit 1
-    REPLY=$(getconf "$2" "$3") && var2=$REPLY || exit 1
+    # REPLY=$(diffconf 'orig_file.txt' 'changed_file.txt' '^some_variable_name=.*' '^some_other_variable_name=.*') && myvar=$REPLY
+    pattern_orig=$3
+    [[ ! -z $4 ]] && pattern_dest=$4 || pattern_dest=$3
+
+    REPLY=$(getconf "$1" "$pattern_orig") && var1=$REPLY || exit 1
+    REPLY=$(getconf "$2" "$pattern_dest") && var2=$REPLY || exit 1
     if [[ $var2 != $var1 ]]; then
         echo $var2
         exit 0
