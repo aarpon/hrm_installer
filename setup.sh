@@ -38,8 +38,9 @@ hrmemail="hrm@localhost"
 hrmpass="pwd4hrm"
 zippath=""
 license=""
-postmax="256M"
-upmax="256M"
+postmax="2048M"
+upmax="1024M"
+step=0
 
 hqn=`host -TtA $(hostname -s)|grep "has address"|awk '{print $1}'`
 
@@ -172,36 +173,49 @@ if [ "$dist" == "Fedora" ]; then
     fi
 fi
 
-source scripts/conf-hucore.sh
+if [[ $step == 0 || $step == 1 ]]; then
+    title="Installing system packages (step 1/7)" 
+    $interactive || echo "---- $title ----"
+    source scripts/conf-hucore.sh
+    source scripts/inst-pkgs.sh
+fi
 
-title="Installing system packages (step 1/7)" 
-$interactive || echo "---- $title ----"
-source scripts/inst-pkgs.sh
+if [[ $step == 0 || $step == 2 ]]; then
+    title="Configuring the database (step 2/7)" 
+    $interactive || echo "---- $title ----"
+    source scripts/conf-db-generic.sh
+    #TODO postgresql in the script above...
+fi
 
-title="Configuring the database (step 2/7)" 
-$interactive || echo "---- $title ----"
-source scripts/conf-db-generic.sh
-#TODO postgresql in the script above...
+if [[ $step == 0 || $step == 3 ]]; then
+    title="Installing HRM files (step 3/7)" 
+    $interactive || echo "---- $title ----"
+    source scripts/inst-hrm.sh
+fi
 
-title="Installing HRM files (step 3/7)" 
-$interactive || echo "---- $title ----"
-source scripts/inst-hrm.sh
+if [[ $step == 0 || $step == 4 ]]; then
+    title="Configuring HRM (step 4/7)" 
+    $interactive || echo "---- $title ----"
+    source scripts/conf-hrm.sh
+fi
 
-title="Configuring HRM (step 4/7)" 
-$interactive || echo "---- $title ----"
-source scripts/conf-hrm.sh
+if [[ $step == 0 || $step == 5 ]]; then
+    title="Configuring PHP (step 5/7)" 
+    $interactive || echo "---- $title ----"
+    source scripts/conf-php.sh
+fi
 
-title="Configuring PHP (step 5/7)" 
-$interactive || echo "---- $title ----"
-source scripts/conf-php.sh
+if [[ $step == 0 || $step == 6 ]]; then
+    title="Making the database (step 6/7)" 
+    $interactive || echo "---- $title ----"
+    source scripts/make-db.sh
+fi
 
-title="Making the database (step 6/7)" 
-$interactive || echo "---- $title ----"
-source scripts/make-db.sh
-
-title="Configuring the queue manager (step 7/7)" 
-$interactive || echo "---- $title ----"
-source scripts/conf-qm.sh
+if [[ $step == 0 || $step == 7 ]]; then
+    title="Configuring the queue manager (step 7/7)" 
+    $interactive || echo "---- $title ----"
+    source scripts/conf-qm.sh
+fi
 
 # This bypasses the license check in login.php (devel option to test the web interface)
 if [ $bypass == true ]; then
@@ -221,8 +235,7 @@ title="HRM installation complete"
 $interactive || echo "---- $title ----"
 source scripts/perms.sh
 
-if [ "$dist" == "Fedora" ]
-then
+if [ "$dist" == "Fedora" ]; then
     msg="Apache, database and queue manager system services will start automatically at boot."
     wt_print "$msg" -q --title="$title" --interactive="$interactive" --debug=$debug
     systemctl enable httpd.service

@@ -135,6 +135,7 @@ The following default values will be used. However, any of those can be set via 
 | bypass | false | This bypasses the license check in login.php (devel option to test the web interface) |
 | remotedeconv | false | Set to true to deconvolve on a machine different that the one hosting HRM |
 | srvhostname | "remote.server.com" | The name of the remote machine which deconvolves images |
+| step | | Launch a single step in isolation (1-7; by default, perform all 7 steps in sequence) |
 
 Script usage
 ------------
