@@ -120,6 +120,7 @@ The following default values will be used. However, any of those can be set via 
 | sysgroup | "hrm" | The system group the of the HRM system user |
 | apache_user | "www-data" | The apache user |
 | hrmdir | "/var/www/html/hrm" | The location of the HRM website |
+| hrmurl | "" | The URL of the HRM website |
 | hrmrepo | "https://github.com/aarpon/hrm.git" | The GIT repository used for pulling HRM |
 | hrmtag | "latest" | The HRM tar or branch ("latest" is converted to the tag of the current release) |
 | imgdir | "/data/images" | The folder HRM will use to store images and user data |

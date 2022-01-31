@@ -100,6 +100,17 @@ do
     chmod u+s,g+ws $hrmdir
 done
 
+######################### choose / modify the hrm URL #######################################
+#
+# a URL is created from hostname and hrmdir if none is given through $hrmurl
+# (one can be given through the command-line argument)
+
+hrmd=`basename $hrmdir`
+[[ -z $hrmurl ]] && hrmurl="http://$hqn/$hrmd"
+
+msg="URL of the HRM website seen by users (and sent to them in e-mail communications)"
+hrmurl=$(wt_read "$hrmurl" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false --password=false)
+
 ######################### get the hrm executable ############################################
 #
 # In non-interactive mode, the latest HRM is checked out from github

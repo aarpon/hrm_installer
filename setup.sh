@@ -29,6 +29,7 @@ sysuser="hrmuser"
 sysgroup="hrm"
 apache_user="www-data"
 hrmdir="/var/www/html/hrm"
+hrmurl=""
 hrmrepo="https://github.com/aarpon/hrm.git"
 hrmtag="latest"
 imgdir="/data/images"
@@ -39,6 +40,9 @@ zippath=""
 license=""
 postmax="256M"
 upmax="256M"
+
+hqn=`host -TtA $(hostname -s)|grep "has address"|awk '{print $1}'`
+
 
 declare -A ARGPARSER_MAP
 ARGPARSER_MAP=(
@@ -226,11 +230,9 @@ then
     [[ "$dbtype" == "mysql" ]] && systemctl enable mariadb.service
 fi
 
-hqn=`host -TtA $(hostname -s)|grep "has address"|awk '{print $1}'`
 hrmd=`basename $hrmdir`
-
-msg="Please restart your system and open HRM in your web browser\n(e.g., http://localhost/$hrmd or http://$hqn/$hrmd)."
-msg="$msg\nThe default admin account is login 'admin' with password '$hrmpass'."
+msg="Please restart your system and open HRM in your web browser\n(e.g., $hrmurl or http://$hqn/$hrmd)."
+msg="$msg\n\nThe default admin account is login 'admin' with password '$hrmpass'."
 
 wt_print "$msg" --title="$title" --interactive="$interactive" --debug=$debug
 $interactive && printf "$msg\n"
