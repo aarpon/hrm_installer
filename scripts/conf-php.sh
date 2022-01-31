@@ -4,15 +4,19 @@ context="$(dirname $BASH_SOURCE)"
 source "$context/funs.sh"
 source "$context/funs-input.sh"
 
-############################### PHP post_max_size (limits POST size for browser uploads) ####
-
-msg="PHP post_max_size (limits POST size for browser uploads)"
-postmax=$(wt_read "$postmax" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
-
 ######################### PHP upload_max_filesize (limits file size for browser uploads) ####
 
-msg="PHP upload_max_filesize (limits file size for browser uploads)"
-upmax=$(wt_read "$upmax" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
+msg="PHP upload_max_filesize -- In a multi-file upload through the browser, the maximum size for each of the files uploaded"
+REPLY=$(wt_read "$upmax" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
+if [[ $upmax != $REPLY ]]; then
+    upmax=$REPLY
+    postmax=$(numfmt --to=iec $((2*$(numfmt --from=iec $upmax))))
+fi
+
+############################### PHP post_max_size (limits POST size for browser uploads) ####
+
+msg="PHP post_max_size -- In a multi-file upload through the browser, the maximum total size of the upload"
+postmax=$(wt_read "$postmax" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
 
 if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]
 then
