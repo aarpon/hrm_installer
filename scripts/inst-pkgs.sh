@@ -67,7 +67,7 @@ if [ $interactive == true ] && [ -z dbtype ]; then
       msg="No database management system installed on this system\n\nPlease choose one of the following:"
     else # only one DBMS has been found
       # which is missing/not installed, mysql?
-      [ "$dbmissing" == "mysql-server" ] && dbtype="postgres" || dbtype="mysql"
+      [ "$dbmissing" == "mysql-server" ] && dbtype="pgsql" || dbtype="mysql"
     fi
 
     # we must choose between multiple possibilities
@@ -81,7 +81,7 @@ if [ $interactive == true ] && [ -z dbtype ]; then
         then
             dbtype="mysql"
         else
-            dbtype="postgres"
+            dbtype="pgsql"
         fi
     fi
 fi

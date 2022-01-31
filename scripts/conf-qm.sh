@@ -46,7 +46,7 @@ if [ "$inittype" == "systemd" ] ; then
     sysdir="/etc/systemd/system/"
     cp $hrmdir/resources/systemd/hrmd.service $sysdir
 
-    if [ "$dbtype" == "postgres" ]; then
+    if [ "$dbtype" == "pgsql" ]; then
         sedconf $sysdir/hrmd.service "^Requires=.*" "Requires=postgresql"
         sedconf $sysdir/hrmd.service "^After=.*" "After=postgresql"
     elif [ "$dist" == "Fedora" ] ; then
