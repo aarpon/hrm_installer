@@ -120,9 +120,9 @@ sedconf $CONF_HRM '^$hrm_path =.*' '$hrm_path = "'$hrmdir'";'
 sedconf $CONF_HRM '^$local_huygens_core =.*' '$local_huygens_core = "'$hucorepath'";'
 
 if [ "$dbtype" == "mysql" ]; then
-    sedconf $CONF_SRV '^$db_type =.*' '$db_type = "mysqli";'
+    sedconf $CONF_HRM '^$db_type =.*' '$db_type = "mysqli";'
 else
-    sedconf $CONF_SRV '^$db_type =.*' '$db_type = "'$dbtype'";'
+    sedconf $CONF_HRM '^$db_type =.*' '$db_type = "'$dbtype'";'
 fi
 
 if [ $remotedeconv == false ]; then
