@@ -7,6 +7,8 @@ source "$context/funs-input.sh"
 ######################### check if we have a valid hucore license ###########################
 function validlic()
 {
+    [[ $bypass == true ]] && return 0
+
     catch stdout stderr $hucorepath /dev/null
     [[ $stderr =~ "No valid" ]] && return 1 || return 0
 }
