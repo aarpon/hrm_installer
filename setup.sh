@@ -42,7 +42,7 @@ postmax="2048M"
 upmax="1024M"
 step=0
 
-hqn=`host -TtA $(hostname -s)|grep "has address"|awk '{print $1}'`
+hqn=$(hostname --fqdn)
 
 
 declare -A ARGPARSER_MAP
