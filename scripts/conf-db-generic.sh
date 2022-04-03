@@ -3,7 +3,7 @@
 # The dbupdate script
 #   checks whether the $dbname db exists and if not creates it.
 #   checks whether the $dbuser user exists and if not creates it.
-#   links $dbuser to $dbname 
+#   links $dbuser to $dbname
 
 context="$(dirname $BASH_SOURCE)"
 source "$context/funs.sh"
@@ -34,14 +34,14 @@ if [ "$dbtype" == "mysql" ]; then
     while : ;
     do
         REPLY=$(check_admin) && rc=$? || rc=$?
-        [ $rc -eq 0 ] && break 
+        [ $rc -eq 0 ] && break
 
         wt_print "$REPLY" --title="$title" --interactive=$interactive
         if [ $interactive == true ]; then
-            msg="admin username for MySQL"
+            msg="admin username for ${dbms[$dbtype]}"
             dbadmin=$(wt_read "$dbadmin" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
 
-            msg="admin password for MySQL"
+            msg="admin password for ${dbms[$dbtype]}"
             adminpass=$(wt_read "$adminpass" --interactive=$interactive --title="$title" --message="$msg" --password=true --allowempty=true)
         else
             exit 1
@@ -62,7 +62,7 @@ if [ $rc == 0 ]; then
 else
     # If not, create one.
     REPLY=$(create_db) && rc=$? || rc=$?
-    if [ $rc != 0 ]; then 
+    if [ $rc != 0 ]; then
         msg="The database $dbname could not be created. Contact your system administrator.\n$REPLY"
         wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
     fi
@@ -86,7 +86,7 @@ else
     dbpass=$(wt_read "$dbpass" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false --password=false)
 
     REPLY=$(create_user) && rc=$? || rc=$?
-    if [ $rc != 0 ]; then 
+    if [ $rc != 0 ]; then
         msg="The user $dbuser could not be created. Contact your system administrator.\n$REPLY"
         wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
     fi
@@ -94,7 +94,7 @@ fi
 
 # Give dbuser access to dbname
 REPLY=$(link_user_db) && rc=$? || rc=$?
-if [ $rc != 0 ]; then 
+if [ $rc != 0 ]; then
     msg="The user $dbuser could not be linked to database $dbname. Contact your system administrator.\n$REPLY"
     wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
 fi

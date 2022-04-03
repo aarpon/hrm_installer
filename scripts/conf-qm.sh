@@ -20,8 +20,7 @@ then
     else
         ans="d"
     fi
-elif [ "$dist" == "Fedora" ]
-then
+elif [[ $isfedorabased == true ]]; then
     ans="d"
 else
     echo "Please select which init system your distribution is using, 'systemd' [d]"
@@ -47,12 +46,12 @@ if [ "$inittype" == "systemd" ] ; then
     cp $hrmdir/resources/systemd/hrmd.service $sysdir
 
     if [ "$dbtype" == "pgsql" ]; then
-        sedconf $sysdir/hrmd.service "^Requires=.*" "Requires=postgresql"
-        sedconf $sysdir/hrmd.service "^After=.*" "After=postgresql"
-    elif [ "$dist" == "Fedora" ] ; then
+        sedconf $sysdir/hrmd.service "^Requires=.*" "Requires=network.target postgresql.service"
+        sedconf $sysdir/hrmd.service "^After=.*" "After=postgresql.service network.target network-online.target"
+    elif [[ $isfedorabased == true ]] ; then
         # FIXME CentOS 7 uses mariadb -- Maybe need better tests here?
-        sedconf $sysdir/hrmd.service "^Requires=.*" "Requires=mariadb"
-        sedconf $sysdir/hrmd.service "^After=.*" "After=mariadb"
+        sedconf $sysdir/hrmd.service "^Requires=.*" "Requires=mariadb.service"
+        sedconf $sysdir/hrmd.service "^After=.*" "After=mariadb.service network.target network-online.target"
     fi
 
     sedconf $sysdir/hrmd.service "^User=.*" "User=$sysuser"
@@ -64,16 +63,16 @@ if [ "$inittype" == "systemd" ] ; then
     systemctl restart hrmd.service
     #systemctl status hrmd.service
 
-    if [ "$dist" == "Fedora" ] ; then
+    if [[ $isfedorabased == true ]] ; then
         chkconfig httpd on
     fi
 
 elif [ "$inittype" == "sysv" ] ; then
     cp $hrmdir/resources/sysv-init-lsb/hrmd /etc/init.d/
     chmod +x /etc/init.d/hrmd
-    if [ "$dist" == "Ubuntu" ] || [ "$dist" == "Debian" ]; then
+    if [[ $isdebianbased == true ]]; then
         update-rc.d hrmd defaults
-    elif [ "$dist" == "Fedora" ] ; then
+    elif [[ $isfedorabased == true ]]; then
         chkconfig hrmd on
     else
         abort "Distribution unsupported."

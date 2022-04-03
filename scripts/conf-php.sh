@@ -18,8 +18,7 @@ fi
 msg="PHP post_max_size -- In a multi-file upload through the browser, the maximum total size of the upload"
 postmax=$(wt_read "$postmax" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
 
-if [ "$dist" == "Debian" ] || [ "$dist" == "Ubuntu" ]
-then
+if [[ $isdebianbased == true ]]; then
     # This will(?) return the correct path for Debian 9 or any recent Ubuntu
     # and a valid path for previous versions
     if [ "$dist" == "Debian" ] && [ $(ver $vers) -lt $(ver "9") ]; then
@@ -32,8 +31,7 @@ then
         wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
     fi
     phpinipath="$phppath/apache2/php.ini"
-elif [ "$dist" == "Fedora" ]
-then
+elif [[ $isfedorabased == true ]]; then
 	phpinipath="/etc/php.ini"
 	tz=`ls -l /etc/localtime | sed "s:zoneinfo/:\n:g" | tail -1`
 	#The line may or may not start with a ;

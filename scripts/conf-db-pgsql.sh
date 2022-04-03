@@ -2,7 +2,7 @@
 
 # init and start pgsql
 function init_dbms() {
-    [ "$dist" == "Fedora" ] && postgresql-setup initdb
+    [[ $isfedorabased == true ]] && postgresql-setup initdb
     service postgresql start
     #systemctl enable postgresql.service
     #systemctl start postgresql.service
@@ -38,7 +38,7 @@ function create_user() {
     # enable MD5 password authentication
     # only necessary for Fedora and CentOS
     # under Ubuntu MD5 is already the default authentication
-    if [ "$dist" == "Fedora" ]
+    if [[ $isfedorabased == true ]];
     then
         echo "Configure postgres for MD5 host authentication..."
         echo -e "host all $dbuser 127.0.0.1/32 md5 \nhost all $dbuser ::1/128 md5\n $(cat /var/lib/pgsql/data/pg_hba.conf)" > /var/lib/pgsql/data/pg_hba.conf

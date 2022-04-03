@@ -5,14 +5,12 @@ source "$context/funs.sh"
 
 function init_dbms() {
     rc=0
-    if [ "$dist" == "Ubuntu" ] || [ "$dist" == "Debian" ]
-    then
+    if [[ $isdebianbased == true ]]; then
         if $(service mysql status | grep -q 'inactive') ; then
             rc=$(service mysql start)
         fi
-        
-    elif [ "$dist" == "Fedora" ]
-    then
+
+    elif [[ $isfedorabased == true ]]; then
         if $(service mariadb status | grep -q 'inactive') ; then
             rc=$(service mariadb start)
         fi

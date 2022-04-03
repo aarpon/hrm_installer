@@ -35,9 +35,8 @@ fi
 if [ $interactive == true ]; then
     msg="Do you want to use the system's default apache user?"
     if (whiptail --title "$title" --yesno "$msg" 8 70); then
-        [[ "$dist" == "Ubuntu" ]] && apache_user="www-data"
-        [[ "$dist" == "Debian" ]] && apache_user="www-data"
-        [[ "$dist" == "Fedora" ]] && apache_user="apache"
+        [[ $isdebianbased == true ]] && apache_user="www-data"
+        [[ $isfedorabased == true ]] && apache_user="apache"
     else
         msg="the apache user name"
         apache_user=$(wt_read "$apache_user" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
@@ -93,7 +92,7 @@ do
         wt_print "$msg" --title="$title" --interactive=$interactive --quit=true
     fi
 
-    [ $rc -eq 0 ] && break 
+    [ $rc -eq 0 ] && break
 
     # This should not fail:
     chown $sysuser:$sysgroup $hrmdir
@@ -131,7 +130,7 @@ if [ $interactive == true ]; then
     tags+=" $(git ls-remote --refs "$hrmrepo" | grep $match | awk -F 'heads/' '{print $2}')"
 
     LIST=()
-    for tag in $tags; do 
+    for tag in $tags; do
         # This selects the currently defined $hrmtag (if in $tags)
         [[ $tag == $hrmtag ]] && selection="on" || selection="off"
 
@@ -139,11 +138,11 @@ if [ $interactive == true ]; then
         if [[ $tag == *"release"* ]]; then
             msg="Pre-release, use with caution!"
         elif [[ $tag == "devel" ]]; then
-            msg="For HRM development only" 
+            msg="For HRM development only"
         elif [[ $tag == "master" ]]; then
-            msg="Rolling fixes for the latest release" 
+            msg="Rolling fixes for the latest release"
         else
-            msg="HRM release v$tag" 
+            msg="HRM release v$tag"
         fi
 
         LIST+=( "$tag" "$msg" $selection )
@@ -153,7 +152,7 @@ if [ $interactive == true ]; then
 
     LIST+=( "zip" "Extract HRM from a local ZIP file" $selection )
 
-    msg="The HRM repo is: $hrmrepo\n\nChoose which version of HRM to install:" 
+    msg="The HRM repo is: $hrmrepo\n\nChoose which version of HRM to install:"
 
     ans=$(whiptail --title "$title" --radiolist \
         "$msg" 20 70 $(( ${#LIST[@]}/3 )) \
