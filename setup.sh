@@ -150,7 +150,7 @@ echo $msg
 
 # No whiptail by default on Centos or Fedora, so install it if interactive mode
 if $interactive && [ "$dist" == "Fedora" ]; then
-    $fedpkg install newt || true
+    $fedpkg install -y newt || true
 fi
 
 hucorepath=`type -pf hucore 2>/dev/null` || true
