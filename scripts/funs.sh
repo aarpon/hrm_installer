@@ -1,4 +1,4 @@
-declare -A dbms=( ["mysql"]="MySQL" ["mysql-server"]="MySQL" ["mariadb"]="MariaDB" ["pgsql"]="PostgreSQL" ["postgresql"]="PostgreSQL" ["postgres"]="PostgreSQL")
+declare -A dbms=( ["mysql"]="MySQL" ["mysql-server"]="MySQL" ["mariadb"]="MariaDB" ["pgsql"]="PostgreSQL" ["postgresql"]="PostgreSQL" ["postgresql-server"]="PostgreSQL" ["postgres"]="PostgreSQL")
 
 function catch() {
 #As per Tino @ https://stackoverflow.com/questions/11027679/capture-stdout-and-stderr-into-different-variables
