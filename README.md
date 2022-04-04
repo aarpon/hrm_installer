@@ -173,6 +173,13 @@ $ sudo ./setup.sh --hrmmail="hrm@valid.email.address"
 ```
 
 
+Self decompressing script
+-------------------------
+
+For ease of use, `setup.sh` and the `scripts` folder can be packaged together into a single self-extracting bash script called `hrm_setup`. To build this file, just run `build.sh`.
+
+The decompression script bundled with the self-extracting script (`scripts/decompress.sh`) assumes that the `tar` command is available on your system.
+
 Authors and contact
 -------------------
 
