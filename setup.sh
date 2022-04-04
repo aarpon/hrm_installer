@@ -171,14 +171,15 @@ if [ -z "$hucorepath" ] || [ ! -f "$hucorepath" ]; then
 fi
 
 # For Alma 8, Rocky 8, CentOS 8, install a more recent PHP
+# FIXME If HRM works with PHP 7.2 then remove this section completely
 if [[ $isfedorabased == true ]]; then
     phpver=$(php -v | awk 'NR<=1{ print $2 }')
     if [ $(ver $phpver) -lt $(ver "7.4") ]; then
         # The following was tested in AlmaLinux 8, RockyLinux 8, Centos Stream 8, Fedora 35
-        rpm -Fvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-        dnf install -y https://rpms.remirepo.net/enterprise/remi-release-8.rpm
-        dnf module reset php -y
-        dnf module install php:remi-7.4 -y
+        #rpm -Fvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+        #dnf install -y https://rpms.remirepo.net/enterprise/remi-release-8.rpm
+        #dnf module reset php -y
+        #dnf module install php:remi-7.4 -y
 
         # As per https://rpms.remirepo.net/wizard/
         #yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm || true
