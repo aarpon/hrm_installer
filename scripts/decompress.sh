@@ -8,7 +8,7 @@ echo "Script files extracted to $TMPDIR"
 
 ARCHIVE=`awk '/^__ARCHIVE_BELOW__/ {print NR + 1; exit 0; }' $0`
 
-tail -n+$ARCHIVE $0 | tar xjv -C $TMPDIR
+tail -n+$ARCHIVE $0 | tar xzv -C $TMPDIR
 
 CDIR=`pwd`
 cd $TMPDIR

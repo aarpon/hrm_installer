@@ -2,10 +2,10 @@
 
 # Compression scheme based on https://www.linuxjournal.com/node/1005818
 
-output_archive='hrm_installer.tar.bz2'
+output_archive='hrm_installer.tar.gz'
 output_script='hrm_setup'
 
-tar cvjf "$output_archive" setup.sh scripts
+tar cvzf "$output_archive" setup.sh scripts
 
 if [ -e "$output_archive" ]; then
     cat scripts/decompress.sh "$output_archive" > "$output_script"
