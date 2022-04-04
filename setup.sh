@@ -120,11 +120,6 @@ if  [ -z "$dist" ]; then
     dist=`cat /etc/os-release | head -n1 | cut -d '=' -f2`
 fi
 
-# No whiptail by default on Centos or Fedora, so install it if interactive mode
-if [[ $interactive == true && $isfedorabased == true ]]; then
-    $fedpkg install -y newt || true
-fi
-
 msg="OS detected: $dist $vers"
 
 if [[ $dist == Debian || $dist == Ubuntu ]]; then
@@ -148,7 +143,13 @@ elif [[ $dist == CentOS* || $dist == Fedora || $dist == AlmaLinux || $dist == Ro
     fedpkg="dnf -y"
     apache_user="apache"
 
-    # TODO add supported versions...
+    # No whiptail by default on Centos or Fedora, so install it if interactive mode
+    if [[ $interactive == true ]]; then
+        $fedpkg install -y newt || true
+    fi
+
+    # TODO add a test to check if the version is supported...
+
     source scripts/funs-fed.sh
 else
     msg="$msg\n\nThis distribution is not supported."
