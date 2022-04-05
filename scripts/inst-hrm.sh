@@ -19,13 +19,13 @@ sysgroup=$(wt_read "$sysgroup" --interactive=$interactive --title="$title" --mes
 
 getent group | cut -f1 -d ":" | grep -q "^$sysgroup$" && rc=$? || rc=$?
 if  [ $rc -eq 1 ]; then
-	[ $interactive == false ] && echo "Group does not exist, creating it..."
+    [ $interactive == false ] && echo "Group does not exist, creating it..."
     groupadd --system $sysgroup
 fi
 
 if ! id -u $sysuser > /dev/null 2>&1; then
-	[ $interactive == false ] && echo "User does not exist, creating it..."
-	USEROPTS="--system --gid $sysgroup"
+    [ $interactive == false ] && echo "User does not exist, creating it..."
+    USEROPTS="--system --gid $sysgroup"
     useradd $sysuser $USEROPTS
 fi
 
@@ -54,10 +54,9 @@ do
     [ $interactive == true ] && msg="$msg (must be a sub-directory of Apache document root)"
     hrmdir=$(wt_read "$hrmdir" --interactive=$interactive --title="$title" --message="$msg" --allowempty=false)
     if [ -d "$hrmdir" ]; then
-
         #This (badly) checks the git version to support Centos7
         gitversion=$(git --version | cut -d' ' -f3)
-	if [ $(ver $gitversion) -lt $(ver "1.8.5") ]; then
+        if [ $(ver $gitversion) -lt $(ver "1.8.5") ]; then
             intohrm="--git-dir=$hrmdir/.git --work-tree=$hrmdir"
         else
             intohrm="-C $hrmdir"
@@ -201,7 +200,7 @@ if [ "$hrmtag" != "zip" ]; then
         #FIXME according to: https://stackoverflow.com/questions/35979642/what-is-git-tag-how-to-create-tags-how-to-checkout-git-remote-tags
         #Might be worth adding  --single-branch --depth 1 if all we're trying to do here is clone for deployment (unless devel?).
         #git clone -b "$hrmtag" "$hrmrepo" $hrmdir
-	git clone -b "$hrmtag" --single-branch --depth 1 "$hrmrepo" $hrmdir
+        git clone -b "$hrmtag" --single-branch --depth 1 "$hrmrepo" $hrmdir
     fi
 fi
 
