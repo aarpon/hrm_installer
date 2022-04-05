@@ -9,12 +9,12 @@ if [[ $isdebianbased == true ]]; then
     if [ "$dist" == "Ubuntu" ]; then
         dbpkgs="mysql-server postgresql"
         mysqlpkgs="mysql-server php-mysql"
-        morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git php-xml"
+        morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git php-xml php-ldap"
     else
         # FIXME do we really need sysvinit-utils tools in debian?
         dbpkgs="mariadb-server postgresql"
         mysqlpkgs="mariadb-server php-mysql"
-        morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git sysvinit-utils php-xml"
+        morepkgs="apache2 libapache2-mod-php php php-cli php-common zip git sysvinit-utils php-xml php-ldap"
     fi
     pgsqlpkgs="postgresql php-pgsql"
 elif [[ $isfedorabased == true ]]; then
@@ -22,7 +22,7 @@ elif [[ $isfedorabased == true ]]; then
     dbpkgs="mariadb postgresql-server"
     mysqlpkgs="mariadb mariadb-server php-mysqlnd"
     pgsqlpkgs="postgresql-server postgresql-contrib php-pgsql"
-    morepkgs="httpd php php-cli php-common zip unzip wget git php-xml policycoreutils-python*"
+    morepkgs="httpd php php-cli php-common zip unzip wget git php-xml php-ldap policycoreutils-python*"
     # composer install from source seems to need php-json
     # but is already installed with the remi package (Centos 7)
     if [ $(ver $vers) -ne $(ver "7") ]; then
