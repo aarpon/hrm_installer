@@ -34,12 +34,13 @@ if [[ $isdebianbased == true ]]; then
 elif [[ $isfedorabased == true ]]; then
 	phpinipath="/etc/php.ini"
 	tz=`ls -l /etc/localtime | sed "s:zoneinfo/:\n:g" | tail -1`
-	#The line may or may not start with a ;
+	# The line may or may not start with a ;
 	sedconf $phpinipath "^;\?date\.timezone =.*" "date.timezone = $tz"
 else
 	abort "Distribution unsupported."
 fi
 
+sedconf $phpinipath "^;\?sys_temp_dir =.*" "sys_temp_dir = \"/tmp\""
 sedconf $phpinipath "^post_max_size =.*" "post_max_size = $postmax"
 sedconf $phpinipath "^upload_max_filesize =.*" "upload_max_filesize = $upmax"
 
