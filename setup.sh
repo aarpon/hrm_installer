@@ -72,7 +72,8 @@ $devel && hrmtag="devel"
 [ -n "$zippath" ] && hrmtag="zip"
 
 if [ $opth == true ]; then
-    echo "This is all the help you will ever need..."
+    # FIXME change devel to latest when we release
+    echo -e 'Please check https://huygens-remote-manager.readthedocs.io/en/devel/admin/script_install.html'
     exit 0
 fi
 
@@ -245,6 +246,10 @@ fi
 hrmd=`basename $hrmdir`
 msg="Please restart your system and open HRM in your web browser\n(e.g., $hrmurl or http://$hqn/$hrmd)."
 msg="$msg\n\nThe default admin account is login 'admin' with password '$hrmpass'."
+
+if [ -z "$license" ]; then
+    msg="$msg\n\nFor full functionality, please note:\n* you will need to add a valid license string to $CONF_LICENSE and\n* you will need to remove the file $hrmdir/.hrm_devel_version\n\nFor now, hucore license check in HRM will be bypassed."
+fi
 
 wt_print "$msg" --title="$title" --interactive="$interactive" --debug=$debug
 $interactive && printf "$msg\n"
