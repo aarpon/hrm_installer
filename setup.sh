@@ -243,8 +243,12 @@ if [[ $isfedorabased == true ]]; then
 fi
 
 
+#Display URL using qualified name $hqn if different from user entered URL $hrmurl
 hrmd=`basename $hrmdir`
-msg="Please restart your system and open HRM in your web browser\n(e.g., $hrmurl or http://$hqn/$hrmd)."
+hrmd="http://$hqn/$hrmd"
+[[ "$hrmurl" == "$hrmd" ]] && hrmd="" || hrmd=" or $hrmd"
+
+msg="Please restart your system and open HRM in your web browser\n(e.g., $hrmurl$hrmd)."
 msg="$msg\n\nThe default admin account is login 'admin' with password '$hrmpass'."
 
 if [ -z "$license" ]; then
