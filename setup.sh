@@ -73,7 +73,7 @@ $devel && hrmtag="devel"
 
 if [ $opth == true ]; then
     # FIXME change devel to latest when we release
-    echo -e 'Please check https://huygens-remote-manager.readthedocs.io/en/devel/admin/script_install.html'
+    echo -e 'Please check the documentation on https://github.com/aarpon/hrm_installer'
     exit 0
 fi
 
