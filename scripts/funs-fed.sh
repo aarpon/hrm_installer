@@ -17,7 +17,6 @@ function install_packages()
 	MISSING=$(packages_missing $1)
 	if [ -n "$MISSING" ] ; then
 	    echo -e "\nThe following packages will be installed:\n$MISSING\n"
-	    waitconfirm
 	    $fedpkg install $MISSING
 	    MISSING=$(packages_missing $1)
 	    [ -z "$MISSING" ] || errcheck "Could not install packages: $MISSING"
