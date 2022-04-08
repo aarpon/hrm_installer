@@ -21,7 +21,7 @@ function parse_args() {
 			_value="${_arg#*=}"
 
 			#if next argument doesnt contain a dash it means it's the value
-		elif [[ ! $_nextarg == -* ]]; then
+		elif [[ ! $_nextarg == -* && ! -z "$_nextarg" ]]; then
 			_value="$_nextarg"
 		else
 			_value=true
