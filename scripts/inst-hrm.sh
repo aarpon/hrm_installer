@@ -180,6 +180,7 @@ if [ "$hrmtag" != "zip" ]; then
 
     if [ -d "$hrmdir/.git" ] ; then
         echo "$hrmdir already contains the git repository."
+
         #FIXME There's probably a more robust way to do this:
         # We need to make sure we can actually checkout the branch or tag $hrmtag.
         # If we already have a repository in $hrmdir, git checkout -d simply creates a new branch
@@ -191,10 +192,9 @@ if [ "$hrmtag" != "zip" ]; then
         else
             branch=$(git $intohrm branch | grep -F "$hrmtag" || true)
             if [ -z "$branch" ] ; then
-                ( cd $hrmdir ; git $intohrm checkout -b $hrmtag )
-            else
-                ( cd $hrmdir ; git $intohrm checkout $hrmtag )
+                hrmtag="-b $hrmtag"
             fi
+            ( cd $hrmdir ; git $intohrm checkout $hrmtag -- composer.lock)
         fi
     else
         #FIXME according to: https://stackoverflow.com/questions/35979642/what-is-git-tag-how-to-create-tags-how-to-checkout-git-remote-tags
@@ -202,6 +202,8 @@ if [ "$hrmtag" != "zip" ]; then
         #git clone -b "$hrmtag" "$hrmrepo" $hrmdir
         git clone -b "$hrmtag" --single-branch --depth 1 "$hrmrepo" $hrmdir
     fi
+
+    git $intohrm pull
 fi
 
 #Here we want to make sure PHP scripts in $hrmdir run as $sysuser
