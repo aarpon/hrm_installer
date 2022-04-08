@@ -185,8 +185,9 @@ Authors and contact
 
 Author of the HRM installation scripts:
 
-Torsten Stöter (torsten.stoeter@lin-magdeburg.de),
+* Torsten Stöter (torsten.stoeter@lin-magdeburg.de),
 Leibniz Institute for Neurobiology, Magdeburg
+* Egor Zindy (egor.zindy@cmmi.be), Centre for Microscopy and Molecular Imaging, Gosselies
 
 Further authors of the Huygens Remote Manager:
 * Aaron Ponti, Department of Biosystems Science and Engineering, ETH Zurich
@@ -194,7 +195,6 @@ Further authors of the Huygens Remote Manager:
 * Niko Ehrenfeuchter, Biozentrum (Basel)
 * Olivier Burri, BioImaging and Optics Platform, EPFL (Lausanne)
 * Frederik Grüll, Biozentrum (Basel)
-* Egor Zindy, University of Manchester
 
 Copyright and licensing
 -----------------------
