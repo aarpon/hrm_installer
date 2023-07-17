@@ -54,6 +54,7 @@ if [ "$inittype" == "systemd" ] ; then
         sedconf $sysdir/hrmd.service "^After=.*" "After=mariadb.service network.target network-online.target"
     fi
 
+    sedconf $sysdir/hrmd.service "^ExecStart=.*" "ExecStart=$hrmdir/bin/hrm_queuemanager --detach"
     sedconf $sysdir/hrmd.service "^User=.*" "User=$sysuser"
     sedconf $sysdir/hrmd.service "^Group=.*" "Group=$sysgroup"
 

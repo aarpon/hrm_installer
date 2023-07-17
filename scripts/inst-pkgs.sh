@@ -25,7 +25,7 @@ elif [[ $isfedorabased == true ]]; then
     morepkgs="httpd php php-cli php-common zip unzip wget git php-xml php-ldap policycoreutils-python*"
     # composer install from source seems to need php-json
     # but is already installed with the remi package (Centos 7)
-    if [ $(ver $vers) -ne $(ver "7") ]; then
+    if [ $(ver $vers) -lt $(ver "7") ]; then
         morepkgs+=" php-json"
     fi
 else
